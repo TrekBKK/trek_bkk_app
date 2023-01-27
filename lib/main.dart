@@ -12,13 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MainScreen(),
-        '/history': (context) => History()
-      },
-    );
+    return MaterialApp(title: 'Flutter Demo', home: MainScreen());
   }
 }
