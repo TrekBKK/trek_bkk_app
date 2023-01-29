@@ -1,85 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/app/pages/browse.dart';
+import 'package:trek_bkk_app/app/pages/create.dart';
+import 'package:trek_bkk_app/app/pages/history.dart';
+import 'package:trek_bkk_app/app/pages/home.dart';
+import 'package:trek_bkk_app/app/pages/me.dart';
 import 'package:trek_bkk_app/app/utils/icons.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainScreen extends StatelessWidget {
+  final PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  late PageController _pageController;
-  int _currentPage = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: 0);
+  List<Widget> _buildScreens() {
+    return const [Home(), Browse(), Create(), Me()];
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
-
-  void onPageChanged(int page) {
-    setState(() {
-      _currentPage = page;
-    });
-  }
-
-  void navigationTapped(int page) {
-    _pageController.jumpToPage(page);
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.home),
+        title: ("Home"),
+        activeColorPrimary: const Color(0xff972d07),
+        inactiveColorPrimary: Colors.grey[500],
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.search),
+        title: ("search"),
+        activeColorPrimary: const Color(0xff972d07),
+        inactiveColorPrimary: Colors.grey[500],
+      ),
+      PersistentBottomNavBarItem(
+        icon: Container(width: 100, child: const Icon(CustomIcons.trek)),
+        title: ("create"),
+        activeColorPrimary: const Color(0xff972d07),
+        inactiveColorPrimary: Colors.grey[500],
+      ),
+      PersistentBottomNavBarItem(
+          icon: const Icon(Icons.account_circle),
+          title: ("me"),
+          activeColorPrimary: const Color(0xff972d07),
+          inactiveColorPrimary: Colors.grey[500],
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
+            routes: {
+              '/History': (context) => History(),
+            },
+          )),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          children: const <Widget>[
-            Text('page1'),
-            Text('page2'),
-            Text('page3'),
-            Text('page4')
-          ],
-        ),
+    print(ModalRoute.of(context)?.settings.name);
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: const Color(0xfffff5df),
+      handleAndroidBackButtonPress: true, // Default is true.
+      resizeToAvoidBottomInset:
+          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+      stateManagement: true, // Default is true.
+      hideNavigationBarWhenKeyboardShows:
+          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      decoration: NavBarDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        colorBehindNavBar: Colors.white,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xfffff5df),
-        selectedItemColor: const Color(0xff972d07),
-        unselectedItemColor: Colors.grey[500],
-        type: BottomNavigationBarType.fixed,
-        onTap: navigationTapped,
-        currentIndex: _currentPage,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Color(0xfffff5df),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Browse',
-            backgroundColor: Color(0xfffff5df),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.trek),
-            label: 'Create',
-            backgroundColor: Color(0xfffff5df),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Me',
-            backgroundColor: Color(0xfffff5df),
-          ),
-        ],
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: const ItemAnimationProperties(
+        // Navigation Bar's items animation properties.
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
       ),
+      screenTransitionAnimation: const ScreenTransitionAnimation(
+        // Screen transition animation on change of selected tab.
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle:
+          NavBarStyle.style6, // Choose the nav bar style with this property.
     );
   }
 }

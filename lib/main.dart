@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/app/pages/history.dart';
 import 'package:trek_bkk_app/app/pages/main_screen.dart';
 
 void main() {
@@ -11,10 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      initialRoute: '/',
-      routes: {'/': (context) => MainScreen()},
-    );
+    return MaterialApp(title: 'Flutter Demo', home: MainScreen());
   }
 }
