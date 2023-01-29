@@ -11,6 +11,8 @@ class MainScreen extends StatelessWidget {
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
+  MainScreen({super.key});
+
   List<Widget> _buildScreens() {
     return const [Home(), Browse(), Create(), Me()];
   }
@@ -30,7 +32,7 @@ class MainScreen extends StatelessWidget {
         inactiveColorPrimary: Colors.grey[500],
       ),
       PersistentBottomNavBarItem(
-        icon: Container(width: 100, child: const Icon(CustomIcons.trek)),
+        icon: const SizedBox(width: 100, child: Icon(CustomIcons.trek)),
         title: ("create"),
         activeColorPrimary: const Color(0xff972d07),
         inactiveColorPrimary: Colors.grey[500],

@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:trek_bkk_app/app/pages/history.dart';
 import 'package:trek_bkk_app/app/pages/main_screen.dart';
 
 void main() {
