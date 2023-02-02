@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trek_bkk_app/app/pages/browse.dart';
-import 'package:trek_bkk_app/app/pages/create.dart';
+import 'package:trek_bkk_app/app/pages/generate/generate_page.dart';
 import 'package:trek_bkk_app/app/pages/history.dart';
 import 'package:trek_bkk_app/app/pages/home.dart';
 import 'package:trek_bkk_app/app/pages/me.dart';
+import 'package:trek_bkk_app/app/pages/search/search_1.dart';
 import 'package:trek_bkk_app/app/utils/icons.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
   List<Widget> _buildScreens() {
-    return const [Home(), Browse(), Create(), Me()];
+    return const [Home(), Search1(), GeneratePage(), Me()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
