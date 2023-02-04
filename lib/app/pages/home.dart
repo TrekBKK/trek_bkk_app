@@ -9,10 +9,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<User>? selectedUserList = [];
+  List<String> selectedTagList = [];
   int _stepperIndex = 0;
 
-  getTagUI(text) {
+  List<String> tags = [
+    "Hospital",
+    "School",
+    "Monument",
+    "Mountain",
+    "Shopping Mall"
+  ];
+
+  tagUI(text) {
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -26,8 +34,39 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void openFilterDialog() async {
+    await FilterListDialog.display<String>(context,
+        listData: tags,
+        selectedListData: selectedTagList,
+        choiceChipLabel: (tag) => tag,
+        validateSelectedItem: (list, val) => list!.contains(val),
+        onItemSearch: (tag, query) {
+          return tag.toLowerCase().contains(query.toLowerCase());
+        },
+        onApplyButtonClick: (list) {
+          setState(() {
+            selectedTagList = List.from(list!);
+          });
+          Navigator.pop(context);
+        },
+        hideSelectedTextCount: true,
+        themeData: FilterListThemeData(context));
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> tagsUI =
+        selectedTagList.map<Widget>((tag) => tagUI(tag)).toList();
+
+    Widget addButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            shape: const StadiumBorder()),
+        onPressed: openFilterDialog,
+        child: const Text("+"));
+
+    tagsUI.add(addButton);
+
     var stepper = Stepper(
         controlsBuilder: (context, details) {
           return Column(
@@ -91,7 +130,15 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     height: 40,
                   ),
-                  getTagUI("sometxt"),
+                  Container(
+                      constraints:
+                          BoxConstraints(maxWidth: 200, maxHeight: 112),
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: tagsUI,
+                      )),
                   SizedBox(
                     height: 48,
                   )
@@ -139,25 +186,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-class User {
-  final String? name;
-  final String? avatar;
-  User({this.name, this.avatar});
-}
-
-List<User> userList = [
-  User(name: "Jon", avatar: ""),
-  User(name: "Lindsey ", avatar: ""),
-  User(name: "Valarie ", avatar: ""),
-  User(name: "Elyse ", avatar: ""),
-  User(name: "Ethel ", avatar: ""),
-  User(name: "Emelyan ", avatar: ""),
-  User(name: "Catherine ", avatar: ""),
-  User(name: "Stepanida  ", avatar: ""),
-  User(name: "Carolina ", avatar: ""),
-  User(name: "Nail  ", avatar: ""),
-  User(name: "Kamil ", avatar: ""),
-  User(name: "Mariana ", avatar: ""),
-  User(name: "Katerina ", avatar: ""),
-];
