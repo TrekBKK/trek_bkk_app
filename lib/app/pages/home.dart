@@ -124,10 +124,10 @@ class _HomeState extends State<Home> {
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.access_alarm),
-                  SizedBox(height: 40),
-                  Text("What type of places do you enjoy going to?"),
-                  SizedBox(
+                  const Icon(Icons.access_alarm),
+                  const SizedBox(height: 40),
+                  const Text("What type of places do you enjoy going to?"),
+                  const SizedBox(
                     height: 40,
                   ),
                   Container(
@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
                         runSpacing: 8,
                         children: tagsUI,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 48,
                   )
                 ],
