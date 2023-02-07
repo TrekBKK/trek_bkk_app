@@ -52,6 +52,26 @@ class _Search2State extends State<Search2> {
                       width: 24,
                     ),
                     GestureDetector(
+                      onTap: () => showDialog(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Column(
+                                    children: [
+                                      const Align(
+                                          alignment: Alignment.topRight,
+                                          child: CloseButton()),
+                                      ElevatedButton(
+                                        child: const Text("APPLY FILTER"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
                       child: const Icon(Icons.filter_alt),
                     )
                   ],
