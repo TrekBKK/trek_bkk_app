@@ -5,7 +5,14 @@ import 'package:trek_bkk_app/constants.dart';
 
 import '../../utils/limit_range_text_input_formatter.dart';
 
-List<String> tags = ["home", "alone", "sad"];
+List<String> tags = [
+  "home",
+  "alone",
+  "sad",
+  "veryverysad",
+  "okokokkkkkkkk",
+  "new line"
+];
 
 class GeneratePage extends StatefulWidget {
   const GeneratePage({
@@ -41,11 +48,12 @@ class _GeneratePageState extends State<GeneratePage> {
       useRootNavigator: false,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context,
+          wrapSpacing: 8,
           choiceChipTheme: const ChoiceChipThemeData(
               selectedBackgroundColor: Color(lightColor),
               selectedTextStyle: TextStyle(color: Colors.black)),
           controlButtonBarTheme: ControlButtonBarThemeData(context,
-              buttonSpacing: 8,
+              buttonSpacing: 4,
               controlButtonTheme: const ControlButtonThemeData(
                   primaryButtonTextStyle: TextStyle(color: Colors.white),
                   primaryButtonBackgroundColor: Color(primaryColor),
@@ -71,7 +79,11 @@ class _GeneratePageState extends State<GeneratePage> {
   Widget build(BuildContext context) {
     List<Widget> tags = selectedTagList
         .map<Widget>((tag) => GestureDetector(
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  selectedTagList.remove(tag);
+                });
+              },
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

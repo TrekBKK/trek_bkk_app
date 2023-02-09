@@ -22,20 +22,6 @@ class _HomeState extends State<Home> {
     "Shopping Mall"
   ];
 
-  tagUI(text) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: const Color(0xFFA49694),
-        ),
-        child: Text(text),
-      ),
-    );
-  }
-
   void openFilterDialog() async {
     await FilterListDialog.display<String>(
       context,
@@ -46,6 +32,7 @@ class _HomeState extends State<Home> {
       choiceChipLabel: (tag) => tag,
       validateSelectedItem: (list, val) => list!.contains(val),
       themeData: FilterListThemeData(context,
+          wrapSpacing: 8,
           choiceChipTheme: const ChoiceChipThemeData(
               selectedBackgroundColor: Color(lightColor),
               selectedTextStyle: TextStyle(color: Colors.black)),
@@ -70,8 +57,24 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> tagsUI =
-        selectedTagList.map<Widget>((tag) => tagUI(tag)).toList();
+    List<Widget> tagsUI = selectedTagList
+        .map<Widget>((tag) => GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedTagList.remove(tag);
+                });
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xFFA49694),
+                ),
+                child: Text(tag),
+              ),
+            ))
+        .toList();
 
     Widget addButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -139,7 +142,8 @@ class _HomeState extends State<Home> {
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Image(image: AssetImage("assets/icons/pref1.png")),
+                  const Image(
+                      image: AssetImage("assets/icons/preference1.png")),
                   const SizedBox(height: 40),
                   const Text("What type of places do you enjoy going to?"),
                   const SizedBox(
