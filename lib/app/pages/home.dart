@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../constants.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -36,22 +37,35 @@ class _HomeState extends State<Home> {
   }
 
   void openFilterDialog() async {
-    await FilterListDialog.display<String>(context,
-        listData: tags,
-        selectedListData: selectedTagList,
-        choiceChipLabel: (tag) => tag,
-        validateSelectedItem: (list, val) => list!.contains(val),
-        onItemSearch: (tag, query) {
-          return tag.toLowerCase().contains(query.toLowerCase());
-        },
-        onApplyButtonClick: (list) {
-          setState(() {
-            selectedTagList = List.from(list!);
-          });
-          Navigator.pop(context);
-        },
-        hideSelectedTextCount: true,
-        themeData: FilterListThemeData(context));
+    await FilterListDialog.display<String>(
+      context,
+      useRootNavigator: false,
+      hideSelectedTextCount: true,
+      listData: tags,
+      selectedListData: selectedTagList,
+      choiceChipLabel: (tag) => tag,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      themeData: FilterListThemeData(context,
+          choiceChipTheme: const ChoiceChipThemeData(
+              selectedBackgroundColor: Color(lightColor),
+              selectedTextStyle: TextStyle(color: Colors.black)),
+          controlButtonBarTheme: ControlButtonBarThemeData(context,
+              buttonSpacing: 8,
+              controlButtonTheme: const ControlButtonThemeData(
+                  primaryButtonTextStyle: TextStyle(color: Colors.white),
+                  primaryButtonBackgroundColor: Color(primaryColor),
+                  backgroundColor: Color(lightColor),
+                  textStyle: TextStyle(color: Colors.black)))),
+      onItemSearch: (tag, query) {
+        return tag.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedTagList = List.from(list!);
+        });
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
