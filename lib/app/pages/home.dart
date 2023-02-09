@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
 
+import '../../constants.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -9,25 +11,77 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<User>? selectedUserList = [];
+  List<String> selectedTagList = [];
   int _stepperIndex = 0;
 
-  getTagUI(text) {
+  List<String> tags = [
+    "Hospital",
+    "School",
+    "Monument",
+    "Mountain",
+    "Shopping Mall"
+  ];
+
+  tagUI(text) {
     return GestureDetector(
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Color(0xFFA49694),
+          color: const Color(0xFFA49694),
         ),
         child: Text(text),
       ),
     );
   }
 
+  void openFilterDialog() async {
+    await FilterListDialog.display<String>(
+      context,
+      useRootNavigator: false,
+      hideSelectedTextCount: true,
+      listData: tags,
+      selectedListData: selectedTagList,
+      choiceChipLabel: (tag) => tag,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      themeData: FilterListThemeData(context,
+          choiceChipTheme: const ChoiceChipThemeData(
+              selectedBackgroundColor: Color(lightColor),
+              selectedTextStyle: TextStyle(color: Colors.black)),
+          controlButtonBarTheme: ControlButtonBarThemeData(context,
+              buttonSpacing: 8,
+              controlButtonTheme: const ControlButtonThemeData(
+                  primaryButtonTextStyle: TextStyle(color: Colors.white),
+                  primaryButtonBackgroundColor: Color(primaryColor),
+                  backgroundColor: Color(lightColor),
+                  textStyle: TextStyle(color: Colors.black)))),
+      onItemSearch: (tag, query) {
+        return tag.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedTagList = List.from(list!);
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> tagsUI =
+        selectedTagList.map<Widget>((tag) => tagUI(tag)).toList();
+
+    Widget addButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            shape: const StadiumBorder()),
+        onPressed: openFilterDialog,
+        child: const Text("+"));
+
+    tagsUI.add(addButton);
+
     var stepper = Stepper(
         controlsBuilder: (context, details) {
           return Column(
@@ -85,13 +139,21 @@ class _HomeState extends State<Home> {
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.access_alarm),
+                  const Image(image: AssetImage("assets/icons/pref1.png")),
                   const SizedBox(height: 40),
                   const Text("What type of places do you enjoy going to?"),
                   const SizedBox(
                     height: 40,
                   ),
-                  getTagUI("sometxt"),
+                  Container(
+                      constraints:
+                          const BoxConstraints(maxWidth: 200, maxHeight: 112),
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: tagsUI,
+                      )),
                   const SizedBox(
                     height: 48,
                   )
@@ -139,25 +201,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-class User {
-  final String? name;
-  final String? avatar;
-  User({this.name, this.avatar});
-}
-
-List<User> userList = [
-  User(name: "Jon", avatar: ""),
-  User(name: "Lindsey ", avatar: ""),
-  User(name: "Valarie ", avatar: ""),
-  User(name: "Elyse ", avatar: ""),
-  User(name: "Ethel ", avatar: ""),
-  User(name: "Emelyan ", avatar: ""),
-  User(name: "Catherine ", avatar: ""),
-  User(name: "Stepanida  ", avatar: ""),
-  User(name: "Carolina ", avatar: ""),
-  User(name: "Nail  ", avatar: ""),
-  User(name: "Kamil ", avatar: ""),
-  User(name: "Mariana ", avatar: ""),
-  User(name: "Katerina ", avatar: ""),
-];
