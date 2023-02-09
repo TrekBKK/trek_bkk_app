@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,7 +28,7 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Color(0xFFA49694),
+          color: const Color(0xFFA49694),
         ),
         child: Text(text),
       ),
@@ -124,7 +125,7 @@ class _HomeState extends State<Home> {
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.access_alarm),
+                  const Image(image: AssetImage("assets/icons/pref1.png")),
                   const SizedBox(height: 40),
                   const Text("What type of places do you enjoy going to?"),
                   const SizedBox(
@@ -132,7 +133,7 @@ class _HomeState extends State<Home> {
                   ),
                   Container(
                       constraints:
-                          BoxConstraints(maxWidth: 200, maxHeight: 112),
+                          const BoxConstraints(maxWidth: 200, maxHeight: 112),
                       child: Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 8,
