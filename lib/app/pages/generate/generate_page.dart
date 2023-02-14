@@ -2,6 +2,7 @@ import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/utils.dart';
 
 import '../../utils/limit_range_text_input_formatter.dart';
 
@@ -47,18 +48,7 @@ class _GeneratePageState extends State<GeneratePage> {
       context,
       useRootNavigator: false,
       hideSelectedTextCount: true,
-      themeData: FilterListThemeData(context,
-          wrapSpacing: 8,
-          choiceChipTheme: const ChoiceChipThemeData(
-              selectedBackgroundColor: Color(lightColor),
-              selectedTextStyle: TextStyle(color: Colors.black)),
-          controlButtonBarTheme: ControlButtonBarThemeData(context,
-              buttonSpacing: 4,
-              controlButtonTheme: const ControlButtonThemeData(
-                  primaryButtonTextStyle: TextStyle(color: Colors.white),
-                  primaryButtonBackgroundColor: Color(primaryColor),
-                  backgroundColor: Color(lightColor),
-                  textStyle: TextStyle(color: Colors.black)))),
+      themeData: getDialogThemeData(context),
       listData: tags,
       selectedListData: selectedTagList,
       choiceChipLabel: (tag) => tag,

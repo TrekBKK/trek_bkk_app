@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
-
-import '../../constants.dart';
+import 'package:trek_bkk_app/utils.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,18 +30,7 @@ class _HomeState extends State<Home> {
       selectedListData: selectedTagList,
       choiceChipLabel: (tag) => tag,
       validateSelectedItem: (list, val) => list!.contains(val),
-      themeData: FilterListThemeData(context,
-          wrapSpacing: 8,
-          choiceChipTheme: const ChoiceChipThemeData(
-              selectedBackgroundColor: Color(lightColor),
-              selectedTextStyle: TextStyle(color: Colors.black)),
-          controlButtonBarTheme: ControlButtonBarThemeData(context,
-              buttonSpacing: 8,
-              controlButtonTheme: const ControlButtonThemeData(
-                  primaryButtonTextStyle: TextStyle(color: Colors.white),
-                  primaryButtonBackgroundColor: Color(primaryColor),
-                  backgroundColor: Color(lightColor),
-                  textStyle: TextStyle(color: Colors.black)))),
+      themeData: getDialogThemeData(context),
       onItemSearch: (tag, query) {
         return tag.toLowerCase().contains(query.toLowerCase());
       },

@@ -80,15 +80,17 @@ class _Search1State extends State<Search1> {
         ),
         const Text("Have some places in mind?"),
         const SizedBox(height: 32),
-        TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: const Color(0xFFFAE1A6),
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: const StadiumBorder()),
-            child: const Text('button'))
+            onPressed: () => showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                      child: Text("test"),
+                    )),
+            child: const Text("Add place")),
       ],
     );
   }

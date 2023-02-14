@@ -25,14 +25,16 @@ class _Search2State extends State<Search2> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
-                      onPressed: null,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       style: TextButton.styleFrom(
                           foregroundColor: Colors.black,
                           backgroundColor: const Color(0xFFFAE1A6),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 8),
                           shape: const StadiumBorder()),
-                      child: const Text("RESET")),
+                      child: const Text("BACK")),
                 ),
                 const SizedBox(
                   height: 16,
