@@ -45,11 +45,6 @@ dependencies:
   http: ^0.13.5
   convert: ^3.1.1
 
-  filter_list: ^1.0.2
-  flutter_svg: ^1.1.6
-
-  filter_list: ^1.0.2
-  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -82,15 +77,9 @@ flutter:
   #   - assets/icons/historyA.png
 
   assets:
+    - assets/images/
     - assets/icons/
 
-  assets:
-    - assets/icons/
-    - assets/images/
-
-  assets:
-    - assets/icons/
-    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
