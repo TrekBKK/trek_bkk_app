@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class History extends StatelessWidget {
   static String routeName = '/History';
@@ -11,7 +9,7 @@ class History extends StatelessWidget {
     print(ModalRoute.of(context)?.settings.name);
     return Scaffold(
       appBar: AppBar(
-        title: Text('history page'),
+        title: const Text('history page'),
       ),
     );
   }
