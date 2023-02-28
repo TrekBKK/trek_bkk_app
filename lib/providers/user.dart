@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:trek_bkk_app/configs.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,8 +21,6 @@ class UserData with ChangeNotifier {
   }
 
   Future<void> _checkUser(UserModel user) async {
-    String url =
-        Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://localhost:8000';
     // final http.Response response = await http.post(
     //   Uri.parse('http://localhost:8080/temp02'),
     //   headers: <String, String>{
@@ -33,7 +32,7 @@ class UserData with ChangeNotifier {
     // );
 
     // final http.Response response = await http.get(Uri.parse('${url}'));
-    final http.Response response = await http.post(Uri.parse('${url}/user/'),
+    final http.Response response = await http.post(Uri.http(apiUrl, "/user/"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
