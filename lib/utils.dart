@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 
-FilterListThemeData getDialogThemeData(context) {
+FilterListThemeData getTagsDialogThemeData(context) {
   return FilterListThemeData(context,
       wrapSpacing: 8,
       choiceChipTheme: const ChoiceChipThemeData(

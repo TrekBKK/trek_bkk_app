@@ -30,7 +30,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
       selectedListData: selectedTagList,
       choiceChipLabel: (tag) => tag,
       validateSelectedItem: (list, val) => list!.contains(val),
-      themeData: getDialogThemeData(context),
+      themeData: getTagsDialogThemeData(context),
       onItemSearch: (tag, query) {
         return tag.toLowerCase().contains(query.toLowerCase());
       },
