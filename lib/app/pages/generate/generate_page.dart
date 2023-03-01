@@ -5,7 +5,7 @@ import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
 import 'package:trek_bkk_app/utils.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
-import 'package:trek_bkk_app/app/utils/snackbar.dart';
+import 'package:trek_bkk_app/app/widgets/snackbar.dart';
 
 List<String> tags = [
   "home",
@@ -88,9 +88,7 @@ class _GeneratePageState extends State<GeneratePage> {
         .toList();
 
     tags.add(ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: const StadiumBorder()),
+        style: primaryButtonStyles(),
         onPressed: openFilterDialog,
         child: const Text("+")));
 
@@ -197,10 +195,7 @@ class _GeneratePageState extends State<GeneratePage> {
                 ),
                 Center(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 16),
-                          shape: const StadiumBorder()),
+                      style: primaryButtonStyles(px: 32),
                       onPressed: () {
                         if (selectedTagList.length > 3) {
                           ScaffoldMessenger.of(context).showSnackBar(

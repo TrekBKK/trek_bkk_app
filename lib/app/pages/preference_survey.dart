@@ -65,9 +65,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
         .toList();
 
     Widget addButton = ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: const StadiumBorder()),
+        style: primaryButtonStyles(),
         onPressed: openFilterDialog,
         child: const Text("+"));
 

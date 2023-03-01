@@ -17,3 +17,9 @@ FilterListThemeData getTagsDialogThemeData(context) {
               backgroundColor: Color(lightColor),
               textStyle: TextStyle(color: Colors.black))));
 }
+
+ButtonStyle primaryButtonStyles({double px = 0, double py = 16}) {
+  return ElevatedButton.styleFrom(
+      padding: EdgeInsets.symmetric(horizontal: px, vertical: py),
+      shape: const StadiumBorder());
+}
