@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trek_bkk_app/app/pages/search/search_2.dart';
 
+import 'package:trek_bkk_app/constants.dart';
+
+import 'package:trek_bkk_app/utils.dart';
+
 class Search1 extends StatefulWidget {
   const Search1({Key? key}) : super(key: key);
 
@@ -9,24 +13,26 @@ class Search1 extends StatefulWidget {
 }
 
 class _Search1State extends State<Search1> {
-  late TextEditingController _controller;
+  late TextEditingController _searchController;
+  late TextEditingController _addController;
   var searchKey = "";
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
-    _controller.text = searchKey;
+    _searchController = TextEditingController();
+    _addController = TextEditingController();
+    _searchController.text = searchKey;
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _searchController.dispose();
+    _addController.dispose();
     super.dispose();
   }
 
   next(String searchKey) {
-    searchKey = searchKey;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Search2(
               initialSearchKey: searchKey,
@@ -35,6 +41,42 @@ class _Search1State extends State<Search1> {
 
   @override
   Widget build(BuildContext context) {
+    var addPlaceDialog = Dialog(
+      backgroundColor: const Color(lightColor),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: SizedBox(
+        height: 304,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [Text("Adding stop"), Icon(Icons.close)],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextField(
+                controller: _addController,
+                onSubmitted: (value) {
+                  print(value);
+                },
+                decoration: textFieldDecoration),
+            const SizedBox(
+              height: 40,
+            ),
+            Center(
+              child: ElevatedButton(
+                style: primaryButtonStyles(),
+                onPressed: () {},
+                child: const Text("ADD"),
+              ),
+            )
+          ]),
+        ),
+      ),
+    );
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -43,16 +85,11 @@ class _Search1State extends State<Search1> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48),
           child: TextField(
-            controller: _controller,
-            onSubmitted: (value) {
-              next(value);
-            },
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Search routes",
-                fillColor: Colors.white,
-                filled: true),
-          ),
+              controller: _searchController,
+              onSubmitted: (value) {
+                next(value);
+              },
+              decoration: textFieldDecoration),
         ),
         const SizedBox(
           height: 40,
@@ -81,15 +118,9 @@ class _Search1State extends State<Search1> {
         const Text("Have some places in mind?"),
         const SizedBox(height: 32),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: const StadiumBorder()),
+            style: primaryButtonStyles(px: 32),
             onPressed: () => showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                      child: Text("test"),
-                    )),
+                context: context, builder: (context) => addPlaceDialog),
             child: const Text("Add place")),
       ],
     );
