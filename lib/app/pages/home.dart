@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
                 image: AssetImage("assets/images/banner.png"),
                 fit: BoxFit.cover,
                 width: double.infinity,
+                height: double.infinity,
               ),
               Align(
                 alignment: Alignment.bottomCenter,
