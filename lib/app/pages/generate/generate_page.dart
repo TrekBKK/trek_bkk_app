@@ -80,7 +80,7 @@ class _GeneratePageState extends State<GeneratePage> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: const Color(lightColor),
+                  color: lightColor,
                 ),
                 child: Text(tag),
               ),
@@ -95,7 +95,7 @@ class _GeneratePageState extends State<GeneratePage> {
     return Scaffold(
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          color: const Color(dividerColor),
+          color: dividerColor,
           padding: const EdgeInsets.all(24),
           child: Row(children: [
             const Text("some icon"),
