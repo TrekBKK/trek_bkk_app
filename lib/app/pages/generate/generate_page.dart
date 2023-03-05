@@ -26,21 +26,21 @@ class GeneratePage extends StatefulWidget {
 }
 
 class _GeneratePageState extends State<GeneratePage> {
-  int _maxDistSliderValue = 3;
+  int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
 
-  late final TextEditingController _maxDistTextFieldController;
+  late final TextEditingController _numStopsTextFieldController;
 
   @override
   void initState() {
     super.initState();
-    _maxDistTextFieldController = TextEditingController();
-    _maxDistTextFieldController.text = "3";
+    _numStopsTextFieldController = TextEditingController();
+    _numStopsTextFieldController.text = "3";
   }
 
   @override
   void dispose() {
-    _maxDistTextFieldController.dispose();
+    _numStopsTextFieldController.dispose();
     super.dispose();
   }
 
@@ -133,7 +133,7 @@ class _GeneratePageState extends State<GeneratePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Maximum distance between two places"),
+                const Text("How many stops would you like?"),
                 const SizedBox(
                   height: 16,
                 ),
@@ -143,7 +143,7 @@ class _GeneratePageState extends State<GeneratePage> {
                       width: 96,
                       child: TextFormField(
                         textAlign: TextAlign.center,
-                        controller: _maxDistTextFieldController,
+                        controller: _numStopsTextFieldController,
                         decoration: InputDecoration(
                             suffixText: "km",
                             contentPadding: const EdgeInsets.symmetric(
@@ -156,7 +156,7 @@ class _GeneratePageState extends State<GeneratePage> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _maxDistSliderValue = int.parse(value);
+                            _numStopsSliderValue = int.parse(value);
                           });
                         },
                       ),
@@ -165,13 +165,13 @@ class _GeneratePageState extends State<GeneratePage> {
                       child: Slider(
                         max: 10,
                         divisions: 10,
-                        value: _maxDistSliderValue.toDouble(),
-                        label: _maxDistSliderValue.round().toString(),
+                        value: _numStopsSliderValue.toDouble(),
+                        label: _numStopsSliderValue.round().toString(),
                         onChanged: ((value) {
                           setState(() {
-                            _maxDistSliderValue = value.toInt();
-                            _maxDistTextFieldController.text =
-                                _maxDistSliderValue.toString();
+                            _numStopsSliderValue = value.toInt();
+                            _numStopsTextFieldController.text =
+                                _numStopsSliderValue.toString();
                           });
                         }),
                       ),
@@ -201,11 +201,11 @@ class _GeneratePageState extends State<GeneratePage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               warningSnackbar("No more than 3 location types"));
                         } else {
-                          generateRoute(
-                              lat: "0",
-                              long: "0",
-                              maxDistBetweenPlaces: _maxDistSliderValue,
-                              tags: selectedTagList);
+                          // generateRoute(
+                          //     lat: "0",
+                          //     long: "0",
+                          //     maxDistBetweenPlaces: _numStopsSliderValue,
+                          //     tags: selectedTagList);
                         }
                       },
                       child: const Text("Generate")),
