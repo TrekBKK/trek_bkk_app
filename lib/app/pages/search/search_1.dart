@@ -42,7 +42,7 @@ class _Search1State extends State<Search1> {
   @override
   Widget build(BuildContext context) {
     var addPlaceDialog = Dialog(
-      backgroundColor: const Color(lightColor),
+      backgroundColor: lightColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: SizedBox(
         height: 304,
