@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trek_bkk_app/app/pages/main_screen.dart';
+import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class LocationPermissionPage extends StatefulWidget {
@@ -60,7 +61,10 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
                     SizedBox(
                       height: 48,
                     ),
-                    Text("Location access is important"),
+                    Text(
+                      "Location access is important",
+                      style: headline22,
+                    ),
                     SizedBox(
                       height: 20,
                     ),

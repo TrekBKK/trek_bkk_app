@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/constants.dart';
 
 import 'package:trek_bkk_app/utils.dart';
 
@@ -38,9 +39,8 @@ class _HomeState extends State<Home> {
                         const LimitedBox(
                             maxWidth: 196,
                             child: Text(
-                              "Discover the hidden gems of BKK",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
+                              "Discover the \nhidden gems of BKK",
+                              style: headline22,
                             )),
                         ElevatedButton(
                             onPressed: () {},
