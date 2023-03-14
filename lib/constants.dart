@@ -9,11 +9,3 @@ const dividerColor = Color(0xFFEFEFEF);
 // Typography
 const headline20 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 const headline22 = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
-
-// Input fields
-const textFieldDecoration = InputDecoration(
-    border:
-        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-    hintText: "Search routes",
-    fillColor: Colors.white,
-    filled: true);

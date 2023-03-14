@@ -21,6 +21,10 @@ class HomeCard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Image.network(
           "https://picsum.photos/160/90",
+          errorBuilder: (context, error, stackTrace) => const Placeholder(
+            fallbackWidth: 160,
+            fallbackHeight: 90,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
