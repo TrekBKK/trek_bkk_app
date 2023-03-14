@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/app/widgets/home_card.dart';
 import 'package:trek_bkk_app/constants.dart';
 
 import 'package:trek_bkk_app/utils.dart';
@@ -52,6 +53,69 @@ class _HomeState extends State<Home> {
                 ),
               )
             ],
+          ),
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: ListView(children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text("Featured routes"),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Row(children: const [
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    ),
+                    HomeCard(
+                        title: "title",
+                        description: "descripto",
+                        stops: 332,
+                        distance: 3.772)
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text("Just for you"),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Row(children: const [
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    ),
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    )
+                  ]),
+                ),
+              ),
+            ]),
           ),
         )
       ],
