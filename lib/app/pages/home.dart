@@ -61,7 +61,10 @@ class _HomeState extends State<Home> {
             child: ListView(children: [
               const Padding(
                 padding: EdgeInsets.only(left: 16),
-                child: Text("Featured routes"),
+                child: Text(
+                  "Featured routes",
+                  style: headline22,
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -71,6 +74,13 @@ class _HomeState extends State<Home> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: Row(children: const [
+                    HomeCard(
+                      title: "Springdale but also very long",
+                      description:
+                          "city of god of the millenial puzzle and very longlong text text text",
+                      stops: 8,
+                      distance: 3.7,
+                    ),
                     HomeCard(
                       title: "ayodaya",
                       description: "city of god",
@@ -90,7 +100,10 @@ class _HomeState extends State<Home> {
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 16),
-                child: Text("Just for you"),
+                child: Text(
+                  "Just for you",
+                  style: headline22,
+                ),
               ),
               const SizedBox(
                 height: 16,
