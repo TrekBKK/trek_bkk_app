@@ -92,127 +92,124 @@ class _GeneratePageState extends State<GeneratePage> {
         onPressed: openFilterDialog,
         child: const Text("+")));
 
-    return Scaffold(
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(
-          color: dividerColor,
-          padding: const EdgeInsets.all(24),
-          child: Row(children: [
-            const Text("some icon"),
-            const SizedBox(
-              width: 24,
-            ),
-            Flexible(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Your starting point",
-                        fillColor: Colors.white,
-                        filled: true),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Your destination",
-                        fillColor: Colors.white,
-                        filled: true),
-                  )
-                ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            color: dividerColor,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Row(children: [
+              const Text("some icon"),
+              const SizedBox(
+                width: 24,
               ),
-            )
-          ]),
-        ),
-        Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("How many stops would you like?"),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
+              Flexible(
+                child: Column(
                   children: [
-                    SizedBox(
-                      width: 96,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        controller: _numStopsTextFieldController,
-                        decoration: InputDecoration(
-                            suffixText: "km",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8))),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LimitRangeTextInputFormatter(1, 10)
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _numStopsSliderValue = int.parse(value);
-                          });
-                        },
-                      ),
+                    TextFormField(
+                      decoration:
+                          textFieldDecoration(hintText: "Your starting point"),
                     ),
-                    Expanded(
-                      child: Slider(
-                        max: 10,
-                        divisions: 10,
-                        value: _numStopsSliderValue.toDouble(),
-                        label: _numStopsSliderValue.round().toString(),
-                        onChanged: ((value) {
-                          setState(() {
-                            _numStopsSliderValue = value.toInt();
-                            _numStopsTextFieldController.text =
-                                _numStopsSliderValue.toString();
-                          });
-                        }),
-                      ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration:
+                          textFieldDecoration(hintText: "Your destination"),
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                const Text("Location types"),
-                const SizedBox(
-                  height: 16,
-                ),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: tags,
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                Center(
-                  child: ElevatedButton(
-                      style: primaryButtonStyles(px: 32),
-                      onPressed: () {
-                        if (selectedTagList.length > 3) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              warningSnackbar("No more than 3 location types"));
-                        } else {
-                          // generateRoute(
-                          //     lat: "0",
-                          //     long: "0",
-                          //     maxDistBetweenPlaces: _numStopsSliderValue,
-                          //     tags: selectedTagList);
-                        }
-                      },
-                      child: const Text("Generate")),
-                )
-              ],
-            )),
-      ]),
+              )
+            ]),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("How many stops would you like?"),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 96,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _numStopsTextFieldController,
+                          decoration: InputDecoration(
+                              suffixText: "km",
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LimitRangeTextInputFormatter(1, 10)
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _numStopsSliderValue = int.parse(value);
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: Slider(
+                          max: 10,
+                          divisions: 10,
+                          value: _numStopsSliderValue.toDouble(),
+                          label: _numStopsSliderValue.round().toString(),
+                          onChanged: ((value) {
+                            setState(() {
+                              _numStopsSliderValue = value.toInt();
+                              _numStopsTextFieldController.text =
+                                  _numStopsSliderValue.toString();
+                            });
+                          }),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text("Location types"),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: tags,
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                        style: primaryButtonStyles(px: 32),
+                        onPressed: () {
+                          if (selectedTagList.length > 3) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                warningSnackbar(
+                                    "No more than 3 location types"));
+                          } else {
+                            // generateRoute(
+                            //     lat: "0",
+                            //     long: "0",
+                            //     maxDistBetweenPlaces: _numStopsSliderValue,
+                            //     tags: selectedTagList);
+                          }
+                        },
+                        child: const Text("Generate")),
+                  )
+                ],
+              )),
+        ]),
+      ),
     );
   }
 }

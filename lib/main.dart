@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trek_bkk_app/app/pages/main_screen.dart';
+import 'package:trek_bkk_app/app/pages/splash.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 void main() {
@@ -21,6 +21,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: ((context) => UserData()),
           )
-        ], child: MainScreen()));
+        ], child: Splash()));
   }
 }

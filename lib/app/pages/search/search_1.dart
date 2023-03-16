@@ -42,7 +42,6 @@ class _Search1State extends State<Search1> {
   @override
   Widget build(BuildContext context) {
     var addPlaceDialog = Dialog(
-      // backgroundColor: const Color(lightColor),
       backgroundColor: lightColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: SizedBox(
@@ -62,7 +61,7 @@ class _Search1State extends State<Search1> {
                 onSubmitted: (value) {
                   print(value);
                 },
-                decoration: textFieldDecoration),
+                decoration: textFieldDecoration(hintText: "Search routes")),
             const SizedBox(
               height: 40,
             ),
@@ -78,52 +77,54 @@ class _Search1State extends State<Search1> {
       ),
     );
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("Search by Route name or description"),
-        const SizedBox(height: 32),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48),
-          child: TextField(
-              controller: _searchController,
-              onSubmitted: (value) {
-                next(value);
-              },
-              decoration: textFieldDecoration),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            children: const [
-              Expanded(
-                  child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Divider(),
-              )),
-              Text("OR"),
-              Expanded(
-                  child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Divider(),
-              ))
-            ],
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Search by Route name or description"),
+          const SizedBox(height: 32),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: TextField(
+                controller: _searchController,
+                onSubmitted: (value) {
+                  next(value);
+                },
+                decoration: textFieldDecoration(hintText: "Search routes")),
           ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        const Text("Have some places in mind?"),
-        const SizedBox(height: 32),
-        ElevatedButton(
-            style: primaryButtonStyles(px: 32),
-            onPressed: () => showDialog(
-                context: context, builder: (context) => addPlaceDialog),
-            child: const Text("Add place")),
-      ],
+          const SizedBox(
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              children: const [
+                Expanded(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Divider(),
+                )),
+                Text("OR"),
+                Expanded(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Divider(),
+                ))
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Text("Have some places in mind?"),
+          const SizedBox(height: 32),
+          ElevatedButton(
+              style: primaryButtonStyles(px: 32),
+              onPressed: () => showDialog(
+                  context: context, builder: (context) => addPlaceDialog),
+              child: const Text("Add place")),
+        ],
+      ),
     );
   }
 }

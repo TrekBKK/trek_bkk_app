@@ -18,8 +18,19 @@ FilterListThemeData getTagsDialogThemeData(context) {
               textStyle: TextStyle(color: Colors.black))));
 }
 
-ButtonStyle primaryButtonStyles({double px = 8, double py = 16}) {
+ButtonStyle primaryButtonStyles({double px = 8, double py = 8}) {
   return ElevatedButton.styleFrom(
       padding: EdgeInsets.symmetric(horizontal: px, vertical: py),
       shape: const StadiumBorder());
+}
+
+InputDecoration textFieldDecoration(
+    {String hintText = "", double px = 16, double py = 4}) {
+  return InputDecoration(
+      contentPadding: EdgeInsets.symmetric(horizontal: px, vertical: py),
+      border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      hintText: hintText,
+      fillColor: Colors.white,
+      filled: true);
 }

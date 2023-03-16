@@ -44,7 +44,7 @@ dependencies:
   google_sign_in: ^5.4.4
   http: ^0.13.5
   convert: ^3.1.1
-
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +79,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/app/widgets/home_card.dart';
+import 'package:trek_bkk_app/constants.dart';
 
 import 'package:trek_bkk_app/utils.dart';
 
@@ -38,9 +40,8 @@ class _HomeState extends State<Home> {
                         const LimitedBox(
                             maxWidth: 196,
                             child: Text(
-                              "Discover the hidden gems of BKK",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
+                              "Discover the \nhidden gems of BKK",
+                              style: headline22,
                             )),
                         ElevatedButton(
                             onPressed: () {},
@@ -52,6 +53,82 @@ class _HomeState extends State<Home> {
                 ),
               )
             ],
+          ),
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: ListView(children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  "Featured routes",
+                  style: headline22,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Row(children: const [
+                    HomeCard(
+                      title: "Springdale but also very long",
+                      description:
+                          "city of god of the millenial puzzle and very longlong text text text",
+                      stops: 8,
+                      distance: 3.7,
+                    ),
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    ),
+                    HomeCard(
+                        title: "title",
+                        description: "descripto",
+                        stops: 332,
+                        distance: 3.772)
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  "Just for you",
+                  style: headline22,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Row(children: const [
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    ),
+                    HomeCard(
+                      title: "ayodaya",
+                      description: "city of god",
+                      stops: 3,
+                      distance: 3.7,
+                    )
+                  ]),
+                ),
+              ),
+            ]),
           ),
         )
       ],
