@@ -3,7 +3,8 @@ List<Map<String, dynamic>> searchResults = [
     'name': 'Route 1',
     'distance': 10,
     'stop': 10,
-    'description': 'Route 1\'s description!',
+    'description':
+        'Route 1\'s description! Route 1\'s description! Route 1\'s description! Route 1\'s description! Route 1\'s description!',
     'tag_set': ["home", "alone"]
   },
   {

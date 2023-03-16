@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
 import 'package:trek_bkk_app/app/utils/search_result_dummy.dart';
 import 'package:trek_bkk_app/app/pages/search/filter_search_results.dart';
+import 'package:trek_bkk_app/app/widgets/route_card.dart';
 
 import '../../../constants.dart';
 
@@ -101,25 +102,38 @@ class _Search2State extends State<Search2> {
           ),
           Expanded(
             child: ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: filteredSearchResult.length,
                 itemBuilder: (BuildContext context, int index) {
+                  // return Padding(
+                  //   padding: const EdgeInsets.all(24),
+                  //   child: Container(
+                  //     height: 100,
+                  //     color: const Color.fromARGB(215, 2, 173, 252),
+                  //     child: Column(
+                  //       children: [
+                  //         Text('name: ${filteredSearchResult[index]['name']}'),
+                  //         Text(
+                  //             'distance: ${filteredSearchResult[index]['distance']}'),
+                  //         Text('stop: ${filteredSearchResult[index]['stop']}'),
+                  //         Text(
+                  //             'description: ${filteredSearchResult[index]['description']}'),
+                  //         Text(
+                  //             'tag_set: ${filteredSearchResult[index]['tag_set'].join(', ')}'),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // );
                   return Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Container(
-                      height: 100,
-                      color: const Color.fromARGB(215, 2, 173, 252),
-                      child: Column(
-                        children: [
-                          Text('name: ${filteredSearchResult[index]['name']}'),
-                          Text(
-                              'distance: ${filteredSearchResult[index]['distance']}'),
-                          Text('stop: ${filteredSearchResult[index]['stop']}'),
-                          Text(
-                              'description: ${filteredSearchResult[index]['description']}'),
-                          Text(
-                              'tag_set: ${filteredSearchResult[index]['tag_set'].join(', ')}'),
-                        ],
-                      ),
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, top: 24),
+                    child: RouteCard(
+                      title: filteredSearchResult[index]['name'],
+                      description: filteredSearchResult[index]['description'],
+                      stops: filteredSearchResult[index]['stop'],
+                      distance:
+                          filteredSearchResult[index]['distance'].toDouble(),
+                      url: "https://picsum.photos/160/90",
                     ),
                   );
                 }),
