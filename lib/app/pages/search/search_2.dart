@@ -32,7 +32,8 @@ class _Search2State extends State<Search2> {
   Color tagColor = lightColor;
 
   late final TextEditingController _numStopsTextFieldController;
-  final searchResultList = searchResults;
+  final List<Map<String, dynamic>> searchResultList = searchResults;
+  List<Map<String, dynamic>> filteredSearchResult = searchResults;
 
   @override
   void initState() {
@@ -50,7 +51,6 @@ class _Search2State extends State<Search2> {
   @override
   Widget build(BuildContext context) {
     String searchKey = widget.initialSearchKey;
-    var filteredSearchResult = searchResultList;
 
     return Scaffold(
       body: Column(
@@ -105,25 +105,6 @@ class _Search2State extends State<Search2> {
                 padding: const EdgeInsets.all(0),
                 itemCount: filteredSearchResult.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // return Padding(
-                  //   padding: const EdgeInsets.all(24),
-                  //   child: Container(
-                  //     height: 100,
-                  //     color: const Color.fromARGB(215, 2, 173, 252),
-                  //     child: Column(
-                  //       children: [
-                  //         Text('name: ${filteredSearchResult[index]['name']}'),
-                  //         Text(
-                  //             'distance: ${filteredSearchResult[index]['distance']}'),
-                  //         Text('stop: ${filteredSearchResult[index]['stop']}'),
-                  //         Text(
-                  //             'description: ${filteredSearchResult[index]['description']}'),
-                  //         Text(
-                  //             'tag_set: ${filteredSearchResult[index]['tag_set'].join(', ')}'),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // );
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 24, right: 24, top: 24),
@@ -244,12 +225,12 @@ class _Search2State extends State<Search2> {
                   ElevatedButton(
                     child: const Text("APPLY FILTER"),
                     onPressed: () {
-                      var temp = filterSearchResult(_numStopsSliderValue,
-                          selectedTagList, searchResultList);
-                      for (var t in temp) {
-                        print(t['name']);
-                      }
-                      // print('${temp.length}');
+                      stfSetState(() {
+                        filteredSearchResult = filterSearchResult(
+                            _numStopsSliderValue,
+                            selectedTagList,
+                            searchResults);
+                      });
                       Navigator.pop(dialogContext);
                     },
                   ),
