@@ -24,3 +24,8 @@ doc/api/
 # flutter
 .flutter-plugins
 .flutter-plugins-dependencies
+
+macos/
+
+.env
+gradle.properties
