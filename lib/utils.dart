@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 import 'constants.dart';
 
@@ -33,4 +36,18 @@ InputDecoration textFieldDecoration(
       hintText: hintText,
       fillColor: Colors.white,
       filled: true);
+}
+
+List<LatLng> convertToLatLng(List<List<double>> latLngPairs, bool swap) {
+  List<LatLng> latLngList = [];
+  if (swap) {
+    for (List<double> latLngPair in latLngPairs) {
+      latLngList.add(LatLng(latLngPair[1], latLngPair[0]));
+    }
+  } else {
+    for (List<double> latLngPair in latLngPairs) {
+      latLngList.add(LatLng(latLngPair[0], latLngPair[1]));
+    }
+  }
+  return latLngList;
 }

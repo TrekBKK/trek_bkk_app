@@ -1,6 +1,7 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
 import 'package:trek_bkk_app/utils.dart';
@@ -28,6 +29,18 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
+  final List<List<double>> route = [
+    [13.740046, 100.512341],
+    [13.739739258635044, 100.51343901410165],
+    [13.74010860629716, 100.51404155092914],
+  ];
+  final List<List<double>> places = [
+    [13.740046, 100.512341],
+    [13.739739258635044, 100.51343901410165],
+    [13.74010860629716, 100.51404155092914],
+    [13.739119920900958, 100.51406087974054],
+    [13.739015828862138, 100.5132387710093]
+  ];
 
   late final TextEditingController _numStopsTextFieldController;
 
@@ -197,6 +210,13 @@ class _GeneratePageState extends State<GeneratePage> {
                                 warningSnackbar(
                                     "No more than 3 location types"));
                           } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => MapGeneratedPage(
+                                          route: route,
+                                          places: places,
+                                        ))));
                             // generateRoute(
                             //     lat: "0",
                             //     long: "0",
