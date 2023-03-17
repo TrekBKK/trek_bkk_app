@@ -28,10 +28,18 @@ class _SplashState extends State<Splash> {
       Future.microtask(() => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen())));
     } else {
-      Future.microtask(() => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const LocationPermissionPage())));
+      permission = await Geolocator.requestPermission();
+      if ((permission == LocationPermission.always ||
+              permission == LocationPermission.whileInUse) &&
+          await Geolocator.isLocationServiceEnabled()) {
+        Future.microtask(() => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen())));
+      } else {
+        Future.microtask(() => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const LocationPermissionPage())));
+      }
     }
   }
 

@@ -15,8 +15,6 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
   @override
   void initState() {
     super.initState();
-
-    checkLocationPermission();
   }
 
   checkLocationPermission() async {
@@ -25,11 +23,11 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
 
     permission = await Geolocator.checkPermission();
 
-    if (permission != LocationPermission.always ||
-        permission != LocationPermission.whileInUse) {
+    if (!(permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse)) {
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.always ||
-          permission != LocationPermission.whileInUse) {
+      if (!(permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse)) {
         return;
       }
     }
