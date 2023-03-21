@@ -10,3 +10,4 @@ const dividerColor = Color(0xFFEFEFEF);
 const headline20 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 const headline22 = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 const body12 = TextStyle(fontSize: 12);
+const body14 = TextStyle(fontSize: 14);

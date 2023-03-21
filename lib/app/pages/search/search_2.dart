@@ -102,19 +102,15 @@ class _Search2State extends State<Search2> {
           ),
           Expanded(
             child: ListView.builder(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(bottom: 36),
                 itemCount: filteredSearchResult.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 24, right: 24, top: 24),
                     child: RouteCard(
-                      title: filteredSearchResult[index]['name'],
-                      description: filteredSearchResult[index]['description'],
-                      stops: filteredSearchResult[index]['stop'],
-                      distance:
-                          filteredSearchResult[index]['distance'].toDouble(),
-                      url: "https://picsum.photos/160/90",
+                      route: filteredSearchResult[index],
+                      imgUrl: "https://picsum.photos/160/90",
                     ),
                   );
                 }),
@@ -133,108 +129,110 @@ class _Search2State extends State<Search2> {
           return Dialog(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  const Align(
-                      alignment: Alignment.topRight, child: CloseButton()),
-                  const Text(
-                    "Maximum total distance",
-                    textAlign: TextAlign.start,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 96,
-                        child: TextFormField(
-                          textAlign: TextAlign.center,
-                          controller: _numStopsTextFieldController,
-                          decoration: InputDecoration(
-                              suffixText: "km",
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LimitRangeTextInputFormatter(1, 10)
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              _numStopsSliderValue = int.parse(value);
-                            });
-                          },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Align(
+                        alignment: Alignment.topRight, child: CloseButton()),
+                    const Text(
+                      "Maximum total distance",
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 96,
+                          child: TextFormField(
+                            textAlign: TextAlign.center,
+                            controller: _numStopsTextFieldController,
+                            decoration: InputDecoration(
+                                suffixText: "km",
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LimitRangeTextInputFormatter(1, 10)
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _numStopsSliderValue = int.parse(value);
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Slider(
-                          max: 10,
-                          divisions: 10,
-                          value: _numStopsSliderValue.toDouble(),
-                          label: _numStopsSliderValue.round().toString(),
-                          onChanged: ((value) {
-                            stfSetState(() {
-                              _numStopsSliderValue = value.toInt();
-                              _numStopsTextFieldController.text =
-                                  _numStopsSliderValue.toString();
-                            });
-                          }),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const Text(
-                    "Types of places",
-                    textAlign: TextAlign.start,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: queryTagList
-                        .map<Widget>((tag) => FilterChip(
-                              label: Text(tag),
-                              showCheckmark: false,
-                              selected: selectedTagList.contains(tag),
-                              onSelected: (bool selected) {
-                                stfSetState(() {
-                                  if (selected) {
-                                    if (!selectedTagList.contains(tag)) {
-                                      selectedTagList.add(tag);
+                        Expanded(
+                          child: Slider(
+                            max: 10,
+                            divisions: 10,
+                            value: _numStopsSliderValue.toDouble(),
+                            label: _numStopsSliderValue.round().toString(),
+                            onChanged: ((value) {
+                              stfSetState(() {
+                                _numStopsSliderValue = value.toInt();
+                                _numStopsTextFieldController.text =
+                                    _numStopsSliderValue.toString();
+                              });
+                            }),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Text(
+                      "Types of places",
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: queryTagList
+                          .map<Widget>((tag) => FilterChip(
+                                label: Text(tag),
+                                showCheckmark: false,
+                                selected: selectedTagList.contains(tag),
+                                onSelected: (bool selected) {
+                                  stfSetState(() {
+                                    if (selected) {
+                                      if (!selectedTagList.contains(tag)) {
+                                        selectedTagList.add(tag);
+                                      }
+                                    } else {
+                                      selectedTagList.remove(tag);
                                     }
-                                  } else {
-                                    selectedTagList.remove(tag);
-                                  }
-                                });
-                              },
-                              selectedColor: lightColor,
-                              disabledColor: Colors.grey.shade100,
-                            ))
-                        .toList(),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ElevatedButton(
-                    child: const Text("APPLY FILTER"),
-                    onPressed: () {
-                      stfSetState(() {
-                        filteredSearchResult = filterSearchResult(
-                            _numStopsSliderValue,
-                            selectedTagList,
-                            searchResults);
-                      });
-                      Navigator.pop(dialogContext);
-                    },
-                  ),
-                ],
+                                  });
+                                },
+                                selectedColor: lightColor,
+                                disabledColor: Colors.grey.shade100,
+                              ))
+                          .toList(),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    ElevatedButton(
+                      child: const Text("APPLY FILTER"),
+                      onPressed: () {
+                        stfSetState(() {
+                          filteredSearchResult = filterSearchResult(
+                              _numStopsSliderValue,
+                              selectedTagList,
+                              searchResults);
+                        });
+                        Navigator.pop(dialogContext);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );
