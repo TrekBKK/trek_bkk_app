@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
 
 class RouteInfoWidget extends StatefulWidget {
-  final Map<String, dynamic> route;
+  final RouteModel route;
 
   const RouteInfoWidget({
     super.key,
@@ -24,11 +25,11 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final String title = widget.route['name'];
-    final String description = widget.route['description'];
-    final int stop = widget.route['stop'];
-    final double distance = widget.route['distance'];
-    final List<Map<String, dynamic>> waypoints = widget.route['waypoints'];
+    final String title = widget.route.name;
+    final String description = widget.route.description;
+    final int stop = widget.route.stops;
+    final double distance = widget.route.distance;
+    final List<WaypointModel> waypoints = widget.route.waypoints;
 
     var padding = MediaQuery.of(context).viewPadding;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -93,7 +94,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 16),
                             child: Text(
-                              waypoints[index]['name'],
+                              waypoints[index].name,
                               style: headline20,
                             ),
                           ),

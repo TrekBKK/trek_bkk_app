@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
 import 'package:trek_bkk_app/app/utils/search_result_dummy.dart';
 import 'package:trek_bkk_app/app/pages/search/filter_search_results.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
-
-import '../../../constants.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
+import 'package:trek_bkk_app/utils.dart';
+import 'package:trek_bkk_app/constants.dart';
 
 List<String> tags = [
   "home",
@@ -32,14 +38,18 @@ class _Search2State extends State<Search2> {
   Color tagColor = lightColor;
 
   late final TextEditingController _numStopsTextFieldController;
+
   final List<Map<String, dynamic>> searchResultList = searchResults;
-  List<Map<String, dynamic>> filteredSearchResult = searchResults;
+  List<RouteModel>? filteredSearchResult;
 
   @override
   void initState() {
     super.initState();
+
     _numStopsTextFieldController = TextEditingController();
     _numStopsTextFieldController.text = "10";
+
+    callApi(widget.initialSearchKey);
   }
 
   @override
@@ -48,73 +58,59 @@ class _Search2State extends State<Search2> {
     super.dispose();
   }
 
+  callApi(String searchKey) async {
+    http.Response response = await getRoutes(searchKey: searchKey);
+    if (response.statusCode == 200) {
+      setState(() {
+        filteredSearchResult = (jsonDecode(response.body) as List)
+            .map((data) => RouteModel.fromJson(data))
+            .toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String searchKey = widget.initialSearchKey;
-
     return Scaffold(
+      appBar: AppBar(
+          title: Row(
+        children: [
+          Flexible(
+              child: TextFormField(
+                  initialValue: widget.initialSearchKey,
+                  onFieldSubmitted: (value) => callApi(value),
+                  decoration: textFieldDecoration(hintText: "Search routes"))),
+          const SizedBox(
+            width: 24,
+          ),
+          GestureDetector(
+            onTap: () => _filterDialogBuilder(context),
+            child: const Icon(Icons.filter_alt),
+          )
+        ],
+      )),
       body: Column(
         children: [
-          Container(
-            color: const Color(0xFFEFEFEF),
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          backgroundColor: const Color(0xFFFAE1A6),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 8),
-                          shape: const StadiumBorder()),
-                      child: const Text("BACK")),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                        child: TextFormField(
-                      initialValue: searchKey,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Search routes",
-                          fillColor: Colors.white,
-                          filled: true),
-                    )),
-                    const SizedBox(
-                      width: 24,
-                    ),
-                    GestureDetector(
-                      onTap: () => _filterDialogBuilder(context),
-                      child: const Icon(Icons.filter_alt),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 36),
-                itemCount: filteredSearchResult.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 24, right: 24, top: 24),
-                    child: RouteCard(
-                      route: filteredSearchResult[index],
-                      imgUrl: "https://picsum.photos/160/90",
-                    ),
-                  );
-                }),
-          ),
+          (() {
+            if (filteredSearchResult != null) {
+              return Expanded(
+                child: ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 36),
+                    itemCount: filteredSearchResult?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(left: 24, right: 24, top: 24),
+                        child: RouteCard(
+                          route: filteredSearchResult![index],
+                          imgUrl: "https://picsum.photos/160/90",
+                        ),
+                      );
+                    }),
+              );
+            }
+            return Text("no result");
+          })()
         ],
       ),
     );

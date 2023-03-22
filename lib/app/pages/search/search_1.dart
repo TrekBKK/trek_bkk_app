@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:trek_bkk_app/app/pages/search/search_2.dart';
-
 import 'package:trek_bkk_app/constants.dart';
-
 import 'package:trek_bkk_app/utils.dart';
 
 class Search1 extends StatefulWidget {
@@ -13,26 +12,21 @@ class Search1 extends StatefulWidget {
 }
 
 class _Search1State extends State<Search1> {
-  late TextEditingController _searchController;
   late TextEditingController _addController;
-  var searchKey = "";
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
     _addController = TextEditingController();
-    _searchController.text = searchKey;
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
     _addController.dispose();
     super.dispose();
   }
 
-  next(String searchKey) {
+  toSearch2(String searchKey) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Search2(
               initialSearchKey: searchKey,
@@ -86,9 +80,8 @@ class _Search1State extends State<Search1> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
             child: TextField(
-                controller: _searchController,
                 onSubmitted: (value) {
-                  next(value);
+                  toSearch2(value);
                 },
                 decoration: textFieldDecoration(hintText: "Search routes")),
           ),
