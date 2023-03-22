@@ -36,11 +36,12 @@ class _Search2State extends State<Search2> {
   List<String> queryTagList = tags.toList();
   List<String> selectedTagList = tags.toList();
   Color tagColor = lightColor;
+  bool dataIsFetched = false;
 
   late final TextEditingController _numStopsTextFieldController;
 
   final List<Map<String, dynamic>> searchResultList = searchResults;
-  List<RouteModel>? filteredSearchResult;
+  late List<RouteModel> filteredSearchResult;
 
   @override
   void initState() {
@@ -59,6 +60,9 @@ class _Search2State extends State<Search2> {
   }
 
   callApi(String searchKey) async {
+    setState(() {
+      dataIsFetched = false;
+    });
     http.Response response = await getRoutes(searchKey: searchKey);
     if (response.statusCode == 200) {
       setState(() {
@@ -67,6 +71,9 @@ class _Search2State extends State<Search2> {
             .toList();
       });
     }
+    setState(() {
+      dataIsFetched = true;
+    });
   }
 
   @override
@@ -92,24 +99,27 @@ class _Search2State extends State<Search2> {
       body: Column(
         children: [
           (() {
-            if (filteredSearchResult != null) {
-              return Expanded(
-                child: ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 36),
-                    itemCount: filteredSearchResult?.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(left: 24, right: 24, top: 24),
-                        child: RouteCard(
-                          route: filteredSearchResult![index],
-                          imgUrl: "https://picsum.photos/160/90",
-                        ),
-                      );
-                    }),
-              );
+            if (dataIsFetched) {
+              if (filteredSearchResult.isNotEmpty) {
+                return Expanded(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 36),
+                      itemCount: filteredSearchResult.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 24, right: 24, top: 24),
+                          child: RouteCard(
+                            route: filteredSearchResult[index],
+                            imgUrl: "https://picsum.photos/160/90",
+                          ),
+                        );
+                      }),
+                );
+              }
+              return const Text("no result");
             }
-            return Text("no result");
+            return const Center(child: CircularProgressIndicator());
           })()
         ],
       ),
