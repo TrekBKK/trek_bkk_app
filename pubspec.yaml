@@ -52,6 +52,9 @@ dependencies:
   mapbox_gl: ^0.16.0
   sliding_up_panel: ^2.0.0+1
 
+  #local
+  shared_preferences: ^2.0.18
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

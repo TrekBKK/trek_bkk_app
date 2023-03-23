@@ -1,45 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:trek_bkk_app/app/widgets/me_menu.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:trek_bkk_app/app/pages/history.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/pages/login/login_view.dart';
+import 'package:trek_bkk_app/app/widgets/me_menu.dart';
 import 'package:trek_bkk_app/app/pages/preference_survey.dart';
 
-class Me extends StatelessWidget {
-  const Me({super.key});
-  final login = false;
-  // void changePage(BuildContext ctx) {
-  //   Navigator.of(ctx).pushNamed('/History');
-  // }
+class MePage extends StatefulWidget {
+  const MePage({super.key});
+
+  @override
+  State<MePage> createState() => _MePageState();
+}
+
+class _MePageState extends State<MePage> {
+  bool _login = false;
+  late bool _perf;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+    _perf = false;
+  }
+
+  Future<void> _checkLogin() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    String? name = sp.getString("email");
+    print("checkLogin");
+    print(name);
+    if (name != null) {
+      setState(() {
+        _login = true;
+      });
+    } else {
+      setState(() {
+        _login = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // return login ? buildMeScene() : SignInPage();
+    // final userProvider = Provider.of<UserData>(context, listen: false);
+
+    // userProvider.check();
     return Scaffold(
       body: SafeArea(
-          child: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const SignInPage())));
-              },
-              child: const Text("SignInPage")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const PreferenceSurvey())));
-              },
-              child: const Text("preference survey"))
-        ],
-      )),
+          child: _login == false
+              ? SignInPage(checkLogin: _checkLogin)
+              : _perf == false
+                  ? const PreferenceSurvey()
+                  : buildMeScene()),
     );
+    // return Scaffold(
+    //   body: SafeArea(
+    //       child: Column(
+    //     children: [
+    //       ElevatedButton(
+    //           onPressed: () {
+    //             Navigator.push(
+    //                 context,
+    //                 MaterialPageRoute(
+    //                     builder: ((context) => const SignInPage())));
+    //           },
+    //           child: const Text("SignInPage")),
+    //       ElevatedButton(
+    //           onPressed: () {
+    //             Navigator.push(
+    //                 context,
+    //                 MaterialPageRoute(
+    //                     builder: ((context) => const PreferenceSurvey())));
+    //           },
+    //           child: const Text("preference survey"))
+    //     ],
+    //   )),
+    // );
   }
 }
 

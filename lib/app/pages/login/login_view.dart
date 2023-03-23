@@ -5,16 +5,18 @@ import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+  final dynamic Function() checkLogin;
+  const SignInPage({super.key, required this.checkLogin});
 
   @override
   Widget build(BuildContext context) {
-    Future google_signIn() async {
+    Future googleSignIn() async {
       var res = await GoogleSignInApi.login();
-      if (res != null) {
+      if (res != null && context.mounted) {
         UserModel user = UserModel(
-            name: res.displayName, email: res.email, photoUrl: res.photoUrl);
-        Provider.of<UserData>(context, listen: false).saveUser(user);
+            name: res.displayName!, email: res.email, photoUrl: res.photoUrl);
+        await Provider.of<UserData>(context, listen: false).saveUser(user);
+        await checkLogin();
       }
     }
 
@@ -36,7 +38,7 @@ class SignInPage extends StatelessWidget {
                   "Sign in to see your favorite list \nand propose your own route!"),
               const SizedBox(height: 48),
               OutlinedButton.icon(
-                onPressed: google_signIn,
+                onPressed: googleSignIn,
                 icon: const Image(
                     width: 16, image: AssetImage("assets/icons/google.png")),
                 label: const Text("Sign in with Google"),
