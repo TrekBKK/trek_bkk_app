@@ -145,8 +145,9 @@ class _Search2State extends State<Search2> {
                     const Align(
                         alignment: Alignment.topRight, child: CloseButton()),
                     const Text(
-                      "Maximum total distance",
+                      "Total distance",
                       textAlign: TextAlign.start,
+                      style: headline20,
                     ),
                     const SizedBox(
                       height: 16,
@@ -199,6 +200,7 @@ class _Search2State extends State<Search2> {
                     const Text(
                       "Types of places",
                       textAlign: TextAlign.start,
+                      style: headline20,
                     ),
                     const SizedBox(
                       height: 16,
