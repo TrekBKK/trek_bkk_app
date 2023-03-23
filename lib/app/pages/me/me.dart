@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:trek_bkk_app/app/widgets/me_menu.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:trek_bkk_app/app/pages/history.dart';
+import 'package:trek_bkk_app/app/pages/me/history.dart';
 import 'package:path/path.dart';
 import 'package:trek_bkk_app/app/pages/login/login_view.dart';
-import 'package:trek_bkk_app/app/pages/preference_survey.dart';
+import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
 
 class Me extends StatelessWidget {
   const Me({super.key});
