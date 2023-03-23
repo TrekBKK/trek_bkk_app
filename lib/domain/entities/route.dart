@@ -4,14 +4,15 @@ class RouteModel {
   final double distance;
   final int stops;
   final List<WaypointModel> waypoints;
+  final List<String> tags;
 
-  RouteModel({
-    required this.name,
-    this.description = "",
-    required this.distance,
-    required this.stops,
-    required this.waypoints,
-  });
+  RouteModel(
+      {required this.name,
+      this.description = "",
+      required this.distance,
+      required this.stops,
+      required this.waypoints,
+      required this.tags});
 
   factory RouteModel.fromJson(Map<String, dynamic> json) => RouteModel(
       name: json["name"],
@@ -20,7 +21,8 @@ class RouteModel {
       stops: json["stops"],
       waypoints: (json["waypoints"] as List)
           .map((waypoint) => WaypointModel.fromJson(waypoint))
-          .toList());
+          .toList(),
+      tags: (json["tags"] as List).cast<String>());
 }
 
 class WaypointModel {

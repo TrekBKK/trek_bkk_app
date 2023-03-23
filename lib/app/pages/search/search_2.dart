@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:trek_bkk_app/app/pages/search/get_tags_from_query.dart';
 
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
 import 'package:trek_bkk_app/app/utils/search_result_dummy.dart';
@@ -33,15 +34,15 @@ class Search2 extends StatefulWidget {
 
 class _Search2State extends State<Search2> {
   int _numStopsSliderValue = 10;
-  List<String> queryTagList = tags.toList();
-  List<String> selectedTagList = tags.toList();
+  List<String> queryTagList = [];
+  List<String> selectedTagList = [];
   Color tagColor = lightColor;
   bool dataIsFetched = false;
 
   late final TextEditingController _numStopsTextFieldController;
 
-  final List<Map<String, dynamic>> searchResultList = searchResults;
-  late List<RouteModel> filteredSearchResult;
+  late List<RouteModel> searchResults;
+  List<RouteModel> filteredSearchResult = [];
 
   @override
   void initState() {
@@ -66,9 +67,12 @@ class _Search2State extends State<Search2> {
     http.Response response = await getRoutes(searchKey: searchKey);
     if (response.statusCode == 200) {
       setState(() {
-        filteredSearchResult = (jsonDecode(response.body) as List)
+        searchResults = (jsonDecode(response.body) as List)
             .map((data) => RouteModel.fromJson(data))
             .toList();
+        filteredSearchResult = searchResults.toList();
+        queryTagList = getTagsFromQuery(searchResults);
+        selectedTagList = queryTagList.toList();
       });
     }
     setState(() {
@@ -174,6 +178,7 @@ class _Search2State extends State<Search2> {
                         Expanded(
                           child: Slider(
                             max: 10,
+                            min: 1,
                             divisions: 10,
                             value: _numStopsSliderValue.toDouble(),
                             label: _numStopsSliderValue.round().toString(),
@@ -226,16 +231,19 @@ class _Search2State extends State<Search2> {
                       height: 24,
                     ),
                     ElevatedButton(
+                      onPressed:
+                          (searchResults.isEmpty || selectedTagList.isEmpty)
+                              ? null
+                              : () {
+                                  stfSetState(() {
+                                    filteredSearchResult = filterSearchResult(
+                                        _numStopsSliderValue,
+                                        selectedTagList,
+                                        searchResults);
+                                  });
+                                  Navigator.pop(dialogContext);
+                                },
                       child: const Text("APPLY FILTER"),
-                      onPressed: () {
-                        stfSetState(() {
-                          filteredSearchResult = filterSearchResult(
-                              _numStopsSliderValue,
-                              selectedTagList,
-                              searchResults);
-                        });
-                        Navigator.pop(dialogContext);
-                      },
                     ),
                   ],
                 ),
