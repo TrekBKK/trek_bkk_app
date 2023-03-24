@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/splash.dart';
-import 'package:trek_bkk_app/providers/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
@@ -19,10 +17,6 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
             colorScheme: ColorScheme.light(primary: Color(0xFF972D07))),
-        home: MultiProvider(providers: [
-          ChangeNotifierProvider(
-            create: ((context) => UserData()),
-          )
-        ], child: Splash()));
+        home: Splash());
   }
 }
