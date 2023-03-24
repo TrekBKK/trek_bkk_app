@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/main_screen.dart';
@@ -17,7 +18,9 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    checkLocationPermission();
+
+    SchedulerBinding.instance
+        .addPostFrameCallback((_) => checkLocationPermission());
   }
 
   checkLocationPermission() async {

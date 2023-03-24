@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trek_bkk_app/app/pages/generate/generate_page.dart';
+import 'package:trek_bkk_app/app/pages/me/history.dart';
 import 'package:trek_bkk_app/app/pages/home.dart';
-import 'package:trek_bkk_app/app/pages/me.dart';
+import 'package:trek_bkk_app/app/pages/me/me.dart';
 import 'package:trek_bkk_app/app/pages/search/search_1.dart';
 import 'package:trek_bkk_app/app/utils/icons.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';

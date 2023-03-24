@@ -3,7 +3,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/pages/login/login_view.dart';
 import 'package:trek_bkk_app/app/widgets/me_menu.dart';
-import 'package:trek_bkk_app/app/pages/preference_survey.dart';
+
+import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
 
 class MePage extends StatefulWidget {
   const MePage({super.key});
