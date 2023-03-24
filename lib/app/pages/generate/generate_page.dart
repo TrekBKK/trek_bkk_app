@@ -1,7 +1,10 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
+import 'package:trek_bkk_app/app/widgets/places_autocomplete_field.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
 import 'package:trek_bkk_app/utils.dart';
@@ -42,18 +45,27 @@ class _GeneratePageState extends State<GeneratePage> {
     [13.739015828862138, 100.5132387710093]
   ];
 
+  String? sourcePlaceId;
+  String? destinationPlaceId;
+
+  late final TextEditingController _startAutocompleteController;
+  late final TextEditingController _destinationAutocompleteController;
   late final TextEditingController _numStopsTextFieldController;
 
   @override
   void initState() {
     super.initState();
     _numStopsTextFieldController = TextEditingController();
+    _startAutocompleteController = TextEditingController();
+    _destinationAutocompleteController = TextEditingController();
     _numStopsTextFieldController.text = "3";
   }
 
   @override
   void dispose() {
     _numStopsTextFieldController.dispose();
+    _startAutocompleteController.dispose();
+    _destinationAutocompleteController.dispose();
     super.dispose();
   }
 
@@ -110,27 +122,57 @@ class _GeneratePageState extends State<GeneratePage> {
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             color: dividerColor,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.all(16),
             child: Row(children: [
-              const Text("some icon"),
+              Column(
+                children: const [
+                  Icon(Icons.follow_the_signs),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  DottedLine(
+                    direction: Axis.vertical,
+                    lineLength: 32,
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Icon(Icons.flag)
+                ],
+              ),
               const SizedBox(
-                width: 24,
+                width: 16,
               ),
               Flexible(
                 child: Column(
                   children: [
-                    TextFormField(
-                      decoration:
-                          textFieldDecoration(hintText: "Your starting point"),
+                    CustomPlacesAutocompleteField(
+                      controller: _startAutocompleteController,
+                      hintText: "Your starting point",
+                      trailingOnTap: () => setState(() {
+                        _startAutocompleteController.clear();
+                        sourcePlaceId = null;
+                      }),
+                      onSelected: (value) => setState(() {
+                        sourcePlaceId = value.placeId;
+                      }),
                     ),
                     const SizedBox(
                       height: 16,
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration:
-                          textFieldDecoration(hintText: "Your destination"),
-                    )
+                    CustomPlacesAutocompleteField(
+                      controller: _destinationAutocompleteController,
+                      hintText: "Your destination",
+                      trailingOnTap: () {
+                        setState(() {
+                          _destinationAutocompleteController.clear();
+                          destinationPlaceId = null;
+                        });
+                      },
+                      onSelected: (value) => setState(() {
+                        destinationPlaceId = value.placeId;
+                      }),
+                    ),
                   ],
                 ),
               )
