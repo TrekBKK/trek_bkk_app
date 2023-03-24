@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/widgets/me_menu.dart';
+<<<<<<<< HEAD;:lib/app/pages/me/profile.dart
 import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/providers/user.dart';
+========
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:trek_bkk_app/app/pages/me/history.dart';
+import 'package:path/path.dart';
+import 'package:trek_bkk_app/app/pages/login/login_view.dart';
+import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
+>>>>>>>> main:lib/app/pages/me/me.dart
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
