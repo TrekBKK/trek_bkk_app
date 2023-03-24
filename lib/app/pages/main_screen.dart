@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
   List<Widget> _buildScreens() {
-    return const [Home(), Search1(), GeneratePage(), Me()];
+    return const [Home(), Search1(), GeneratePage(), MePage()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -38,21 +38,17 @@ class MainScreen extends StatelessWidget {
         inactiveColorPrimary: Colors.grey[500],
       ),
       PersistentBottomNavBarItem(
-          icon: const Icon(Icons.account_circle),
-          title: ("me"),
-          activeColorPrimary: const Color(0xff972d07),
-          inactiveColorPrimary: Colors.grey[500],
-          routeAndNavigatorSettings: RouteAndNavigatorSettings(
-            routes: {
-              '/History': (context) => History(),
-            },
-          )),
+        icon: const Icon(Icons.account_circle),
+        title: ("me"),
+        activeColorPrimary: const Color(0xff972d07),
+        inactiveColorPrimary: Colors.grey[500],
+      ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    print(ModalRoute.of(context)?.settings.name);
+    // print(ModalRoute.of(context)?.settings.name);
     return PersistentTabView(
       context,
       controller: _controller,

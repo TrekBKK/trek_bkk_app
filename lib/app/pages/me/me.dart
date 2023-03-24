@@ -1,100 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:trek_bkk_app/app/widgets/me_menu.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:trek_bkk_app/app/pages/me/history.dart';
-import 'package:path/path.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/pages/login/login_view.dart';
-import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
+import 'package:trek_bkk_app/app/pages/me/profile.dart';
+import 'package:trek_bkk_app/app/widgets/me_menu.dart';
 
-class Me extends StatelessWidget {
-  const Me({super.key});
-  final login = false;
-  // void changePage(BuildContext ctx) {
-  //   Navigator.of(ctx).pushNamed('/History');
-  // }
+import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
+import 'package:trek_bkk_app/domain/entities/user.dart';
+
+import '../../../providers/user.dart';
+
+class MePage extends StatefulWidget {
+  const MePage({super.key});
+
+  @override
+  State<MePage> createState() => _MePageState();
+}
+
+class _MePageState extends State<MePage> {
+  bool _login = false;
+  late bool _perf;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
+  Future<void> _checkLogin() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    String? _name = sp.getString("name");
+    String? _email = sp.getString("email");
+    print("checkLogin");
+    // print(Provider.of<UserData>(context, listen: false).user);
+
+    if (context.mounted) {
+      if (_name != null && _email != null) {
+        UserModel _user = UserModel(name: _name, email: _email);
+        Provider.of<UserData>(context, listen: false).saveUser(_user);
+        setState(() {
+          _login = true;
+        });
+      } else {
+        setState(() {
+          _login = false;
+        });
+      }
+    }
+  }
+
+  void _registerCallBack() {
+    setState(() {
+      _login = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // return login ? buildMeScene() : SignInPage();
+    // bool _login = Provider.of<UserData>(context, listen: false).check();
+
     return Scaffold(
       body: SafeArea(
-          child: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const SignInPage())));
-              },
-              child: const Text("SignInPage")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const PreferenceSurvey())));
-              },
-              child: const Text("preference survey"))
-        ],
-      )),
+          child: _login == false
+              ? SignInPage(callback: _registerCallBack)
+              // : _perf == false
+              //     ? const PreferenceSurvey()
+              : ProfilePage()),
     );
   }
 }
-
-Widget buildMeScene() => Scaffold(
-      body: SafeArea(
-          child: Container(
-        // width: double.infinity,
-        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
-        child: Column(children: <Widget>[
-          Align(alignment: Alignment(1, 0), child: buildSettings()),
-          Flexible(flex: 2, fit: FlexFit.tight, child: buildProfile()),
-          Flexible(flex: 7, fit: FlexFit.tight, child: MeMenu()),
-        ]),
-      )),
-    );
-
-Widget buildSettings() =>
-    IconButton(onPressed: (() {}), icon: Icon(Icons.settings));
-
-Widget buildProfile() => Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-      child: Row(
-        children: [
-          const CircleAvatar(
-              radius: 60,
-              backgroundImage:
-                  NetworkImage('https://picsum.photos/250?image=9')),
-          Container(
-            padding: const EdgeInsets.only(left: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('userName temp'),
-                const SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(width: 1, color: Colors.black)),
-                  child: LinearPercentIndicator(
-                    width: 120.0,
-                    lineHeight: 15.0,
-                    percent: 0.2,
-                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                    barRadius: const Radius.circular(16),
-                    progressColor: Colors.blue[400],
-                    backgroundColor: Colors.grey[300],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Text('3 places visited'),
-              ],
-            ),
-          )
-        ],
-      ),
-    );

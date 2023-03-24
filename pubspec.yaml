@@ -54,6 +54,9 @@ dependencies:
   dotted_line: ^3.1.0
   flutter_google_places_hoc081098: ^1.2.0
 
+  #local storage
+  shared_preferences: ^2.0.18
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

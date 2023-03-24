@@ -33,6 +33,12 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
     var data = await getDirectionRoute(source, latLngList);
     Map<String, dynamic> geo = ((data["routes"]) as List)[0]['geometry'];
 
+    // List<Map<String, Object>> waypoints =
+    //     ((data["waypoints"]) as List<Map<String, Object>>);
+
+    // Map<String, dynamic> waypoints =
+    // print(waypoints);
+
     List<List<double>> coordinates = [];
     coordinates = (geo["coordinates"] as List).map(
       (e) {
