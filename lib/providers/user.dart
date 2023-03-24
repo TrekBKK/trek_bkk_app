@@ -6,13 +6,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserData with ChangeNotifier {
-  late UserModel _user;
+  UserModel? _user;
 
-  String get user => _user.name;
+  UserModel get user => _user!;
 
   Future<void> saveUser(UserModel user) async {
     _user = user;
-    await _getUser(_user);
+    await _getUser(user);
 
     notifyListeners();
   }
@@ -23,8 +23,8 @@ class UserData with ChangeNotifier {
     }
   }
 
-  void check() {
-    print("check");
+  bool check() {
+    return _user == null;
   }
 
   Future<void> _getUser(UserModel user) async {
@@ -38,7 +38,8 @@ class UserData with ChangeNotifier {
     _user = UserModel.fromJson(json.decode(response.body));
     SharedPreferences sp = await SharedPreferences.getInstance();
 
-    sp.setString("email", _user.email);
+    sp.setString("name", user.name);
+    sp.setString("email", user.email);
     print("response");
     print(_user);
 

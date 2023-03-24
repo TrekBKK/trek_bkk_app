@@ -5,8 +5,8 @@ import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class SignInPage extends StatelessWidget {
-  final dynamic Function() checkLogin;
-  const SignInPage({super.key, required this.checkLogin});
+  final dynamic Function() callback;
+  const SignInPage({super.key, required this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SignInPage extends StatelessWidget {
         UserModel user = UserModel(
             name: res.displayName!, email: res.email, photoUrl: res.photoUrl);
         await Provider.of<UserData>(context, listen: false).saveUser(user);
-        await checkLogin();
+        await callback();
       }
     }
 
