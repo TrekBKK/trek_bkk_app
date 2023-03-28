@@ -56,80 +56,80 @@ class _HomeState extends State<Home> {
           ),
         ),
         Flexible(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 32),
-            child: ListView(children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Text(
-                  "Featured routes",
-                  style: headline22,
-                ),
+          child: ListView(children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: Text(
+                "Featured routes",
+                style: headline22,
               ),
-              const SizedBox(
-                height: 16,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(children: const [
+                  HomeCard(
+                    title: "Springdale but also very long",
+                    description:
+                        "city of god of the millenial puzzle and very longlong text text text",
+                    stops: 8,
+                    distance: 3.7,
+                  ),
+                  HomeCard(
+                    title: "ayodaya",
+                    description: "city of god",
+                    stops: 3,
+                    distance: 3.7,
+                  ),
+                  HomeCard(
+                      title: "title",
+                      description: "descripto",
+                      stops: 332,
+                      distance: 3.772)
+                ]),
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Row(children: const [
-                    HomeCard(
-                      title: "Springdale but also very long",
-                      description:
-                          "city of god of the millenial puzzle and very longlong text text text",
-                      stops: 8,
-                      distance: 3.7,
-                    ),
-                    HomeCard(
-                      title: "ayodaya",
-                      description: "city of god",
-                      stops: 3,
-                      distance: 3.7,
-                    ),
-                    HomeCard(
-                        title: "title",
-                        description: "descripto",
-                        stops: 332,
-                        distance: 3.772)
-                  ]),
-                ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: Text(
+                "Just for you",
+                style: headline22,
               ),
-              const SizedBox(
-                height: 24,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(children: const [
+                  HomeCard(
+                    title: "ayodaya",
+                    description: "city of god",
+                    stops: 3,
+                    distance: 3.7,
+                  ),
+                  HomeCard(
+                    title: "ayodaya",
+                    description: "city of god",
+                    stops: 3,
+                    distance: 3.7,
+                  )
+                ]),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Text(
-                  "Just for you",
-                  style: headline22,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Row(children: const [
-                    HomeCard(
-                      title: "ayodaya",
-                      description: "city of god",
-                      stops: 3,
-                      distance: 3.7,
-                    ),
-                    HomeCard(
-                      title: "ayodaya",
-                      description: "city of god",
-                      stops: 3,
-                      distance: 3.7,
-                    )
-                  ]),
-                ),
-              ),
-            ]),
-          ),
+            ),
+            const SizedBox(
+              height: 32,
+            )
+          ]),
         )
       ],
     );
