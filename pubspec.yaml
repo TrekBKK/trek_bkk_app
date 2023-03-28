@@ -57,6 +57,7 @@ dependencies:
 
   #local storage
   shared_preferences: ^2.0.18
+  google_polyline_algorithm: ^3.0.0
 
 dev_dependencies:
   flutter_test:

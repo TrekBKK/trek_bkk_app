@@ -19,8 +19,8 @@ class _NavigatedMapState extends State<NavigatedMap> {
   @override
   void initState() {
     super.initState();
-    _initialCameraPosition = const CameraPosition(
-        target: LatLng(13.739462114167152, 100.51155300834212), zoom: 20);
+    _initialCameraPosition =
+        const CameraPosition(target: LatLng(13.74026, 100.51001), zoom: 20);
 
     _coordinates = widget.coordinates;
   }
@@ -58,8 +58,9 @@ class _NavigatedMapState extends State<NavigatedMap> {
   }
 
   _onStyleLoadedCallback() async {
-    List<LatLng> points = _coordinates.map((c) => LatLng(c[1], c[0])).toList();
-
+    List<LatLng> points = _coordinates.map((c) => LatLng(c[0], c[1])).toList();
+    print('map updatedd-----------------------');
+    print(points);
     currentLine = await mapcontroller!.addLine(LineOptions(
       geometry: points,
       lineColor: Colors.green.toHexStringRGB(),
