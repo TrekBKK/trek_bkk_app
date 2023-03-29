@@ -17,7 +17,11 @@ class RouteModel {
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     List<String> tags = [];
 
-    json["geocoded_waypoints"].map((place) => tags.addAll(place["types"]));
+    (json["geocoded_waypoints"] as List).map((place) {
+      List<String> types =
+          (place["types"] as List).map((tag) => tag as String).toList();
+      tags.addAll(types);
+    }).toList();
 
     return RouteModel(
         name: json["title"],
