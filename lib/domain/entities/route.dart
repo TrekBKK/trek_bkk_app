@@ -14,27 +14,35 @@ class RouteModel {
       required this.waypoints,
       required this.tags});
 
-  factory RouteModel.fromJson(Map<String, dynamic> json) => RouteModel(
-      name: json["name"],
-      description: json["description"],
-      distance: json["distance"],
-      stops: json["stops"],
-      waypoints: (json["waypoints"] as List)
-          .map((waypoint) => WaypointModel.fromJson(waypoint))
-          .toList(),
-      tags: (json["tags"] as List).cast<String>());
+  factory RouteModel.fromJson(Map<String, dynamic> json) {
+    List<String> tags = [];
+
+    json["geocoded_waypoints"].map((place) => tags.addAll(place["types"]));
+
+    return RouteModel(
+        name: json["title"],
+        description: json["description"],
+        distance: json["routes"][0]["legs"][0]["distance"]['value'] / 1000,
+        stops: json["geocoded_waypoints"].length,
+        waypoints: (json["geocoded_waypoints"] as List)
+            .map((waypoint) => WaypointModel.fromJson(waypoint))
+            .toList(),
+        tags: tags.toSet().toList());
+  }
 }
 
 class WaypointModel {
-  final double? distance;
+  final String placeId;
   final String name;
   final List<double> location;
 
   WaypointModel(
-      {required this.distance, required this.name, required this.location});
+      {required this.placeId, required this.name, required this.location});
 
   factory WaypointModel.fromJson(Map<String, dynamic> json) => WaypointModel(
-      distance: json["distance"],
+      placeId: json["place_id"],
       name: json["name"],
-      location: (json["location"] as List).cast<double>());
+      location: (json["location"] as List)
+          .map((coordinate) => coordinate as double)
+          .toList());
 }
