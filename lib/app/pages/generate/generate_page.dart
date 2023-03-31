@@ -32,17 +32,73 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
-  final List<List<double>> route = [
-    [13.740046, 100.512341],
-    [13.739739258635044, 100.51343901410165],
-    [13.74010860629716, 100.51404155092914],
+  final List<dynamic> route = [
+    {
+      "name": "Mung Korn Khao Noodle",
+      "place_id": "ChIJ-800myGZ4jAR1ueSgnnaneI",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7405188, 100.5094153],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "กู่ หลง เปา ซาลาเปาโบราณ ",
+      "place_id": "ChIJb5w4voOZ4jAROOGnKsvbtZk",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7404719, 100.5120479],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "Odean Crab Wonton Noodle",
+      "place_id": "ChIJexwZLSGZ4jAR0Cg9qysJX9Y",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.73891, 100.512532],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    }
   ];
-  final List<List<double>> places = [
-    [13.740046, 100.512341],
-    [13.739739258635044, 100.51343901410165],
-    [13.74010860629716, 100.51404155092914],
-    [13.739119920900958, 100.51406087974054],
-    [13.739015828862138, 100.5132387710093]
+  final List<dynamic> places = [
+    {
+      "name": "Mung Korn Khao Noodle",
+      "place_id": "ChIJ-800myGZ4jAR1ueSgnnaneI",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7405188, 100.5094153],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "Lod Chong Singapore",
+      "place_id": "ChIJj3waSSGZ4jAR48m9Dn3QwpU",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7399556, 100.5122606],
+      "types": ["food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "กู่ หลง เปา ซาลาเปาโบราณ ",
+      "place_id": "ChIJb5w4voOZ4jAROOGnKsvbtZk",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7404719, 100.5120479],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "Tae Jeaw Cuisine",
+      "place_id": "ChIJ61kXOiGZ4jARg4ZDvWQBQDg",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.7396842, 100.5134283],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    },
+    {
+      "name": "Odean Crab Wonton Noodle",
+      "place_id": "ChIJexwZLSGZ4jAR0Cg9qysJX9Y",
+      "icon":
+          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "location": [13.73891, 100.512532],
+      "types": ["restaurant", "food", "point_of_interest", "establishment"]
+    }
   ];
 
   String? sourcePlaceId;
