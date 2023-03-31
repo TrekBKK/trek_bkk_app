@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:trek_bkk_app/app/pages/search/search_2.dart';
-import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/app/widgets/add_place_dialog.dart';
+import 'package:trek_bkk_app/domain/entities/add_place_dialog_input.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class Search1 extends StatefulWidget {
@@ -13,64 +14,33 @@ class Search1 extends StatefulWidget {
 
 class _Search1State extends State<Search1> {
   late TextEditingController _addController;
+  late TextEditingController _searchController;
+  String prevSearchKey = "";
 
   @override
   void initState() {
     super.initState();
     _addController = TextEditingController();
+    _searchController = TextEditingController();
   }
 
   @override
   void dispose() {
     _addController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
-  toSearch2(String searchKey) {
-    Navigator.of(context).push(MaterialPageRoute(
+  toSearch2(String searchKey) async {
+    prevSearchKey = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Search2(
               initialSearchKey: searchKey,
             )));
+    _searchController.text = prevSearchKey;
   }
 
   @override
   Widget build(BuildContext context) {
-    var addPlaceDialog = Dialog(
-      backgroundColor: lightColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: SizedBox(
-        height: 304,
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [Text("Adding stop"), Icon(Icons.close)],
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            TextField(
-                controller: _addController,
-                onSubmitted: (value) {
-                  print(value);
-                },
-                decoration: textFieldDecoration(hintText: "Search routes")),
-            const SizedBox(
-              height: 40,
-            ),
-            Center(
-              child: ElevatedButton(
-                style: primaryButtonStyles(),
-                onPressed: () {},
-                child: const Text("ADD"),
-              ),
-            )
-          ]),
-        ),
-      ),
-    );
-
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,8 +49,9 @@ class _Search1State extends State<Search1> {
           const SizedBox(height: 32),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: TextField(
-                onSubmitted: (value) {
+            child: TextFormField(
+                controller: _searchController,
+                onFieldSubmitted: (value) {
                   toSearch2(value);
                 },
                 decoration: textFieldDecoration(hintText: "Search routes")),
@@ -113,8 +84,20 @@ class _Search1State extends State<Search1> {
           const SizedBox(height: 32),
           ElevatedButton(
               style: primaryButtonStyles(px: 32),
-              onPressed: () => showDialog(
-                  context: context, builder: (context) => addPlaceDialog),
+              onPressed: () async {
+                AddPlaceDialogInput? a = await showDialog(
+                    context: context,
+                    builder: (context) => const AddPlaceDialog());
+
+                if (a != null && context.mounted) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Search2(
+                                initalPlaceTag: a,
+                              )));
+                }
+              },
               child: const Text("Add place")),
         ],
       ),
