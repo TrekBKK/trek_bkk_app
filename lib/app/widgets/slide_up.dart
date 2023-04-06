@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SlideUp extends StatefulWidget {
   final ScrollController controller;
   final Future<void> Function(List<String>) selectRouteHandler;
-  final List<List<double>> places;
+  final List<dynamic> places;
   const SlideUp(
       {super.key,
       required this.selectRouteHandler,
@@ -15,7 +15,7 @@ class SlideUp extends StatefulWidget {
 }
 
 class _SlideUpState extends State<SlideUp> {
-  late List<List<double>> _places;
+  late List<dynamic> _places;
   late List<bool> _checked;
 
   @override
@@ -32,10 +32,10 @@ class _SlideUpState extends State<SlideUp> {
   }
 
   void _onsubmitHandler() {
-    List<List<double>> route = [];
+    List<String> places = [];
     for (int i = 0; i < _checked.length; i++) {
       if (_checked[i]) {
-        route.add(_places[i]);
+        places.add(_places[i]["place_id"]);
       }
     }
     // widget.selectRouteHandler(route);
@@ -51,7 +51,7 @@ class _SlideUpState extends State<SlideUp> {
             itemCount: _places.length,
             itemBuilder: (BuildContext context, int index) {
               return CheckboxListTile(
-                title: Text("${_places[index]}"),
+                title: Text("${_places[index]["name"]}"),
                 value: _checked[index],
                 onChanged: (bool? value) {
                   _onItemChecked(index, value);
