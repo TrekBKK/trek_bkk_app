@@ -27,7 +27,6 @@ class _NavigatedMapState extends State<NavigatedMap> {
 
   @override
   void dispose() {
-    print("dispose map2");
     mapcontroller?.dispose();
     super.dispose();
   }
@@ -47,7 +46,7 @@ class _NavigatedMapState extends State<NavigatedMap> {
 
   void updateLine() async {
     List<LatLng> points =
-        widget.coordinates.map((c) => LatLng(c[1], c[0])).toList();
+        widget.coordinates.map((c) => LatLng(c[0], c[1])).toList();
     await mapcontroller!.removeLine(currentLine);
 
     currentLine = await mapcontroller!.addLine(LineOptions(
@@ -59,14 +58,12 @@ class _NavigatedMapState extends State<NavigatedMap> {
 
   _onStyleLoadedCallback() async {
     List<LatLng> points = _coordinates.map((c) => LatLng(c[0], c[1])).toList();
-    print('map updatedd-----------------------');
     print(points);
     currentLine = await mapcontroller!.addLine(LineOptions(
       geometry: points,
       lineColor: Colors.green.toHexStringRGB(),
       lineWidth: 3.0,
     ));
-    print("onstyleloading");
   }
 
   @override

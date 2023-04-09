@@ -38,7 +38,8 @@ class _SlideUpState extends State<SlideUp> {
         places.add(_places[i]["place_id"]);
       }
     }
-    // widget.selectRouteHandler(route);
+
+    widget.selectRouteHandler(places);
   }
 
   @override

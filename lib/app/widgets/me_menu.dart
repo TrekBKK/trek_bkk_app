@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trek_bkk_app/app/widgets/propose_route.dart';
+import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
 
 class MeMenu extends StatefulWidget {
   const MeMenu({super.key});

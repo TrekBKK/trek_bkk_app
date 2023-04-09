@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/app/widgets/slide_up.dart';
-// import 'package:trek_bkk_app/domain/repositories/mapbox_api.dart';
 
 import '../../../domain/repositories/googlemap_api.dart';
-import '../../../utils.dart';
-import '../../widgets/navigate_map.dart';
+
+// import 'package:trek_bkk_app/app/widgets/map_box/navigate_map.dart';
+import 'package:trek_bkk_app/app/widgets/google_map/navigate_map.dart';
 
 class MapGeneratedPage extends StatefulWidget {
   final List<dynamic> route;
@@ -25,23 +24,19 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   @override
   void initState() {
     super.initState();
-    // locations = (jsonData['routes'] as List<dynamic>)
     final placeIds =
         widget.route.map((route) => route['place_id'] as String).toList();
-    print(placeIds);
     _generateRoute(placeIds);
   }
 
   Future<void> _generateRoute(List<String> places) async {
     final a = await getDirectionRoute(places);
     String polylineStr = a['routes'][0]['overview_polyline']['points'];
-    // String polylineStr = "cxzrAuqmdRtBqFFWGLINGL";
     final polyline = decodePolyline(polylineStr);
     List<List<double>> convertedList = polyline
         .map((innerList) =>
             innerList.map((numValue) => numValue.toDouble()).toList())
         .toList();
-
     setState(() {
       _coordinates = convertedList;
     });
@@ -60,9 +55,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
         body: Center(
           child: _coordinates.isEmpty
               ? const CircularProgressIndicator()
-              : NavigatedMap(
-                  coordinates: _coordinates,
-                ),
+              : NavigatedMapG(coordinates: _coordinates, places: widget.places),
         ),
       ),
     );
