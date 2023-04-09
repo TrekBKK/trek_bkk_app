@@ -21,7 +21,6 @@ class MapGeneratedPage extends StatefulWidget {
 
 class _MapGeneratedPageState extends State<MapGeneratedPage> {
   List<List<double>> _coordinates = [];
-  String _polyline = "";
 
   @override
   void initState() {
@@ -36,46 +35,17 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   Future<void> _generateRoute(List<String> places) async {
     final a = await getDirectionRoute(places);
     String polylineStr = a['routes'][0]['overview_polyline']['points'];
+    // String polylineStr = "cxzrAuqmdRtBqFFWGLINGL";
     final polyline = decodePolyline(polylineStr);
     List<List<double>> convertedList = polyline
         .map((innerList) =>
             innerList.map((numValue) => numValue.toDouble()).toList())
         .toList();
 
-    print(convertedList);
     setState(() {
       _coordinates = convertedList;
     });
   }
-
-  // Future<void> _generateRoute(List<List<double>> coordinate) async {
-  //   LatLng source = LatLng(coordinate[0][0], coordinate[0][1]);
-  //   List<LatLng> latLngList = convertToLatLng(coordinate.sublist(1), false);
-
-  //   var data = await getDirectionRoute(source, latLngList);
-  //   Map<String, dynamic> geo = ((data["routes"]) as List)[0]['geometry'];
-
-  //   // List<Map<String, Object>> waypoints =
-  //   //     ((data["waypoints"]) as List<Map<String, Object>>);
-
-  //   // Map<String, dynamic> waypoints =
-  //   // print(waypoints);
-
-  //   List<List<double>> coordinates = [];
-  //   coordinates = (geo["coordinates"] as List).map(
-  //     (e) {
-  //       List<double> temp = [];
-  //       temp.add(e[0]);
-  //       temp.add(e[1]);
-  //       return temp;
-  //     },
-  //   ).toList();
-  //   print(coordinates);
-
-  //   setState(() {
-  //     _coordinates = coordinates;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +54,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
       body: SlidingUpPanel(
         panelBuilder: (ScrollController sc) => SlideUp(
           controller: sc,
-          places: [],
-          // places: widget.places,
+          places: widget.places,
           selectRouteHandler: _generateRoute,
         ),
         body: Center(

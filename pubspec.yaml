@@ -54,10 +54,12 @@ dependencies:
   dotted_line: ^3.1.0
   flutter_google_places_hoc081098: ^1.2.0
   google_maps_webservice: ^0.0.20-nullsafety.5
+  google_maps_flutter: ^2.2.5
 
   #local storage
   shared_preferences: ^2.0.18
   google_polyline_algorithm: ^3.0.0
+  flutter_config: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trek_bkk_app/app/widgets/propose_route.dart';
 
 class MeMenu extends StatefulWidget {
   const MeMenu({super.key});
@@ -129,7 +130,7 @@ class _MeMenuState extends State<MeMenu> {
                 );
               },
               child: _currentIndex == 0
-                  ? _buildOwnRoute()
+                  ? _buildOwnRoute(context)
                   : _currentIndex == 1
                       ? _buildFav()
                       : _buildHistory(),
@@ -139,8 +140,17 @@ class _MeMenuState extends State<MeMenu> {
   }
 }
 
-Widget _buildOwnRoute() {
-  return Text('rotues');
+Widget _buildOwnRoute(BuildContext context) {
+  return (ElevatedButton(
+    onPressed: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProposeRoutePage(),
+          ));
+    },
+    child: Text("click"),
+  ));
 }
 
 Widget _buildFav() {
