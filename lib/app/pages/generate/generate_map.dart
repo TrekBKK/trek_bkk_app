@@ -26,11 +26,11 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
     super.initState();
     final placeIds =
         widget.route.map((route) => route['place_id'] as String).toList();
-    _generateRoute(placeIds);
+    _generateRoute(placeIds, true);
   }
 
-  Future<void> _generateRoute(List<String> places) async {
-    final a = await getDirectionRoute(places);
+  Future<void> _generateRoute(List<String> places, bool optimize) async {
+    final a = await getDirectionRoute(places, optimize);
     String polylineStr = a['routes'][0]['overview_polyline']['points'];
     final polyline = decodePolyline(polylineStr);
     List<List<double>> convertedList = polyline

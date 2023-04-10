@@ -32,32 +32,7 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
-  final List<dynamic> route = [
-    {
-      "name": "Mung Korn Khao Noodle",
-      "place_id": "ChIJ-800myGZ4jAR1ueSgnnaneI",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7405188, 100.5094153],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "กู่ หลง เปา ซาลาเปาโบราณ ",
-      "place_id": "ChIJb5w4voOZ4jAROOGnKsvbtZk",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7404719, 100.5120479],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "Odean Crab Wonton Noodle",
-      "place_id": "ChIJexwZLSGZ4jAR0Cg9qysJX9Y",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.73891, 100.512532],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    }
-  ];
+  final int route = 3;
   final List<dynamic> places = [
     {
       "name": "Mung Korn Khao Noodle",
@@ -312,7 +287,7 @@ class _GeneratePageState extends State<GeneratePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: ((context) => MapGeneratedPage(
-                                          route: route,
+                                          route: places.sublist(0, route),
                                           places: places,
                                         ))));
                             // generateRoute(

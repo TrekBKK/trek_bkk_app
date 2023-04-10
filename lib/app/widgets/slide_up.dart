@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SlideUp extends StatefulWidget {
   final ScrollController controller;
-  final Future<void> Function(List<String>) selectRouteHandler;
+  final Future<void> Function(List<String>, bool) selectRouteHandler;
   final List<dynamic> places;
   const SlideUp(
       {super.key,
@@ -39,7 +39,7 @@ class _SlideUpState extends State<SlideUp> {
       }
     }
 
-    widget.selectRouteHandler(places);
+    widget.selectRouteHandler(places, false);
   }
 
   @override
