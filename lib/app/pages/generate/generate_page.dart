@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dotted_line/dotted_line.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
 import 'package:trek_bkk_app/app/widgets/places_autocomplete_field.dart';
@@ -122,6 +125,34 @@ class _GeneratePageState extends State<GeneratePage> {
     );
   }
 
+  generate() async {
+    if (selectedTagList.length > 3) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(warningSnackbar("No more than 3 location types"));
+    } else if (sourcePlaceId == null || destinationPlaceId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          warningSnackbar("Please specify source and destination"));
+    } else {
+      http.Response response = await generateRoute(
+          srcId: sourcePlaceId!,
+          destId: destinationPlaceId!,
+          stops: _numStopsSliderValue,
+          tags: selectedTagList);
+
+      if (response.statusCode == 200) {
+        dynamic results = jsonDecode(response.body);
+        print(results);
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: ((context) => MapGeneratedPage(
+        //               route: places.sublist(0, route),
+        //               places: places,
+        //             ))));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> tags = selectedTagList
@@ -221,12 +252,11 @@ class _GeneratePageState extends State<GeneratePage> {
                   Row(
                     children: [
                       SizedBox(
-                        width: 96,
+                        width: 80,
                         child: TextFormField(
                           textAlign: TextAlign.center,
                           controller: _numStopsTextFieldController,
                           decoration: InputDecoration(
-                              suffixText: "km",
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
                               border: OutlineInputBorder(
@@ -277,26 +307,7 @@ class _GeneratePageState extends State<GeneratePage> {
                   Center(
                     child: ElevatedButton(
                         style: primaryButtonStyles(px: 32),
-                        onPressed: () {
-                          if (selectedTagList.length > 3) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                warningSnackbar(
-                                    "No more than 3 location types"));
-                          } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => MapGeneratedPage(
-                                          route: places.sublist(0, route),
-                                          places: places,
-                                        ))));
-                            // generateRoute(
-                            //     lat: "0",
-                            //     long: "0",
-                            //     maxDistBetweenPlaces: _numStopsSliderValue,
-                            //     tags: selectedTagList);
-                          }
-                        },
+                        onPressed: generate,
                         child: const Text("Generate")),
                   )
                 ],
