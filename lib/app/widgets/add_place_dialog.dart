@@ -84,7 +84,8 @@ class _AddPlaceDialogState extends State<AddPlaceDialog> {
                         if (value.placeId != null ||
                             value.description != null) {
                           currentSelection = Place(
-                              id: value.placeId!, name: value.description!);
+                              placeId: value.placeId!,
+                              name: value.description!);
                         }
                       }),
                       trailingOnTap: () => setState(() {

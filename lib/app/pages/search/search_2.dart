@@ -113,7 +113,7 @@ class _Search2State extends State<Search2> {
       dataIsFetched = false;
     });
     http.Response response =
-        await getRoutesByPlaceIds(places: selectedPlaceTags);
+        await getRoutesByPlaceIds(inputs: selectedPlaceTags);
     if (response.statusCode == 200) {
       setState(() {
         searchResults = (jsonDecode(response.body) as List)

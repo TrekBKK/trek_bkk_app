@@ -1,6 +1,6 @@
 class Place {
-  final String id;
+  final String placeId;
   final String name;
 
-  Place({required this.id, required this.name});
+  Place({required this.placeId, required this.name});
 }

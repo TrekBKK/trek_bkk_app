@@ -2,18 +2,18 @@ import 'package:http/http.dart' as http;
 import 'package:trek_bkk_app/configs.dart';
 import 'package:trek_bkk_app/domain/entities/add_place_dialog_input.dart';
 
-getRoutesByPlaceIds({required List<AddPlaceDialogInput> places}) async {
+getRoutesByPlaceIds({required List<AddPlaceDialogInput> inputs}) async {
   String? srcId;
   String? destId;
   List<String> ids = [];
 
-  for (final place in places) {
-    if (place.isSource) {
-      srcId = place.place.id;
-    } else if (place.isDestination) {
-      destId = place.place.id;
+  for (final input in inputs) {
+    if (input.isSource) {
+      srcId = input.place.placeId;
+    } else if (input.isDestination) {
+      destId = input.place.placeId;
     } else {
-      ids.add(place.place.id);
+      ids.add(input.place.placeId);
     }
   }
 
