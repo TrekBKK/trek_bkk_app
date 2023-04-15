@@ -36,3 +36,27 @@ Future getDirectionRoute(List<String> placeIds, bool optimize) async {
     throw Exception('Failed to fetch directions: ${response.statusCode}');
   }
 }
+
+Future<List<dynamic>> getNearbyPlaces(double lat, double lng) async {
+  final url =
+      Uri.https("maps.googleapis.com", "/maps/api/place/nearbysearch/json", {
+    "location": "$lat,$lng",
+    "radius": "10",
+    "type": "establishment",
+    "key": accessToken,
+  });
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+    final status = jsonResponse['status'] as String;
+    if (status == 'OK') {
+      return jsonResponse['results'];
+    } else {
+      throw Exception('google map nearby API error: $status');
+    }
+  } else {
+    throw Exception('Failed to fetch directions: ${response.statusCode}');
+  }
+}
