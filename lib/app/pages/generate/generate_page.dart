@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
 import 'package:trek_bkk_app/app/widgets/places_autocomplete_field.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
 import 'package:trek_bkk_app/utils.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
@@ -35,7 +36,7 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
-  final int route = 3;
+  final int routeIndex = 3;
   final List<dynamic> places = [
     {
       "name": "Mung Korn Khao Noodle",
@@ -125,32 +126,50 @@ class _GeneratePageState extends State<GeneratePage> {
     );
   }
 
-  generate() async {
-    if (selectedTagList.length > 3) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(warningSnackbar("No more than 3 location types"));
-    } else if (sourcePlaceId == null || destinationPlaceId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          warningSnackbar("Please specify source and destination"));
-    } else {
-      http.Response response = await generateRoute(
-          srcId: sourcePlaceId!,
-          destId: destinationPlaceId!,
-          stops: _numStopsSliderValue,
-          tags: selectedTagList);
+  void toMap() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => MapGeneratedPage(
+                  routeIndex: routeIndex,
+                  places: places,
+                ))));
+  }
 
-      if (response.statusCode == 200) {
-        dynamic results = jsonDecode(response.body);
-        print(results);
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: ((context) => MapGeneratedPage(
-        //               route: places.sublist(0, route),
-        //               places: places,
-        //             ))));
-      }
-    }
+  void generate() async {
+    toMap();
+    // http.Response response = await generateRoute(
+    //     srcId: sourcePlaceId!,
+    //     destId: destinationPlaceId!,
+    //     stops: _numStopsSliderValue,
+    //     tags: selectedTagList);
+
+    // if (response.statusCode == 200) {
+    //   dynamic results = (jsonDecode(response.body) as List)
+    //       .map((place) => RouteModel.fromJson(place))
+    //       .toList();
+    //   print(results);
+    // }
+
+    // if (selectedTagList.length > 3) {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(warningSnackbar("No more than 3 location types"));
+    // } else if (sourcePlaceId == null || destinationPlaceId == null) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       warningSnackbar("Please specify source and destination"));
+    // } else {
+    //   toMap();
+    //   // http.Response response = await generateRoute(
+    //   //     srcId: sourcePlaceId!,
+    //   //     destId: destinationPlaceId!,
+    //   //     stops: _numStopsSliderValue,
+    //   //     tags: selectedTagList);
+
+    //   // if (response.statusCode == 200) {
+    //   //   dynamic results = jsonDecode(response.body);
+    //   //   print(results);
+    //   // }
+    // }
   }
 
   @override

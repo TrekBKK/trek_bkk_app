@@ -9,10 +9,10 @@ import '../../../domain/repositories/googlemap_api.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/navigate_map.dart';
 
 class MapGeneratedPage extends StatefulWidget {
-  final List<dynamic> route;
+  final int routeIndex;
   final List<dynamic> places;
   const MapGeneratedPage(
-      {super.key, required this.route, required this.places});
+      {super.key, required this.routeIndex, required this.places});
 
   @override
   State<MapGeneratedPage> createState() => _MapGeneratedPageState();
@@ -20,12 +20,15 @@ class MapGeneratedPage extends StatefulWidget {
 
 class _MapGeneratedPageState extends State<MapGeneratedPage> {
   List<List<double>> _coordinates = [];
+  final PanelController _pc = PanelController();
 
   @override
   void initState() {
     super.initState();
-    final placeIds =
-        widget.route.map((route) => route['place_id'] as String).toList();
+    final placeIds = widget.places
+        .sublist(0, widget.routeIndex)
+        .map((route) => route['place_id'] as String)
+        .toList();
     _generateRoute(placeIds, true);
   }
 
@@ -45,20 +48,53 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: SlidingUpPanel(
+        controller: _pc,
+        defaultPanelState: PanelState.OPEN,
+        minHeight: 0,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24.0),
+          topRight: Radius.circular(24.0),
+        ),
         panelBuilder: (ScrollController sc) => SlideUp(
           controller: sc,
           places: widget.places,
+          routeIndex: widget.routeIndex,
           selectRouteHandler: _generateRoute,
+          close: () {
+            _pc.close();
+          },
         ),
         body: Center(
           child: _coordinates.isEmpty
               ? const CircularProgressIndicator()
-              : NavigatedMapG(coordinates: _coordinates, places: widget.places),
+              : Stack(children: [
+                  NavigatedMapG(
+                      coordinates: _coordinates, places: widget.places),
+                  Positioned(
+                    right: 16,
+                    bottom: 64,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _pc.open();
+                      },
+                      icon: const Icon(Icons.list),
+                      label: const Text("View Detail"),
+                    ),
+                  ),
+                  Positioned(
+                      top: 32,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(8)),
+                          child: const Icon(Icons.arrow_back)))
+                ]),
         ),
       ),
     );
-    ;
   }
 }
