@@ -24,7 +24,15 @@ class CustomOrderedCheckbox extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
               order != -1
                   ? Container(
                       decoration: BoxDecoration(

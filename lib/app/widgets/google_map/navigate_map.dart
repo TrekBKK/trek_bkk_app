@@ -58,7 +58,8 @@ class _NavigatedMapGState extends State<NavigatedMapG> {
     widget.places.forEach((place) {
       _markers.add(Marker(
         markerId: MarkerId(place["place_id"]),
-        position: LatLng(place["location"][0], place["location"][1]),
+        position: LatLng(place["geometry"]["location"]["lat"],
+            place["geometry"]["location"]["lng"]),
         infoWindow: InfoWindow(title: place["name"], snippet: 'some text'),
       ));
     });

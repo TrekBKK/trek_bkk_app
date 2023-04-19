@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -58,5 +57,27 @@ Future<List<dynamic>> getNearbyPlaces(double lat, double lng) async {
     }
   } else {
     throw Exception('Failed to fetch directions: ${response.statusCode}');
+  }
+}
+
+Future<dynamic> getPlaceDetail(String placeId) async {
+  final url = Uri.https("maps.googleapis.com", "/maps/api/place/details/json", {
+    "fields": "name,geometry,place_id,types",
+    "place_id": placeId,
+    "key": accessToken
+  });
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+    final status = jsonResponse['status'] as String;
+    if (status == 'OK') {
+      return jsonResponse['result'];
+    } else {
+      throw Exception('google map place detail API error: $status');
+    }
+  } else {
+    throw Exception('Failed to fetch place detail: ${response.statusCode}');
   }
 }

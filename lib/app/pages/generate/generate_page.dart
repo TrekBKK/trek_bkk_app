@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
 import 'package:trek_bkk_app/app/widgets/places_autocomplete_field.dart';
 import 'package:trek_bkk_app/constants.dart';
-import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/domain/repositories/googlemap_api.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
 import 'package:trek_bkk_app/utils.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
@@ -36,52 +36,9 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
-  final int routeIndex = 3;
-  final List<dynamic> places = [
-    {
-      "name": "Mung Korn Khao Noodle",
-      "place_id": "ChIJ-800myGZ4jAR1ueSgnnaneI",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7405188, 100.5094153],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "Lod Chong Singapore",
-      "place_id": "ChIJj3waSSGZ4jAR48m9Dn3QwpU",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7399556, 100.5122606],
-      "types": ["food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "กู่ หลง เปา ซาลาเปาโบราณ ",
-      "place_id": "ChIJb5w4voOZ4jAROOGnKsvbtZk",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7404719, 100.5120479],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "Tae Jeaw Cuisine",
-      "place_id": "ChIJ61kXOiGZ4jARg4ZDvWQBQDg",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.7396842, 100.5134283],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    },
-    {
-      "name": "Odean Crab Wonton Noodle",
-      "place_id": "ChIJexwZLSGZ4jAR0Cg9qysJX9Y",
-      "icon":
-          "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
-      "location": [13.73891, 100.512532],
-      "types": ["restaurant", "food", "point_of_interest", "establishment"]
-    }
-  ];
 
-  String? sourcePlaceId;
-  String? destinationPlaceId;
+  String? srcPlaceId;
+  String? destPlaceId;
 
   late final TextEditingController _startAutocompleteController;
   late final TextEditingController _destinationAutocompleteController;
@@ -126,50 +83,42 @@ class _GeneratePageState extends State<GeneratePage> {
     );
   }
 
-  void toMap() {
+  void toMap(results, int routeIndex) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: ((context) => MapGeneratedPage(
                   routeIndex: routeIndex,
-                  places: places,
+                  places: results,
                 ))));
   }
 
   void generate() async {
-    toMap();
-    // http.Response response = await generateRoute(
-    //     srcId: sourcePlaceId!,
-    //     destId: destinationPlaceId!,
-    //     stops: _numStopsSliderValue,
-    //     tags: selectedTagList);
+    if (selectedTagList.length > 3) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(warningSnackbar("No more than 3 location types"));
+    } else if (srcPlaceId == null || destPlaceId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          warningSnackbar("Please specify source and destination"));
+    } else {
+      http.Response response = await generateRoute(
+          srcId: srcPlaceId!,
+          destId: destPlaceId!,
+          stops: _numStopsSliderValue,
+          tags: selectedTagList);
 
-    // if (response.statusCode == 200) {
-    //   dynamic results = (jsonDecode(response.body) as List)
-    //       .map((place) => RouteModel.fromJson(place))
-    //       .toList();
-    //   print(results);
-    // }
+      dynamic srcDetail = await getPlaceDetail(srcPlaceId!);
+      dynamic destDetail = await getPlaceDetail(destPlaceId!);
 
-    // if (selectedTagList.length > 3) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(warningSnackbar("No more than 3 location types"));
-    // } else if (sourcePlaceId == null || destinationPlaceId == null) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       warningSnackbar("Please specify source and destination"));
-    // } else {
-    //   toMap();
-    //   // http.Response response = await generateRoute(
-    //   //     srcId: sourcePlaceId!,
-    //   //     destId: destinationPlaceId!,
-    //   //     stops: _numStopsSliderValue,
-    //   //     tags: selectedTagList);
-
-    //   // if (response.statusCode == 200) {
-    //   //   dynamic results = jsonDecode(response.body);
-    //   //   print(results);
-    //   // }
-    // }
+      if (response.statusCode == 200) {
+        dynamic data = jsonDecode(response.body);
+        List results = data["results"];
+        int routeIndex = data["routeIndex"];
+        results.insert(0, srcDetail);
+        results.insert(routeIndex - 1, destDetail);
+        toMap(results, routeIndex);
+      }
+    }
   }
 
   @override
@@ -232,10 +181,10 @@ class _GeneratePageState extends State<GeneratePage> {
                       hintText: "Your starting point",
                       trailingOnTap: () => setState(() {
                         _startAutocompleteController.clear();
-                        sourcePlaceId = null;
+                        srcPlaceId = null;
                       }),
                       onSelected: (value) => setState(() {
-                        sourcePlaceId = value.placeId;
+                        srcPlaceId = value.placeId;
                       }),
                     ),
                     const SizedBox(
@@ -247,11 +196,11 @@ class _GeneratePageState extends State<GeneratePage> {
                       trailingOnTap: () {
                         setState(() {
                           _destinationAutocompleteController.clear();
-                          destinationPlaceId = null;
+                          destPlaceId = null;
                         });
                       },
                       onSelected: (value) => setState(() {
-                        destinationPlaceId = value.placeId;
+                        destPlaceId = value.placeId;
                       }),
                     ),
                   ],
