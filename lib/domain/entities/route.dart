@@ -5,6 +5,7 @@ class RouteModel {
   final int stops;
   final List<WaypointModel> waypoints;
   final List<String> tags;
+  final String polyline;
 
   RouteModel(
       {required this.name,
@@ -12,7 +13,8 @@ class RouteModel {
       required this.distance,
       required this.stops,
       required this.waypoints,
-      required this.tags});
+      required this.tags,
+      required this.polyline});
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     List<String> tags = [];
@@ -31,7 +33,8 @@ class RouteModel {
         waypoints: (json["geocoded_waypoints"] as List)
             .map((waypoint) => WaypointModel.fromJson(waypoint))
             .toList(),
-        tags: tags.toSet().toList());
+        tags: tags.toSet().toList(),
+        polyline: json['routes'][0]['overview_polyline']['points']);
   }
 }
 

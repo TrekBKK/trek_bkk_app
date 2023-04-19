@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/app/pages/route/route_info.dart';
+import 'package:trek_bkk_app/app/widgets/google_map/detail_map.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 
@@ -31,10 +32,10 @@ class _RoutePageState extends State<RoutePage> {
         panel: RouteInfoWidget(
           route: widget.route,
         ),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.only(bottom: 235),
           child: Container(
-            height: 200,
-            child: Text("Map from ${widget.route.name}"),
+            child: RouteDetailMap(route: widget.route),
           ),
         ),
       ),
