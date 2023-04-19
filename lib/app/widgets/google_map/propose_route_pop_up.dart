@@ -6,12 +6,14 @@ class PRpopup extends StatefulWidget {
   final List<dynamic> markedPlaces;
   final void Function(String) onAddCurrentLoc;
   final void Function(dynamic) onClick;
+  final Function() onPlacesChanged;
   const PRpopup({
     super.key,
     required this.places,
     required this.markedPlaces,
     required this.onClick,
     required this.onAddCurrentLoc,
+    required this.onPlacesChanged,
   });
 
   @override
@@ -30,28 +32,36 @@ class _PRpopupState extends State<PRpopup> {
     _markedPlaces = widget.markedPlaces;
   }
 
+  @override
+  void didUpdateWidget(PRpopup oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _places = widget.places;
+    _markedPlaces = widget.markedPlaces;
+  }
+
   void _onClickHandler(dynamic place) {
-    final temp = {
+    var temp = {
+      'place_id': "$place['place_id']",
       'name': place['name'],
       'latitude': place['geometry']['location']['lat'],
       'longitude': place['geometry']['location']['lng'],
     };
 
     widget.onClick(place);
-    setState(() {
-      _markedPlaces.add(temp);
-    });
+    widget.onPlacesChanged();
   }
 
   void _onClickCustomPlaceHandler() {
     final String text = _textController.text.trim();
     final temp = {
+      'place_id': "$text+id",
       'name': text,
     };
     widget.onAddCurrentLoc(text);
-    setState(() {
-      _markedPlaces.add(temp);
-    });
+    widget.onPlacesChanged();
+    // setState(() {
+    //   _markedPlaces.add(temp);
+    // });
 
     Fluttertoast.showToast(
       msg: "added your custom place",

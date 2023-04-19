@@ -21,7 +21,6 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   late CameraPosition _initialCameraPosition;
   Position? _currentLocation;
   List<LatLng> _polylinePoints = [];
-  late Future<List<dynamic>> _places;
   Set<Marker> _markers = {};
   List<dynamic> _markedPlaces = [];
 
@@ -95,6 +94,8 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
           .map((LatLng latLng) => [latLng.latitude, latLng.longitude])
           .toList(),
     );
+
+    print(_encodedPolyline);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -106,26 +107,27 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   void _findPlacesHandler() {
     Future<List<dynamic>> places = getNearbyPlaces(
         _currentLocation!.latitude, _currentLocation!.longitude);
-    setState(() {
-      _places = places;
-    });
-    _showPlacesPopup();
-  }
 
-  void _showPlacesPopup() {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return PRpopup(
-            places: _places,
-            markedPlaces: _markedPlaces,
-            onClick: _onTapHandler,
-            onAddCurrentLoc: _addCurrentlocHandler);
-      },
-    );
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStateChild) {
+            return PRpopup(
+              places: places,
+              markedPlaces: _markedPlaces,
+              onClick: _onTapHandler,
+              onAddCurrentLoc: _addCurrentlocHandler,
+              onPlacesChanged: () {
+                setStateChild(() {});
+              },
+            );
+          });
+        });
   }
 
   void _onTapHandler(dynamic place) {
+    String name = place["name"];
     Marker newMarker = Marker(
       markerId: MarkerId(place['place_id']),
       position: LatLng(place['geometry']['location']['lat'],
@@ -134,13 +136,15 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
     );
 
     final temp = {
+      'place_id': place['place_id'],
       'name': place['name'],
       'latitude': place['geometry']['location']['lat'],
       'longitude': place['geometry']['location']['lng'],
+      'vicinity': place['vicinity']
     };
 
-    _markedPlaces.add(temp);
     setState(() {
+      _markedPlaces.add(temp);
       _markers.add(newMarker);
     });
   }
@@ -153,9 +157,11 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
     );
 
     final temp = {
+      'place_id': 'placeID+$name',
       'name': name,
       'latitude': _currentLocation!.latitude,
       'longitude': _currentLocation!.longitude,
+      'vicinity': null,
     };
 
     _markedPlaces.add(temp);
@@ -209,12 +215,6 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
                     )),
               ),
             ]),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: _saveRouteHandler,
-      //   label: const Text('Finish!'),
-      //   icon: const Icon(Icons.directions_run),
-      // ),
     );
   }
 }
