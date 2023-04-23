@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:trek_bkk_app/app/pages/generate/navigation.dart';
 import 'package:trek_bkk_app/app/widgets/slide_up.dart';
+import 'package:trek_bkk_app/domain/entities/direction_route.dart';
 
 import '../../../domain/repositories/googlemap_api.dart';
 
 // import 'package:trek_bkk_app/app/widgets/map_box/navigate_map.dart';
-import 'package:trek_bkk_app/app/widgets/google_map/navigate_map.dart';
+import 'package:trek_bkk_app/app/widgets/google_map/generated_result_map.dart';
 
 class MapGeneratedPage extends StatefulWidget {
   final int routeIndex;
@@ -19,7 +20,7 @@ class MapGeneratedPage extends StatefulWidget {
 }
 
 class _MapGeneratedPageState extends State<MapGeneratedPage> {
-  List<List<double>> _coordinates = [];
+  DirectionRouteModel? _route;
   final PanelController _pc = PanelController();
 
   @override
@@ -33,15 +34,13 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   }
 
   Future<void> _generateRoute(List<String> places, bool optimize) async {
-    final a = await getDirectionRoute(places, optimize);
-    String polylineStr = a['routes'][0]['overview_polyline']['points'];
-    final polyline = decodePolyline(polylineStr);
-    List<List<double>> convertedList = polyline
-        .map((innerList) =>
-            innerList.map((numValue) => numValue.toDouble()).toList())
-        .toList();
+    final data = await getDirectionRoute(places, optimize);
+    data["geocoded_waypoints"] = await Future.wait(
+        (data["geocoded_waypoints"] as List)
+            .map((waypoint) async => await getPlaceDetail(waypoint["place_id"]))
+            .toList());
     setState(() {
-      _coordinates = convertedList;
+      _route = DirectionRouteModel.fromJson(data);
     });
   }
 
@@ -67,24 +66,42 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
             },
           ),
           body: Center(
-            child: _coordinates.isEmpty
+            child: _route == null
                 ? const CircularProgressIndicator()
                 : Stack(children: [
-                    NavigatedMapG(
-                        coordinates: _coordinates, places: widget.places),
+                    GeneratedResultMap(route: _route!, places: widget.places),
                     Positioned(
                       right: 16,
                       bottom: 88,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _pc.open();
-                        },
-                        icon: const Icon(Icons.list),
-                        label: const Text("View Detail"),
+                      child: Row(
+                        children: [
+                          ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            GeneratedNavigation(
+                                              route: _route!,
+                                            )));
+                              },
+                              icon: const Icon(Icons.hiking),
+                              label: const Text("START")),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              _pc.open();
+                            },
+                            icon: const Icon(Icons.list),
+                            label: const Text("View Detail"),
+                          ),
+                        ],
                       ),
                     ),
                     Positioned(
-                        top: 48,
+                        top: 16,
                         child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();

@@ -26,8 +26,8 @@ class RouteModel {
     }).toList();
 
     return RouteModel(
-        name: json["title"],
-        description: json["description"],
+        name: json["title"] ?? "",
+        description: json["description"] ?? "",
         distance: json["routes"][0]["legs"][0]["distance"]['value'] / 1000,
         stops: json["geocoded_waypoints"].length,
         waypoints: (json["geocoded_waypoints"] as List)
@@ -48,7 +48,7 @@ class WaypointModel {
 
   factory WaypointModel.fromJson(Map<String, dynamic> json) => WaypointModel(
       placeId: json["place_id"],
-      name: json["name"],
+      name: json["name"] ?? "",
       location: (json["location"] as List)
           .map((coordinate) => coordinate as double)
           .toList());

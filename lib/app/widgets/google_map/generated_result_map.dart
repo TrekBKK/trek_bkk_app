@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:trek_bkk_app/domain/entities/direction_route.dart';
 
-class NavigatedMapG extends StatefulWidget {
-  final List<List<double>> coordinates;
+class GeneratedResultMap extends StatefulWidget {
+  final DirectionRouteModel route;
+
   final dynamic places;
-  const NavigatedMapG({Key? key, required this.coordinates, this.places})
+  const GeneratedResultMap({Key? key, this.places, required this.route})
       : super(key: key);
 
   @override
-  State<NavigatedMapG> createState() => _NavigatedMapGState();
+  State<GeneratedResultMap> createState() => _GeneratedResultMapState();
 }
 
-class _NavigatedMapGState extends State<NavigatedMapG> {
+class _GeneratedResultMapState extends State<GeneratedResultMap> {
   late CameraPosition _initialCameraPosition;
   late GoogleMapController _mapController;
-  late List<LatLng> _points;
-  Set<Marker> _markers = {};
+  late List<LatLng> _polylinePoints;
+  final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
-    _points = widget.coordinates.map((c) => LatLng(c[0], c[1])).toList();
+    _polylinePoints = decodePolyline(widget.route.polyline)
+        .map((innerList) =>
+            innerList.map((numValue) => numValue.toDouble()).toList())
+        .map((c) => LatLng(c[0], c[1]))
+        .toList();
     _initialCameraPosition = CameraPosition(
-      target: _points.first,
+      target: _polylinePoints.first,
       zoom: 18,
     );
     _addMarkers();
@@ -35,9 +42,9 @@ class _NavigatedMapGState extends State<NavigatedMapG> {
   }
 
   @override
-  void didUpdateWidget(NavigatedMapG oldWidget) {
+  void didUpdateWidget(GeneratedResultMap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.coordinates != widget.coordinates) {
+    if (oldWidget.route != widget.route) {
       _updateLine();
       // _addMarkers();
     }
@@ -45,10 +52,13 @@ class _NavigatedMapGState extends State<NavigatedMapG> {
 
   void _updateLine() {
     setState(() {
-      _points = widget.coordinates.map((c) => LatLng(c[0], c[1])).toList();
-
+      _polylinePoints = decodePolyline(widget.route.polyline)
+          .map((innerList) =>
+              innerList.map((numValue) => numValue.toDouble()).toList())
+          .map((c) => LatLng(c[0], c[1]))
+          .toList();
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: _points.first, zoom: 18)
+          CameraPosition(target: _polylinePoints.first, zoom: 18)
           //17 is new zoom level
           ));
     });
@@ -70,13 +80,14 @@ class _NavigatedMapGState extends State<NavigatedMapG> {
     return GoogleMap(
       mapType: MapType.normal,
       initialCameraPosition: _initialCameraPosition,
+      compassEnabled: false,
       onMapCreated: (GoogleMapController controller) {
         _mapController = controller;
       },
       polylines: {
         Polyline(
           polylineId: PolylineId('route'),
-          points: _points,
+          points: _polylinePoints,
           color: Colors.red,
           width: 3,
         )
