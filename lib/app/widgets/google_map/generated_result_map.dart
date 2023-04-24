@@ -1,13 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:trek_bkk_app/domain/entities/direction_route.dart';
+import 'package:trek_bkk_app/utils.dart';
 
 class GeneratedResultMap extends StatefulWidget {
   final DirectionRouteModel route;
+  final List places;
 
-  final dynamic places;
-  const GeneratedResultMap({Key? key, this.places, required this.route})
+  const GeneratedResultMap(
+      {Key? key, required this.places, required this.route})
       : super(key: key);
 
   @override
@@ -46,7 +50,7 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.route != widget.route) {
       _updateLine();
-      // _addMarkers();
+      _addMarkers();
     }
   }
 
@@ -64,15 +68,28 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
     });
   }
 
-  void _addMarkers() {
-    widget.places.forEach((place) {
+  void _addMarkers() async {
+    final Uint8List? redMarker =
+        await getBytesFromAsset("assets/icons/location-pin.png", 40);
+    final Uint8List? barMarker =
+        await getBytesFromAsset("assets/icons/bar.png", 40);
+
+    _markers.clear();
+
+    for (dynamic place in widget.places) {
+      final BitmapDescriptor icon = BitmapDescriptor.fromBytes(widget
+              .route.waypoints
+              .any((waypoint) => waypoint.placeId == place["place_id"])
+          ? redMarker!
+          : barMarker!);
+
       _markers.add(Marker(
-        markerId: MarkerId(place["place_id"]),
-        position: LatLng(place["geometry"]["location"]["lat"],
-            place["geometry"]["location"]["lng"]),
-        infoWindow: InfoWindow(title: place["name"], snippet: 'some text'),
-      ));
-    });
+          markerId: MarkerId(place["place_id"]),
+          position: LatLng(place["geometry"]["location"]["lat"],
+              place["geometry"]["location"]["lng"]),
+          infoWindow: InfoWindow(title: place["name"], snippet: 'some text'),
+          icon: icon));
+    }
   }
 
   @override
@@ -86,11 +103,11 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
       },
       polylines: {
         Polyline(
-          polylineId: PolylineId('route'),
-          points: _polylinePoints,
-          color: Colors.red,
-          width: 3,
-        )
+            polylineId: PolylineId('route'),
+            points: _polylinePoints,
+            color: Colors.black,
+            width: 4,
+            patterns: _polylinePoints.map((_) => PatternItem.dot).toList())
       },
       markers: _markers,
       minMaxZoomPreference: const MinMaxZoomPreference(14, 19),

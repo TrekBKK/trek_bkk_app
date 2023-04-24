@@ -33,21 +33,24 @@ class CustomOrderedCheckbox extends StatelessWidget {
                   ),
                 ),
               ),
-              order != -1
-                  ? Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: lightColor,
-                          border: Border.all(
+              SizedBox(
+                height: 32,
+                child: order != -1
+                    ? Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                             color: lightColor,
-                            width: 4.0,
-                            style: BorderStyle.solid,
-                          )),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Text((order + 1).toString()),
-                      ))
-                  : const Icon(Icons.circle_outlined)
+                            border: Border.all(
+                              color: lightColor,
+                              width: 4.0,
+                              style: BorderStyle.solid,
+                            )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text((order + 1).toString()),
+                        ))
+                    : const Icon(Icons.circle_outlined),
+              )
             ],
           ),
         ),

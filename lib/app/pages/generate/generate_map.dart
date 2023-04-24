@@ -10,10 +10,10 @@ import '../../../domain/repositories/googlemap_api.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/generated_result_map.dart';
 
 class MapGeneratedPage extends StatefulWidget {
-  final int routeIndex;
+  final int stops;
   final List<dynamic> places;
   const MapGeneratedPage(
-      {super.key, required this.routeIndex, required this.places});
+      {super.key, required this.stops, required this.places});
 
   @override
   State<MapGeneratedPage> createState() => _MapGeneratedPageState();
@@ -27,7 +27,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   void initState() {
     super.initState();
     final placeIds = widget.places
-        .sublist(0, widget.routeIndex)
+        .sublist(0, widget.stops + 2)
         .map((place) => place['place_id'] as String)
         .toList();
     _generateRoute(placeIds, true);
@@ -59,7 +59,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
           panelBuilder: (ScrollController sc) => SlideUp(
             controller: sc,
             places: widget.places,
-            routeIndex: widget.routeIndex,
+            stops: widget.stops,
             selectRouteHandler: _generateRoute,
             close: () {
               _pc.close();

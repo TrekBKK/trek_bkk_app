@@ -83,12 +83,12 @@ class _GeneratePageState extends State<GeneratePage> {
     );
   }
 
-  void toMap(results, int routeIndex) {
+  void toMap(results, int stops) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: ((context) => MapGeneratedPage(
-                  routeIndex: routeIndex,
+                  stops: stops,
                   places: results,
                 ))));
   }
@@ -111,12 +111,10 @@ class _GeneratePageState extends State<GeneratePage> {
       dynamic destDetail = await getPlaceDetail(destPlaceId!);
 
       if (response.statusCode == 200) {
-        dynamic data = jsonDecode(response.body);
-        List results = data["results"];
-        int routeIndex = data["routeIndex"];
+        List results = jsonDecode(response.body);
         results.insert(0, srcDetail);
-        results.insert(routeIndex - 1, destDetail);
-        toMap(results, routeIndex);
+        results.insert(_numStopsSliderValue + 1, destDetail);
+        toMap(results, _numStopsSliderValue);
       }
     }
   }
