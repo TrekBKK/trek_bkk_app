@@ -36,7 +36,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
     double screenHeight =
         MediaQuery.of(context).size.height - padding.top - padding.bottom;
     double panelHeight = screenHeight / 2;
-    double infoHeight = panelHeight - 30;
+    double infoHeight = panelHeight;
     double descHeight = panelHeight - 20;
 
     return SizedBox(

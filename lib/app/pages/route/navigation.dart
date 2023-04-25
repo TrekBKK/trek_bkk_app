@@ -7,7 +7,7 @@ import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:trek_bkk_app/domain/entities/direction_route.dart';
 
 class GeneratedNavigation extends StatefulWidget {
-  final dynamic route;
+  final DirectionRouteModel route;
 
   const GeneratedNavigation({super.key, required this.route});
 
@@ -30,7 +30,7 @@ class _GeneratedNavigationState extends State<GeneratedNavigation> {
   @override
   void initState() {
     super.initState();
-    _polylinePoints = decodePolyline(widget.route["polyline"])
+    _polylinePoints = decodePolyline(widget.route.polyline)
         .map((innerList) =>
             innerList.map((numValue) => numValue.toDouble()).toList())
         .map((c) => LatLng(c[0], c[1]))
@@ -71,7 +71,7 @@ class _GeneratedNavigationState extends State<GeneratedNavigation> {
   }
 
   void _addMarkers() {
-    for (WaypointModel place in widget.route["waypoints"]) {
+    for (WaypointModel place in widget.route.waypoints) {
       _markers.add(Marker(
         markerId: MarkerId(place.placeId),
         position: LatLng(place.location["lat"], place.location["lng"]),

@@ -41,7 +41,7 @@ class _RouteDetailMapState extends State<RouteDetailMap> {
     _route.waypoints.forEach((place) {
       _markers.add(Marker(
         markerId: MarkerId(place.placeId),
-        position: LatLng(place.location[0], place.location[1]),
+        position: LatLng(place.location["lat"], place.location["lng"]),
         infoWindow: InfoWindow(
           title: place.name,
         ),

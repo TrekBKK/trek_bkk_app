@@ -41,7 +41,7 @@ class RouteModel {
 class WaypointModel {
   final String placeId;
   final String name;
-  final List<double> location;
+  final dynamic location;
 
   WaypointModel(
       {required this.placeId, required this.name, required this.location});
@@ -49,7 +49,5 @@ class WaypointModel {
   factory WaypointModel.fromJson(Map<String, dynamic> json) => WaypointModel(
       placeId: json["place_id"],
       name: json["name"] ?? "",
-      location: (json["location"] as List)
-          .map((coordinate) => coordinate as double)
-          .toList());
+      location: json["geometry"]["location"]);
 }

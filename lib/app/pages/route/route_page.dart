@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/app/pages/route/route_info.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/detail_map.dart';
-import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/utils.dart';
 
 class RoutePage extends StatefulWidget {
   final RouteModel route;
@@ -28,15 +28,23 @@ class _RoutePageState extends State<RoutePage> {
       appBar: AppBar(),
       body: SlidingUpPanel(
         minHeight: threshold,
+        maxHeight: 416,
         defaultPanelState: PanelState.OPEN,
         panel: RouteInfoWidget(
           route: widget.route,
         ),
         body: Padding(
           padding: const EdgeInsets.only(bottom: 235),
-          child: Container(
-            child: RouteDetailMap(route: widget.route),
-          ),
+          child: Stack(children: [
+            RouteDetailMap(route: widget.route),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                  onPressed: () {},
+                  style: primaryButtonStyles(px: 24),
+                  child: const Text("Start")),
+            )
+          ]),
         ),
       ),
     );
