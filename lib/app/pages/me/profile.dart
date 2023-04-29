@@ -15,7 +15,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserData>(context, listen: false).user;
+    UserModel? _user = Provider.of<UserData>(context, listen: false).user;
 
     return Scaffold(
       body: SafeArea(
@@ -25,9 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(children: <Widget>[
           Align(alignment: Alignment(1, 0), child: buildSettings()),
           Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
-              child: buildProfile(user.name, user.email)),
+              flex: 2, fit: FlexFit.tight, child: buildProfile(_user!.name)),
           Flexible(flex: 7, fit: FlexFit.tight, child: MeMenu()),
         ]),
       )),
@@ -38,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
 Widget buildSettings() =>
     IconButton(onPressed: (() {}), icon: Icon(Icons.settings));
 
-Widget buildProfile(name, email) => Container(
+Widget buildProfile(name) => Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
       child: Row(

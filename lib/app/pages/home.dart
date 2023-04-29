@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/widgets/home_card.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 
 import 'package:trek_bkk_app/utils.dart';
 
@@ -12,6 +16,45 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
+  Future<void> _checkLogin() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    String? _name = sp.getString("name");
+    String? _email = sp.getString("email");
+    print("check have user info or not<Home page> ${_name} ${_email}");
+
+    if (context.mounted) {
+      if (_name != null && _email != null) {
+        //have user information in local storage -> call BE to get user instance
+        await Provider.of<UserData>(context, listen: false)
+            .getUser(_name, _email);
+      } else {
+        // first time logging in
+      }
+    }
+  }
+
+  Future _logout() async {
+    await GoogleSignInApi.logout();
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.clear();
+    if (context.mounted) {
+      Provider.of<UserData>(context, listen: false).clear();
+    }
+  }
+
+  // void _registerCallBack() {
+  //   setState(() {
+  //     _login = true;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,7 +87,7 @@ class _HomeState extends State<Home> {
                               style: headline22,
                             )),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _logout,
                             style: primaryButtonStyles(),
                             child: const Text("Explore"))
                       ],

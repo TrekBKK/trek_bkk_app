@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class SignInPage extends StatelessWidget {
-  final dynamic Function() callback;
-  const SignInPage({super.key, required this.callback});
+  // final dynamic Function() callback;
+  const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     Future googleSignIn() async {
       var res = await GoogleSignInApi.login();
       if (res != null && context.mounted) {
-        UserModel user = UserModel(
-            name: res.displayName!, email: res.email, photoUrl: res.photoUrl);
-        await Provider.of<UserData>(context, listen: false).saveUser(user);
-        await callback();
+        await Provider.of<UserData>(context, listen: false)
+            .getUser(res.displayName!, res.email, res.photoUrl ?? "");
+        // await callback();
       }
     }
 

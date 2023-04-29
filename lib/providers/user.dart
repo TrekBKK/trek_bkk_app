@@ -7,46 +7,47 @@ import 'dart:convert';
 
 class UserData with ChangeNotifier {
   UserModel? _user;
+  bool _isfilled = false;
 
-  UserModel get user => _user!;
+  UserModel? get user => _user;
+  bool get isfilled => _isfilled;
 
-  Future<void> saveUser(UserModel user) async {
-    _user = user;
-    await _getUser(user);
-
-    notifyListeners();
-  }
-
-  void checkLogin() {
-    if (_user == null) {
-      print("null");
-    }
-  }
-
-  bool check() {
+  bool checkUser() {
     return _user == null;
   }
 
-  Future<void> _getUser(UserModel user) async {
-    final http.Response response = await http.post(Uri.http(apiUrl, "/user/"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-            <String, String>{'name': user.name, 'email': user.email}));
-
-    _user = UserModel.fromJson(json.decode(response.body));
-    SharedPreferences sp = await SharedPreferences.getInstance();
-
-    sp.setString("name", user.name);
-    sp.setString("email", user.email);
-    print("response");
-    print(_user);
-
-    if (response.statusCode == 200) {
-      print('User information saved successfully.');
-    } else {
-      print('Failed to save user information.');
+  Future<void> getUser(String name, email, [photoUrl]) async {
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      final url = Uri.http(apiUrl, "/user/");
+      final http.Response response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'name': name,
+            'email': email,
+            'photo': photoUrl ?? ""
+          }));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _user = UserModel.fromJson(data);
+        sp.setString("name", _user!.name);
+        sp.setString("email", _user!.email);
+      } else {
+        print('Failed to save user information.');
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+    } finally {
+      _isfilled = true;
+      notifyListeners();
     }
+  }
+
+  void clear() {
+    _isfilled = false;
+    _user = null;
+    notifyListeners();
   }
 }

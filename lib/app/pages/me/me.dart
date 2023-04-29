@@ -25,30 +25,6 @@ class _MePageState extends State<MePage> {
   @override
   void initState() {
     super.initState();
-    _checkLogin();
-  }
-
-  Future<void> _checkLogin() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-
-    String? _name = sp.getString("name");
-    String? _email = sp.getString("email");
-    print("checkLogin");
-    // print(Provider.of<UserData>(context, listen: false).user);
-
-    if (context.mounted) {
-      if (_name != null && _email != null) {
-        UserModel _user = UserModel(name: _name, email: _email);
-        Provider.of<UserData>(context, listen: false).saveUser(_user);
-        setState(() {
-          _login = true;
-        });
-      } else {
-        setState(() {
-          _login = false;
-        });
-      }
-    }
   }
 
   void _registerCallBack() {
@@ -59,15 +35,39 @@ class _MePageState extends State<MePage> {
 
   @override
   Widget build(BuildContext context) {
-    // bool _login = Provider.of<UserData>(context, listen: false).check();
-
     return Scaffold(
       body: SafeArea(
-          child: _login == false
-              ? SignInPage(callback: _registerCallBack)
-              // : _perf == false
-              //     ? const PreferenceSurvey()
-              : ProfilePage()),
+        child: Consumer<UserData>(
+          builder: (context, userProvider, child) {
+            if (userProvider.isfilled == false) {
+              return SignInPage();
+            } else if (userProvider.user == null) {
+              return const Text('Error fetching user data');
+            } else {
+              if (userProvider.user!.perference == true) {
+                return ProfilePage();
+              } else {
+                return PreferenceSurvey();
+              }
+            }
+          },
+        ),
+      ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   bool _login = false;
+  //   _login = Provider.of<UserData>(context, listen: false).checkLogin();
+  //   print("$_login in mme page");
+  //   return Scaffold(
+  //     body: SafeArea(
+  //         child: _login == false
+  //             ? SignInPage(callback: _registerCallBack)
+  //             // : _perf == false
+  //             //     ? const PreferenceSurvey()
+  //             : ProfilePage()),
+  //   );
+  // }
 }

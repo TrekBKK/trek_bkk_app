@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
+import 'package:trek_bkk_app/domain/entities/user.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 
 class MeMenu extends StatefulWidget {
   const MeMenu({super.key});
@@ -13,6 +16,8 @@ class _MeMenuState extends State<MeMenu> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? _user = Provider.of<UserData>(context, listen: false).user;
+
     return Column(
       children: [
         Flexible(
@@ -132,8 +137,8 @@ class _MeMenuState extends State<MeMenu> {
               child: _currentIndex == 0
                   ? _buildOwnRoute(context)
                   : _currentIndex == 1
-                      ? _buildFav()
-                      : _buildHistory(),
+                      ? _buildFav(_user?.favoriteRoutes)
+                      : _buildHistory(_user?.placesHistory),
             ))
       ],
     );
@@ -153,10 +158,12 @@ Widget _buildOwnRoute(BuildContext context) {
   ));
 }
 
-Widget _buildFav() {
+Widget _buildFav(List<String>? routes) {
+  print(routes);
   return Text('favorite');
 }
 
-Widget _buildHistory() {
+Widget _buildHistory(List<String>? routes) {
+  print(routes);
   return Text('history');
 }
