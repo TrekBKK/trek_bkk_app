@@ -138,7 +138,7 @@ class _MeMenuState extends State<MeMenu> {
                   ? _buildOwnRoute(context)
                   : _currentIndex == 1
                       ? _buildFav(_user?.favoriteRoutes)
-                      : _buildHistory(_user?.placesHistory),
+                      : _buildHistory(_user?.routesHistory),
             ))
       ],
     );
@@ -163,7 +163,7 @@ Widget _buildFav(List<String>? routes) {
   return Text('favorite');
 }
 
-Widget _buildHistory(List<String>? routes) {
+Widget _buildHistory(List<RouteHistory>? routes) {
   print(routes);
   return Text('history');
 }
