@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
+import 'package:trek_bkk_app/app/widgets/route_card.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
+import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class MeMenu extends StatefulWidget {
@@ -13,6 +16,26 @@ class MeMenu extends StatefulWidget {
 
 class _MeMenuState extends State<MeMenu> {
   int _currentIndex = 0;
+  List<RouteModel> _favRoutes = [];
+  List<RouteHistoryModel> _historyRoutes = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (context.mounted) {
+      UserModel? user = Provider.of<UserData>(context, listen: false).user;
+      _fetchData(user!.name, user.email);
+    }
+  }
+
+  void _fetchData(String name, email) async {
+    _favRoutes = await getFavoriteRoutes(name, email);
+    _historyRoutes = await getHistoryRoutes(name, email);
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +160,8 @@ class _MeMenuState extends State<MeMenu> {
               child: _currentIndex == 0
                   ? _buildOwnRoute(context)
                   : _currentIndex == 1
-                      ? _buildFav(_user?.favoriteRoutes)
-                      : _buildHistory(_user?.routesHistory),
+                      ? _buildFav(_isLoading, _favRoutes)
+                      : _buildHistory(_isLoading, _historyRoutes),
             ))
       ],
     );
@@ -158,12 +181,41 @@ Widget _buildOwnRoute(BuildContext context) {
   ));
 }
 
-Widget _buildFav(List<String>? routes) {
-  print(routes);
-  return Text('favorite');
+Widget _buildFav(bool isloading, List<RouteModel> routes) {
+  return Container(
+    child: isloading
+        ? const CircularProgressIndicator()
+        : ListView.builder(
+            padding: const EdgeInsets.only(bottom: 36),
+            itemCount: routes.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
+                child: RouteCard(
+                  route: routes[index],
+                  imgUrl: "https://picsum.photos/160/90",
+                ),
+              );
+            }),
+  );
 }
 
-Widget _buildHistory(List<RouteHistory>? routes) {
-  print(routes);
-  return Text('history');
+Widget _buildHistory(bool isloading, List<RouteHistoryModel> routes) {
+  //using another widget -> in case someone want to have fancy dateTime decoration
+  return Container(
+    child: isloading
+        ? const CircularProgressIndicator()
+        : ListView.builder(
+            padding: const EdgeInsets.only(bottom: 36),
+            itemCount: routes.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
+                child: RouteCard(
+                  route: routes[index].route,
+                  imgUrl: "https://picsum.photos/160/90",
+                ),
+              );
+            }),
+  );
 }

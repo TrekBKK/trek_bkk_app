@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class RouteModel {
   final String name;
   final String description;
@@ -50,4 +52,20 @@ class WaypointModel {
       placeId: json["place_id"],
       name: json["name"] ?? "",
       location: json["geometry"]["location"]);
+}
+
+class RouteHistoryModel {
+  final RouteModel route;
+  final DateTime time;
+
+  RouteHistoryModel({required this.route, required this.time});
+
+  factory RouteHistoryModel.fromJson(Map<String, dynamic> json) {
+    final DateFormat dateFormat = DateFormat('EEE, d MMM yyyy HH:mm:ss Z');
+
+    return RouteHistoryModel(
+      route: RouteModel.fromJson(json["route"]),
+      time: dateFormat.parse(json['timestamp']),
+    );
+  }
 }
