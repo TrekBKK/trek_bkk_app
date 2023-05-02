@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:trek_bkk_app/app/pages/route/navigation.dart';
 import 'package:trek_bkk_app/app/pages/route/route_info.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/detail_map.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
@@ -40,7 +41,13 @@ class _RoutePageState extends State<RoutePage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                RouteNavigation(route: widget.route)));
+                  },
                   style: primaryButtonStyles(px: 24),
                   child: const Text("Start")),
             )
