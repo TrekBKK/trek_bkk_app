@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
+import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class PreferenceSurvey extends StatefulWidget {
@@ -12,27 +13,33 @@ class PreferenceSurvey extends StatefulWidget {
 class _PreferenceSurveyState extends State<PreferenceSurvey> {
   List<String> selectedTagList = [];
   int _stepperIndex = 0;
+  final int _maxStepIndex = 3;
+  int _numStopsSliderValue = 3;
+  late String _numStopsText;
+  double _distanceSliderValue = 5;
+  late String _distanceText;
 
-  List<String> tags = [
-    "Hospital",
-    "School",
-    "Monument",
-    "Mountain",
-    "Shopping Mall"
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _numStopsText = _numStopsSliderValue.toString();
+    _distanceText = _distanceSliderValue.toString();
+  }
 
   void openFilterDialog() async {
     await FilterListDialog.display<String>(
       context,
       useRootNavigator: false,
       hideSelectedTextCount: true,
-      listData: tags,
+      hideSearchField: true,
+      hideCloseIcon: true,
+      listData: placeTypes.keys.toList(),
       selectedListData: selectedTagList,
-      choiceChipLabel: (tag) => tag,
+      choiceChipLabel: (tag) => placeTypes[tag],
       validateSelectedItem: (list, val) => list!.contains(val),
       themeData: getTagsDialogThemeData(context),
       onItemSearch: (tag, query) {
-        return tag.toLowerCase().contains(query.toLowerCase());
+        return placeTypes[tag]!.toLowerCase().contains(query.toLowerCase());
       },
       onApplyButtonClick: (list) {
         setState(() {
@@ -81,12 +88,9 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     shape: const StadiumBorder()),
                 onPressed: details.onStepContinue,
-                child: _stepperIndex == 2
+                child: _stepperIndex == _maxStepIndex
                     ? const Text("COMPLETE")
                     : const Text('CONTINUE'),
-              ),
-              const SizedBox(
-                height: 8,
               ),
               if (_stepperIndex > 0)
                 OutlinedButton(
@@ -111,10 +115,13 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
           }
         },
         onStepContinue: () {
-          if (_stepperIndex < 2) {
+          if (_stepperIndex < _maxStepIndex) {
             setState(() {
               _stepperIndex += 1;
             });
+          } else {
+            print(
+                {_numStopsSliderValue, _distanceSliderValue, selectedTagList});
           }
         },
         onStepTapped: (int index) {
@@ -127,11 +134,113 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
               title: const Text(""),
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Image(image: AssetImage("assets/icons/preference1.png")),
+                  SizedBox(
+                    height: 48,
+                  ),
+                  Text(
+                    "Please 2 minutes to answer we get to know you more to provide you your taste",
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                ],
+              ),
+              isActive: _stepperIndex >= 0,
+              state:
+                  _stepperIndex > 0 ? StepState.complete : StepState.disabled),
+          Step(
+              title: const Text(""),
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Image(
-                      image: AssetImage("assets/icons/preference1.png")),
+                      image: AssetImage("assets/icons/preference2.png")),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  const Text(
+                    "How many places do you normally go to?",
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    _numStopsText,
+                    style: headline48,
+                  ),
+                  const Text(
+                    "places",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  Slider(
+                    max: 10,
+                    divisions: 10,
+                    value: _numStopsSliderValue.toDouble(),
+                    label: _numStopsSliderValue.round().toString(),
+                    onChanged: ((value) {
+                      setState(() {
+                        _numStopsSliderValue = value.toInt();
+                        _numStopsText = _numStopsSliderValue.toString();
+                      });
+                    }),
+                  )
+                ],
+              ),
+              isActive: _stepperIndex >= 1,
+              state:
+                  _stepperIndex > 1 ? StepState.complete : StepState.disabled),
+          Step(
+              title: const Text(""),
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Image(
+                      image: AssetImage("assets/icons/preference3.png")),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  const Text(
+                    "How far would you prefer your walking trip be?",
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    _distanceText,
+                    style: headline48,
+                  ),
+                  const Text(
+                    "KM",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  Slider(
+                    max: 10,
+                    divisions: 20,
+                    value: _distanceSliderValue,
+                    label: _distanceSliderValue.toString(),
+                    onChanged: ((value) {
+                      setState(() {
+                        _distanceSliderValue = value;
+                        _distanceText = _distanceSliderValue.toString();
+                      });
+                    }),
+                  )
+                ],
+              ),
+              isActive: _stepperIndex >= 2,
+              state:
+                  _stepperIndex > 2 ? StepState.complete : StepState.disabled),
+          Step(
+              title: const Text(""),
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Image(
+                      image: AssetImage("assets/icons/preference4.png")),
                   const SizedBox(height: 40),
-                  const Text("What type of places do you enjoy going to?"),
+                  const Text(
+                    "What type of places do you enjoy going to?",
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(
                     height: 40,
                   ),
@@ -149,37 +258,9 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
                   )
                 ],
               ),
-              isActive: _stepperIndex >= 0,
+              isActive: _stepperIndex >= 3,
               state:
-                  _stepperIndex > 0 ? StepState.complete : StepState.disabled),
-          Step(
-              title: const Text(""),
-              content: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.accessible_rounded),
-                  SizedBox(
-                    height: 48,
-                  )
-                ],
-              ),
-              isActive: _stepperIndex >= 1,
-              state:
-                  _stepperIndex > 1 ? StepState.complete : StepState.disabled),
-          Step(
-              title: const Text(""),
-              content: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.accessible_rounded),
-                  SizedBox(
-                    height: 48,
-                  )
-                ],
-              ),
-              isActive: _stepperIndex >= 2,
-              state:
-                  _stepperIndex > 2 ? StepState.complete : StepState.disabled)
+                  _stepperIndex > 3 ? StepState.complete : StepState.disabled)
         ]);
 
     return Scaffold(

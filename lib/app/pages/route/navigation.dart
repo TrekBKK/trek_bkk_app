@@ -86,7 +86,7 @@ class _RouteNavigationState extends State<RouteNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _currentLocation == null
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
               myLocationEnabled: true,
               onMapCreated: (controller) {
