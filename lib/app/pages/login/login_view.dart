@@ -4,7 +4,6 @@ import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class SignInPage extends StatelessWidget {
-  // final dynamic Function() callback;
   const SignInPage({super.key});
 
   @override
@@ -14,7 +13,6 @@ class SignInPage extends StatelessWidget {
       if (res != null && context.mounted) {
         await Provider.of<UserData>(context, listen: false)
             .getUser(res.displayName!, res.email, res.photoUrl ?? "");
-        // await callback();
       }
     }
 

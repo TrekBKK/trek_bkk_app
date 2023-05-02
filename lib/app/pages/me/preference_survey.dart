@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
+import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class PreferenceSurvey extends StatefulWidget {
@@ -50,6 +52,17 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
     );
   }
 
+  void _onSubmitHandler() async {
+    print("in submit");
+    print(selectedTagList);
+    print(_numStopsText);
+    print(_distanceText);
+    if (context.mounted) {
+      await Provider.of<UserData>(context, listen: false)
+          .addPreference(_distanceText, _numStopsText, selectedTagList);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> tagsUI = selectedTagList
@@ -87,7 +100,9 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     shape: const StadiumBorder()),
-                onPressed: details.onStepContinue,
+                onPressed: _stepperIndex == _maxStepIndex
+                    ? _onSubmitHandler
+                    : details.onStepContinue,
                 child: _stepperIndex == _maxStepIndex
                     ? const Text("COMPLETE")
                     : const Text('CONTINUE'),

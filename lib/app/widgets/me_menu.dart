@@ -30,17 +30,17 @@ class _MeMenuState extends State<MeMenu> {
   }
 
   void _fetchData(String name, email) async {
-    _favRoutes = await getFavoriteRoutes(name, email);
-    _historyRoutes = await getHistoryRoutes(name, email);
-    setState(() {
-      _isLoading = false;
-    });
+    if (context.mounted) {
+      _favRoutes = await getFavoriteRoutes(name, email);
+      _historyRoutes = await getHistoryRoutes(name, email);
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _user = Provider.of<UserData>(context, listen: false).user;
-
     return Column(
       children: [
         Flexible(

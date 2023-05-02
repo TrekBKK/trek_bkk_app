@@ -43,7 +43,8 @@ class _HomeState extends State<Home> {
   Future _logout() async {
     await GoogleSignInApi.logout();
     SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.clear();
+    sp.remove("name");
+    sp.remove("email");
     if (context.mounted) {
       Provider.of<UserData>(context, listen: false).clear();
     }

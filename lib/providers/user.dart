@@ -12,8 +12,50 @@ class UserData with ChangeNotifier {
   UserModel? get user => _user;
   bool get isfilled => _isfilled;
 
-  bool checkUser() {
-    return _user == null;
+  bool checkHaveUser() {
+    return _user != null;
+  }
+
+  bool checkPref() {
+    if (checkHaveUser() == false) {
+      return false;
+    }
+    if (_user!.preference.distance != '' &&
+        _user!.preference.distance != '' &&
+        _user!.preference.type.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> addPreference(String distance, stop, List<String> type) async {
+    if (checkHaveUser() == false) {
+      print("have no user(how the hell you can call this function)");
+      return;
+    }
+    try {
+      final url = Uri.https(apiUrl, "/user/pref");
+      final http.Response response = await http.patch(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'name': _user!.name,
+            'email': _user!.name,
+            'preference': {"distance": distance},
+          }));
+      if (response.statusCode == 200) {
+        print("success");
+        _user!.preference.distance = distance;
+        _user!.preference.stop = stop;
+        _user!.preference.type = type;
+        notifyListeners();
+      } else {
+        print('Failed to save user information.');
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+    }
   }
 
   Future<void> getUser(String name, email, [photoUrl]) async {

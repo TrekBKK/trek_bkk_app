@@ -19,18 +19,9 @@ class MePage extends StatefulWidget {
 }
 
 class _MePageState extends State<MePage> {
-  bool _login = false;
-  late bool _perf;
-
   @override
   void initState() {
     super.initState();
-  }
-
-  void _registerCallBack() {
-    setState(() {
-      _login = true;
-    });
   }
 
   @override
@@ -44,7 +35,7 @@ class _MePageState extends State<MePage> {
             } else if (userProvider.user == null) {
               return const Text('Error fetching user data');
             } else {
-              if (userProvider.user!.perference == true) {
+              if (userProvider.checkPref()) {
                 return ProfilePage();
               } else {
                 return PreferenceSurvey();
@@ -65,7 +56,7 @@ class _MePageState extends State<MePage> {
   //     body: SafeArea(
   //         child: _login == false
   //             ? SignInPage(callback: _registerCallBack)
-  //             // : _perf == false
+  //             // : _pref == false
   //             //     ? const PreferenceSurvey()
   //             : ProfilePage()),
   //   );

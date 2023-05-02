@@ -5,8 +5,8 @@ class UserModel {
   final String? photoUrl;
   final List<String> favoriteRoutes;
   final List<RouteHistory> routesHistory;
-  final bool perference;
-  // List<String>? perference;
+  // final bool preference;
+  final Preference preference;
 
   UserModel({
     required this.id,
@@ -15,7 +15,7 @@ class UserModel {
     required this.photoUrl,
     required this.favoriteRoutes,
     required this.routesHistory,
-    required this.perference,
+    required this.preference,
   });
 
   @override
@@ -37,7 +37,7 @@ class UserModel {
         photoUrl: json['photo'],
         favoriteRoutes: List<String>.from(json['favorite_route']),
         routesHistory: historyRoute,
-        perference: json['perference']);
+        preference: Preference.fromJson(json["preference"]));
   }
 
   Map<String, dynamic> toJson() {
@@ -48,7 +48,7 @@ class UserModel {
     data['photo_url'] = photoUrl;
     data['favorite_route'] = favoriteRoutes;
     data['history_route'] = routesHistory.map((v) => v.toJson()).toList();
-    data['perference'] = perference;
+    data['preference'] = preference;
     return data;
   }
 }
@@ -68,6 +68,29 @@ class RouteHistory {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['route_id'] = routeId;
     data['timestamp'] = timestamp;
+    return data;
+  }
+}
+
+class Preference {
+  String distance;
+  String stop;
+  List<String> type;
+
+  Preference({required this.distance, required this.stop, required this.type});
+
+  factory Preference.fromJson(Map<String, dynamic> json) {
+    return Preference(
+        distance: json["distance"],
+        stop: json["stop"],
+        type: List<String>.from(json['type']));
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['distance'] = distance;
+    data['stop'] = stop;
+    data['type'] = type;
     return data;
   }
 }
