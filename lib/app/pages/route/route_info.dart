@@ -90,12 +90,15 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 16),
-                            child: Text(
-                              waypoints[index].name,
-                              style: headline20,
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 16),
+                              child: Text(
+                                waypoints[index].name,
+                                style: headline20,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         ],
