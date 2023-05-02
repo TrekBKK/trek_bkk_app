@@ -19,7 +19,7 @@ class UserData with ChangeNotifier {
   Future<void> getUser(String name, email, [photoUrl]) async {
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
-      final url = Uri.http(apiUrl, "/user/");
+      final url = Uri.https(apiUrl, "/user/");
       final http.Response response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
