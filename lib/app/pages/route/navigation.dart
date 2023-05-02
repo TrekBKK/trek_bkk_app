@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:trek_bkk_app/domain/entities/direction_route.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
 
-class GeneratedNavigation extends StatefulWidget {
-  final DirectionRouteModel route;
+class RouteNavigation extends StatefulWidget {
+  final RouteModel route;
 
-  const GeneratedNavigation({super.key, required this.route});
+  const RouteNavigation({super.key, required this.route});
 
   @override
-  State<GeneratedNavigation> createState() => _GeneratedNavigationState();
+  State<RouteNavigation> createState() => _RouteNavigationState();
 }
 
-class _GeneratedNavigationState extends State<GeneratedNavigation> {
+class _RouteNavigationState extends State<RouteNavigation> {
   StreamSubscription<Position>? _positionStream;
   Position? _currentLocation;
   GoogleMapController? _mapController;
@@ -84,27 +84,29 @@ class _GeneratedNavigationState extends State<GeneratedNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return _currentLocation == null
-        ? const CircularProgressIndicator()
-        : GoogleMap(
-            myLocationEnabled: true,
-            onMapCreated: (controller) {
-              _mapController = controller;
-            },
-            polylines: {
-              Polyline(
-                polylineId: const PolylineId("route"),
-                color: Colors.blue,
-                width: 3,
-                points: _polylinePoints,
+    return Scaffold(
+      body: _currentLocation == null
+          ? const CircularProgressIndicator()
+          : GoogleMap(
+              myLocationEnabled: true,
+              onMapCreated: (controller) {
+                _mapController = controller;
+              },
+              polylines: {
+                Polyline(
+                  polylineId: const PolylineId("route"),
+                  color: Colors.blue,
+                  width: 3,
+                  points: _polylinePoints,
+                ),
+              },
+              markers: _markers,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                    _currentLocation!.latitude, _currentLocation!.longitude),
+                zoom: 20,
               ),
-            },
-            markers: _markers,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  _currentLocation!.latitude, _currentLocation!.longitude),
-              zoom: 20,
             ),
-          );
+    );
   }
 }

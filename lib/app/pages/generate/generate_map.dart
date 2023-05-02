@@ -6,7 +6,6 @@ import 'package:trek_bkk_app/domain/entities/direction_route.dart';
 
 import '../../../domain/repositories/googlemap_api.dart';
 
-// import 'package:trek_bkk_app/app/widgets/map_box/navigate_map.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/generated_result_map.dart';
 
 class MapGeneratedPage extends StatefulWidget {
