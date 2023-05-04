@@ -30,6 +30,11 @@ class _MePageState extends State<MePage> {
       body: SafeArea(
         child: Consumer<UserData>(
           builder: (context, userProvider, child) {
+            if (userProvider.isloading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             if (userProvider.isfilled == false) {
               return SignInPage();
             } else if (userProvider.user == null) {

@@ -8,9 +8,11 @@ import 'dart:convert';
 class UserData with ChangeNotifier {
   UserModel? _user;
   bool _isfilled = false;
+  bool _isloading = false;
 
   UserModel? get user => _user;
   bool get isfilled => _isfilled;
+  bool get isloading => _isloading;
 
   bool checkHaveUser() {
     return _user != null;
@@ -34,7 +36,7 @@ class UserData with ChangeNotifier {
       return;
     }
     try {
-      final url = Uri.https(apiUrl, "/user/pref");
+      final url = Uri.http(apiUrl, "/user/pref");
       final http.Response response = await http.patch(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -42,7 +44,7 @@ class UserData with ChangeNotifier {
           body: jsonEncode(<String, dynamic>{
             'name': _user!.name,
             'email': _user!.name,
-            'preference': {"distance": distance},
+            'preference': {"distance": distance, "stop": stop, "type": type},
           }));
       if (response.statusCode == 200) {
         print("success");
@@ -60,8 +62,10 @@ class UserData with ChangeNotifier {
 
   Future<void> getUser(String name, email, [photoUrl]) async {
     try {
+      _isloading = true;
+      notifyListeners();
       SharedPreferences sp = await SharedPreferences.getInstance();
-      final url = Uri.https(apiUrl, "/user/");
+      final url = Uri.http(apiUrl, "/user/");
       final http.Response response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -83,6 +87,7 @@ class UserData with ChangeNotifier {
       print('Error fetching user data: $error');
     } finally {
       _isfilled = true;
+      _isloading = false;
       notifyListeners();
     }
   }

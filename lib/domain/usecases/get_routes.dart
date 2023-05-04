@@ -6,7 +6,7 @@ import 'package:trek_bkk_app/domain/entities/route.dart';
 
 getFavoriteRoutes(String name, email) async {
   try {
-    final url = Uri.https(apiUrl, "/user/favorite");
+    final url = Uri.http(apiUrl, "/user/favorite");
     final http.Response response = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -30,7 +30,7 @@ getFavoriteRoutes(String name, email) async {
 
 getHistoryRoutes(String name, email) async {
   try {
-    final url = Uri.https(apiUrl, "/user/history");
+    final url = Uri.http(apiUrl, "/user/history");
     final http.Response response = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

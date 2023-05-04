@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 class RouteModel {
+  final String id;
   final String name;
   final String description;
   final double distance;
@@ -10,7 +11,8 @@ class RouteModel {
   final String polyline;
 
   RouteModel(
-      {required this.name,
+      {required this.id,
+      required this.name,
       this.description = "",
       required this.distance,
       required this.stops,
@@ -20,7 +22,6 @@ class RouteModel {
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     List<String> tags = [];
-
     (json["geocoded_waypoints"] as List).map((place) {
       List<String> types =
           (place["types"] as List).map((tag) => tag as String).toList();
@@ -28,6 +29,7 @@ class RouteModel {
     }).toList();
 
     return RouteModel(
+        id: json["_id"],
         name: json["title"] ?? "",
         description: json["description"] ?? "",
         distance: json["routes"][0]["legs"][0]["distance"]['value'] / 1000,

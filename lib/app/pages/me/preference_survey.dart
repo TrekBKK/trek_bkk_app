@@ -53,10 +53,6 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
   }
 
   void _onSubmitHandler() async {
-    print("in submit");
-    print(selectedTagList);
-    print(_numStopsText);
-    print(_distanceText);
     if (context.mounted) {
       await Provider.of<UserData>(context, listen: false)
           .addPreference(_distanceText, _numStopsText, selectedTagList);
