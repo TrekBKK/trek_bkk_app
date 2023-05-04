@@ -66,7 +66,12 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
           ),
           body: Center(
             child: _route == null
-                ? const CircularProgressIndicator()
+                ? Column(
+                    children: const [
+                      CircularProgressIndicator(),
+                      Text("Connecting to GPT IV...")
+                    ],
+                  )
                 : Stack(children: [
                     GeneratedResultMap(route: _route!, places: widget.places),
                     Positioned(

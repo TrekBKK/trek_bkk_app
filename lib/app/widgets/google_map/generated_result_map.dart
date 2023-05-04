@@ -62,7 +62,7 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
           .map((c) => LatLng(c[0], c[1]))
           .toList();
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: _polylinePoints.first, zoom: 18)
+          CameraPosition(target: _polylinePoints.first, zoom: 13)
           //17 is new zoom level
           ));
     });
@@ -76,20 +76,22 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
 
     _markers.clear();
 
-    for (dynamic place in widget.places) {
-      final BitmapDescriptor icon = BitmapDescriptor.fromBytes(widget
-              .route.waypoints
-              .any((waypoint) => waypoint.placeId == place["place_id"])
-          ? redMarker!
-          : barMarker!);
+    setState(() {
+      for (dynamic place in widget.places) {
+        final BitmapDescriptor icon = BitmapDescriptor.fromBytes(widget
+                .route.waypoints
+                .any((waypoint) => waypoint.placeId == place["place_id"])
+            ? redMarker!
+            : barMarker!);
 
-      _markers.add(Marker(
-          markerId: MarkerId(place["place_id"]),
-          position: LatLng(place["geometry"]["location"]["lat"],
-              place["geometry"]["location"]["lng"]),
-          infoWindow: InfoWindow(title: place["name"], snippet: 'some text'),
-          icon: icon));
-    }
+        _markers.add(Marker(
+            markerId: MarkerId(place["place_id"]),
+            position: LatLng(place["geometry"]["location"]["lat"],
+                place["geometry"]["location"]["lng"]),
+            infoWindow: InfoWindow(title: place["name"], snippet: 'some text'),
+            icon: icon));
+      }
+    });
   }
 
   @override
@@ -106,7 +108,7 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
             polylineId: PolylineId('route'),
             points: _polylinePoints,
             color: Colors.black,
-            width: 4,
+            width: 3,
             patterns: _polylinePoints.map((_) => PatternItem.dot).toList())
       },
       markers: _markers,
