@@ -70,12 +70,12 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
               },
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: const Color(0xFFA49694),
+                  color: lightColor,
                 ),
-                child: Text(tag),
+                child: Text(placeTypes[tag]!),
               ),
             ))
         .toList();
@@ -259,7 +259,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
                       constraints:
                           const BoxConstraints(maxWidth: 200, maxHeight: 112),
                       child: Wrap(
-                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         spacing: 8,
                         runSpacing: 8,
                         children: tagsUI,

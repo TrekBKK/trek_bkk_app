@@ -128,7 +128,7 @@ class _GeneratePageState extends State<GeneratePage> {
                   borderRadius: BorderRadius.circular(16),
                   color: lightColor,
                 ),
-                child: Text(tag),
+                child: Text(placeTypes[tag]!),
               ),
             ))
         .toList();
