@@ -64,6 +64,7 @@ dependencies:
   #decoration
   fluttertoast: ^8.2.1
   intl: ^0.18.1
+  maps_toolkit: ^2.0.1
 
 dev_dependencies:
   flutter_test:
