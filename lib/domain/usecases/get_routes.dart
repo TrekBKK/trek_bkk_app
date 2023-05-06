@@ -1,8 +1,27 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:trek_bkk_app/configs.dart';
+import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
+
+getProposedRoutes(String userId) async {
+  try {
+    final url = Uri.http(apiUrl, "/routes/propose", {"user_id": userId});
+    final http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final res = (jsonDecode(response.body) as List);
+      List<ProposeModel> routes =
+          res.map((e) => ProposeModel.fromJson(e)).toList();
+
+      return routes;
+    }
+  } catch (e) {
+    debugPrint("Error fetching proposed routes: $e");
+  }
+}
 
 getFavoriteRoutes(String name, email) async {
   try {

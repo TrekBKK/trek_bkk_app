@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trek_bkk_app/app/pages/me/propose_tab.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
@@ -158,7 +159,7 @@ class _MeMenuState extends State<MeMenu> {
                 );
               },
               child: _currentIndex == 0
-                  ? _buildOwnRoute(context)
+                  ? const ProposeTab()
                   : _currentIndex == 1
                       ? _buildFav(_isLoading, _favRoutes)
                       : _buildHistory(_isLoading, _historyRoutes),
@@ -166,19 +167,6 @@ class _MeMenuState extends State<MeMenu> {
       ],
     );
   }
-}
-
-Widget _buildOwnRoute(BuildContext context) {
-  return (ElevatedButton(
-    onPressed: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProposeRoutePage(),
-          ));
-    },
-    child: Text("click"),
-  ));
 }
 
 Widget _buildFav(bool isloading, List<RouteModel> routes) {
