@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:provider/provider.dart';
+import 'package:trek_bkk_app/app/pages/me/me.dart';
+import 'package:trek_bkk_app/app/widgets/snackbar.dart';
+import 'package:trek_bkk_app/domain/entities/propose.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/domain/usecases/post_route.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 
 class ProposePage extends StatefulWidget {
   final String polyline;
   final List<dynamic> places;
-  const ProposePage({Key? key, required this.polyline, required this.places})
+  final double totalDistanceInMeter;
+  const ProposePage(
+      {Key? key,
+      required this.polyline,
+      required this.places,
+      required this.totalDistanceInMeter})
       : super(key: key);
 
   @override
@@ -21,6 +33,7 @@ class _ProposePageState extends State<ProposePage> {
   late List<dynamic> _places;
   late List<LatLng> _polylinePoints;
   Set<Marker> _markers = {};
+  bool _isProposing = false;
 
   @override
   void initState() {
@@ -82,10 +95,30 @@ class _ProposePageState extends State<ProposePage> {
     });
   }
 
+  void _propose(ProposeModel route) async {
+    await postProposedRoute(route);
+  }
+
   void _onSubmitHandler(String name, String des) {
-    print(name + des);
-    print(_polyline);
-    print(_places);
+    if (context.mounted) {
+      _propose(ProposeModel(
+          userId: Provider.of<UserData>(context, listen: false).user!.id,
+          name: name,
+          description: des,
+          distance: widget.totalDistanceInMeter,
+          stops: _places.length,
+          waypoints: _places,
+          polyline: _polyline));
+
+      ScaffoldMessenger.of(context).showSnackBar(successSnackbar("Success!"));
+
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MePage()),
+            (route) => false);
+      });
+    }
   }
 
   @override
@@ -114,44 +147,55 @@ class _ProposePageState extends State<ProposePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Enter your name',
-                border: OutlineInputBorder(),
-                hintText: 'Enter a message',
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter your name',
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter a message',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    controller: _descriptionController,
+                    minLines: 2,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter your description',
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter a message',
+                    ),
+                  ),
+                  _isProposing
+                      ? const CircularProgressIndicator()
+                      : IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {
+                            final String text = _nameController.text.trim();
+                            final String des =
+                                _descriptionController.text.trim();
+                            if (text.isNotEmpty) {
+                              _onSubmitHandler(text, des);
+                              setState(() {
+                                _isProposing = true;
+                              });
+                              _nameController.clear();
+                              _descriptionController.clear();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  warningSnackbar(
+                                      "Please specify the route name"));
+                            }
+                          },
+                        ),
+                ],
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _descriptionController,
-              minLines: 2,
-              maxLines: 5,
-              decoration: const InputDecoration(
-                labelText: 'Enter your description',
-                border: OutlineInputBorder(),
-                hintText: 'Enter a message',
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () {
-                final String text = _nameController.text.trim();
-                final String des = _descriptionController.text.trim();
-                if (text.isNotEmpty) {
-                  _onSubmitHandler(text, des);
-                  _nameController.clear();
-                  _descriptionController.clear();
-                }
-              },
             ),
           ],
         ));

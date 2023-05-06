@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:trek_bkk_app/app/pages/propose/propose_route.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route_pop_up.dart';
+import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/repositories/googlemap_api.dart';
 
 class ProposeRoutePage extends StatefulWidget {
@@ -23,6 +24,8 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   List<LatLng> _polylinePoints = [];
   Set<Marker> _markers = {};
   List<dynamic> _markedPlaces = [];
+  Position? _previousPosition;
+  double _totalDistance = 0;
 
   Polyline _polyline = const Polyline(
     polylineId: PolylineId("running_route"),
@@ -73,6 +76,15 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
         LatLng latLng = LatLng(position.latitude, position.longitude);
         if (context.mounted) {
           setState(() {
+            if (_previousPosition == null) {
+              _previousPosition = position;
+            } else {
+              _totalDistance += Geolocator.distanceBetween(
+                  _previousPosition!.latitude,
+                  _previousPosition!.longitude,
+                  position.latitude,
+                  position.longitude);
+            }
             _currentLocation = position;
             _polylinePoints.add(latLng);
             _polyline = Polyline(
@@ -99,8 +111,11 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              ProposePage(polyline: _encodedPolyline, places: _markedPlaces)),
+          builder: (context) => ProposePage(
+                polyline: _encodedPolyline,
+                places: _markedPlaces,
+                totalDistanceInMeter: _totalDistance,
+              )),
     );
   }
 
@@ -214,6 +229,26 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
                       icon: const Icon(Icons.access_time),
                     )),
               ),
+              Positioned(
+                  top: 16,
+                  left: 8,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16)),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Total distance: ",
+                          style: headline20,
+                        ),
+                        Text((_totalDistance / 1000).toStringAsFixed(1)),
+                        const Text(" km")
+                      ],
+                    ),
+                  ))
             ]),
     );
   }
