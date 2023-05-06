@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trek_bkk_app/app/pages/me/propose_tab.dart';
+import 'package:trek_bkk_app/app/pages/propose/propose_tab.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';

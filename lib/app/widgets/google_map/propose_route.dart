@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:trek_bkk_app/app/pages/me/me.dart';
 import 'package:trek_bkk_app/app/pages/propose/propose_route.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route_pop_up.dart';
 import 'package:trek_bkk_app/constants.dart';
@@ -101,6 +102,14 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   }
 
   void _saveRouteHandler() {
+    if (_markedPlaces.isEmpty) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MePage()),
+          (route) => false);
+      return;
+    }
+
     String _encodedPolyline = encodePolyline(
       _polylinePoints
           .map((LatLng latLng) => [latLng.latitude, latLng.longitude])
@@ -213,6 +222,7 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
                     alignment: Alignment.bottomLeft,
                     child: FloatingActionButton.extended(
                       heroTag: "btn1",
+                      backgroundColor: lightColor,
                       onPressed: _saveRouteHandler,
                       label: const Text("finish"),
                       icon: const Icon(Icons.directions_run),
@@ -224,7 +234,10 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
                     alignment: Alignment.bottomLeft,
                     child: FloatingActionButton.extended(
                       heroTag: "btn2",
-                      label: const Text("find places"),
+                      backgroundColor: lightColor,
+                      label: const Text(
+                        "search nearby",
+                      ),
                       onPressed: _findPlacesHandler,
                       icon: const Icon(Icons.access_time),
                     )),
@@ -235,6 +248,7 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
+                        border: Border.all(),
                         borderRadius: BorderRadius.circular(16)),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
