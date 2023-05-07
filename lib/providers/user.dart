@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/configs.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
@@ -48,8 +49,49 @@ class UserData with ChangeNotifier {
 
   void tempp() {
     testFe.add("test state");
-    print(routeFavorite!.length);
+    DateTime now = DateTime.now();
+    DateFormat dateFormat = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
+    String dateNow = dateFormat.format(now);
+    print(dateNow);
+    print(routeHistory!.length);
     notifyListeners();
+  }
+
+  Future<void> addHistoryRoute(RouteModel route) async {
+    if (checkHaveUser() == false) {
+      print("have no user(how the hell you can call this function)");
+      return;
+    }
+
+    try {
+      DateTime now = DateTime.now();
+      DateFormat dateFormat = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
+      String dateNow = dateFormat.format(now);
+      print(dateNow);
+      final url = Uri.http(apiUrl, "/user/history");
+      final http.Response response = await http.patch(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'user_id': _user!.id,
+            'route_id': route.id,
+            'timestamp': dateNow
+          }));
+      if (response.statusCode == 200) {
+        _user!.favoriteRoutes.add(route.id);
+
+        RouteHistoryModel temp = RouteHistoryModel(
+            route: route, timestamp: dateFormat.parse(dateNow));
+        routeHistory!.add(temp);
+        print(routeHistory!.length);
+        notifyListeners();
+      } else {
+        print('Failed to adding history route .');
+      }
+    } catch (error) {
+      print('Error adding history route: $error');
+    }
   }
 
   Future<void> updateFavRoute(RouteModel route) async {
@@ -57,7 +99,6 @@ class UserData with ChangeNotifier {
       print("have no user(how the hell you can call this function)");
       return;
     }
-
     try {
       final url = Uri.http(apiUrl, "/user/favorite");
       final http.Response response = await http.patch(url,
@@ -122,6 +163,7 @@ class UserData with ChangeNotifier {
     String userId = _user!.id;
     routeFavorite = await getFavoriteRoutes(userId);
     routeHistory = await getHistoryRoutes(userId);
+    print(routeHistory!.length);
     //get proposeRoute
   }
 

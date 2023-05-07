@@ -68,16 +68,16 @@ class WaypointModel {
 
 class RouteHistoryModel {
   final RouteModel route;
-  final DateTime time;
+  final DateTime timestamp;
 
-  RouteHistoryModel({required this.route, required this.time});
+  RouteHistoryModel({required this.route, required this.timestamp});
 
   factory RouteHistoryModel.fromJson(Map<String, dynamic> json) {
-    final DateFormat dateFormat = DateFormat('EEE, d MMM yyyy HH:mm:ss Z');
+    final DateFormat dateFormat = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
 
     return RouteHistoryModel(
       route: RouteModel.fromJson(json["route"]),
-      time: dateFormat.parse(json['timestamp']),
+      timestamp: dateFormat.parse(json['timestamp']),
     );
   }
 }

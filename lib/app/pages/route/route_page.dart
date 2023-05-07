@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/app/pages/route/navigation.dart';
 import 'package:trek_bkk_app/app/pages/route/route_info.dart';
 import 'package:trek_bkk_app/app/widgets/google_map/detail_map.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class RoutePage extends StatefulWidget {
@@ -42,6 +44,8 @@ class _RoutePageState extends State<RoutePage> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                   onPressed: () {
+                    Provider.of<UserData>(context, listen: false)
+                        .addHistoryRoute(widget.route);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
