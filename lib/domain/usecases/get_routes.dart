@@ -23,17 +23,10 @@ getProposedRoutes(String userId) async {
   }
 }
 
-getFavoriteRoutes(String name, email) async {
+Future<List<RouteModel>?> getFavoriteRoutes(String userId) async {
   try {
-    final url = Uri.http(apiUrl, "/user/favorite");
-    final http.Response response = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'name': name,
-          'email': email,
-        }));
+    final url = Uri.http(apiUrl, "/user/favorite", {"user_id": userId});
+    final http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       final res = (jsonDecode(response.body)) as List;
       List<RouteModel> routes = res.map((e) => RouteModel.fromJson(e)).toList();
@@ -41,27 +34,23 @@ getFavoriteRoutes(String name, email) async {
       return routes;
     } else {
       print('Failed to get user favorite routes.');
+      return null;
     }
   } catch (error) {
     print('Error fetching user favorite routes: $error');
   }
+  return null;
 }
 
-getHistoryRoutes(String name, email) async {
+getHistoryRoutes(String userId) async {
   try {
-    final url = Uri.http(apiUrl, "/user/history");
-    final http.Response response = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'name': name,
-          'email': email,
-        }));
+    final url = Uri.http(apiUrl, "/user/history", {"user_id": userId});
+    final http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       final res = (jsonDecode(response.body)) as List;
       List<RouteHistoryModel> routes =
           res.map((e) => RouteHistoryModel.fromJson(e)).toList();
+
       return routes;
     } else {
       print('Failed to get user history routes.');

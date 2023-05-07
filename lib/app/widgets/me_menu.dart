@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/propose/propose_tab.dart';
-import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
-import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class MeMenu extends StatefulWidget {
-  const MeMenu({super.key});
+  final UserModel? user;
+  const MeMenu({super.key, this.user});
 
   @override
   State<MeMenu> createState() => _MeMenuState();
@@ -17,23 +16,19 @@ class MeMenu extends StatefulWidget {
 
 class _MeMenuState extends State<MeMenu> {
   int _currentIndex = 0;
-  List<RouteModel> _favRoutes = [];
-  List<RouteHistoryModel> _historyRoutes = [];
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     if (context.mounted) {
-      UserModel? user = Provider.of<UserData>(context, listen: false).user;
-      _fetchData(user!.name, user.email);
+      _fetchData();
     }
   }
 
-  void _fetchData(String name, email) async {
+  void _fetchData() async {
     if (context.mounted) {
-      _favRoutes = await getFavoriteRoutes(name, email);
-      _historyRoutes = await getHistoryRoutes(name, email);
+      await Provider.of<UserData>(context, listen: false).getUserInfo();
       setState(() {
         _isLoading = false;
       });
@@ -42,6 +37,10 @@ class _MeMenuState extends State<MeMenu> {
 
   @override
   Widget build(BuildContext context) {
+    List<RouteModel>? _routeFavorite =
+        Provider.of<UserData>(context, listen: false).routeFavorite;
+    List<RouteHistoryModel>? _routeHistory =
+        Provider.of<UserData>(context, listen: false).routeHistory;
     return Column(
       children: [
         Flexible(
@@ -161,21 +160,21 @@ class _MeMenuState extends State<MeMenu> {
               child: _currentIndex == 0
                   ? const ProposeTab()
                   : _currentIndex == 1
-                      ? _buildFav(_isLoading, _favRoutes)
-                      : _buildHistory(_isLoading, _historyRoutes),
+                      ? _buildFav(_isLoading, _routeFavorite)
+                      : _buildHistory(_isLoading, _routeHistory),
             ))
       ],
     );
   }
 }
 
-Widget _buildFav(bool isloading, List<RouteModel> routes) {
+Widget _buildFav(bool isloading, List<RouteModel>? routes) {
   return Container(
     child: isloading
         ? const CircularProgressIndicator()
         : ListView.builder(
             padding: const EdgeInsets.only(bottom: 36),
-            itemCount: routes.length,
+            itemCount: routes!.length,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
@@ -188,14 +187,14 @@ Widget _buildFav(bool isloading, List<RouteModel> routes) {
   );
 }
 
-Widget _buildHistory(bool isloading, List<RouteHistoryModel> routes) {
+Widget _buildHistory(bool isloading, List<RouteHistoryModel>? routes) {
   //using another widget -> in case someone want to have fancy dateTime decoration
   return Container(
     child: isloading
         ? const CircularProgressIndicator()
         : ListView.builder(
             padding: const EdgeInsets.only(bottom: 36),
-            itemCount: routes.length,
+            itemCount: routes!.length,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24, top: 24),

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 
 class RouteInfoWidget extends StatefulWidget {
   final RouteModel route;
@@ -22,6 +24,25 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
 
   bool favTapped = false;
   IconData favIcon = Icons.star_outline_rounded;
+
+  @override
+  void initState() {
+    super.initState();
+    if (context.mounted) {
+      favTapped = Provider.of<UserData>(context, listen: false)
+          .checkFav(widget.route.id);
+    }
+  }
+
+  void _favHandler() async {
+    if (context.mounted) {
+      await Provider.of<UserData>(context, listen: false)
+          .updateFavRoute(widget.route);
+    }
+    setState(() {
+      favTapped = !favTapped;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,15 +210,10 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                             style: headline20,
                             overflow: TextOverflow.ellipsis)),
                     GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            favTapped = !favTapped;
-                            favIcon = (favTapped)
-                                ? Icons.star_rounded
-                                : Icons.star_outline_rounded;
-                          });
-                        },
-                        child: Icon(favIcon))
+                        onTap: _favHandler,
+                        child: favTapped
+                            ? Icon(Icons.star_rounded)
+                            : Icon(Icons.star_outline_rounded))
                   ],
                 ),
                 const SizedBox(

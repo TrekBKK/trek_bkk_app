@@ -38,10 +38,12 @@ class _MePageState extends State<MePage> {
             if (userProvider.isfilled == false) {
               return SignInPage();
             } else if (userProvider.user == null) {
-              return const Text('Error fetching user data');
+              return const Text(
+                  'Error fetching user data. cant create user model');
             } else {
               if (userProvider.checkPref()) {
-                return ProfilePage();
+                print("some thing change in me page");
+                return ProfilePage(user: userProvider.user);
               } else {
                 return PreferenceSurvey();
               }

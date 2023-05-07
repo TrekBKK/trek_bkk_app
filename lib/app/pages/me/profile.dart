@@ -6,7 +6,8 @@ import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final UserModel? user;
+  const ProfilePage({super.key, this.user});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -16,25 +17,29 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     UserModel? _user = Provider.of<UserData>(context, listen: false).user;
-
     return Scaffold(
       body: SafeArea(
           child: Container(
-        // width: double.infinity,
         decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
         child: Column(children: <Widget>[
-          Align(alignment: Alignment(1, 0), child: buildSettings()),
+          Align(alignment: Alignment(1, 0), child: buildSettings(context)),
           Flexible(
-              flex: 2, fit: FlexFit.tight, child: buildProfile(_user!.name)),
-          Flexible(flex: 7, fit: FlexFit.tight, child: MeMenu()),
+              flex: 2,
+              fit: FlexFit.tight,
+              child: buildProfile(widget.user!.name)),
+          Flexible(
+              flex: 7, fit: FlexFit.tight, child: MeMenu(user: widget.user)),
         ]),
       )),
     );
   }
 }
 
-Widget buildSettings() =>
-    IconButton(onPressed: (() {}), icon: Icon(Icons.settings));
+Widget buildSettings(BuildContext context) => IconButton(
+    onPressed: (() {
+      Provider.of<UserData>(context, listen: false).tempp();
+    }),
+    icon: Icon(Icons.settings));
 
 Widget buildProfile(name) => Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
