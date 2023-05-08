@@ -91,7 +91,7 @@ class _ProposeTabState extends State<ProposeTab> {
                                                   Container(
                                             width: 108,
                                             height: 144,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 image: NetworkImage(
                                                     "https://picsum.photos/108/144"),
@@ -106,7 +106,8 @@ class _ProposeTabState extends State<ProposeTab> {
                                         ),
                                         Expanded(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(16),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 8),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -138,15 +139,29 @@ class _ProposeTabState extends State<ProposeTab> {
                                                     ),
                                                   ],
                                                 ),
-                                                const Align(
+                                                Align(
                                                   alignment:
-                                                      Alignment.centerRight,
-                                                  child: Text(
-                                                    "Pending",
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.grey),
+                                                      Alignment.bottomRight,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                          "created on: ${_proposedRoutes[index].timestamp ?? ""}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      const Text(
+                                                        "Pending",
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ],
                                                   ),
                                                 )
                                               ],
