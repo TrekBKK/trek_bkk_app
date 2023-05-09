@@ -23,7 +23,7 @@ getProposedRoutes(String userId) async {
   }
 }
 
-Future<List<RouteModel>?> getFavoriteRoutes(String userId) async {
+Future<List<RouteModel>> getFavoriteRoutes(String userId) async {
   try {
     final url = Uri.http(apiUrl, "/user/favorite", {"user_id": userId});
     final http.Response response = await http.get(url);
@@ -34,12 +34,11 @@ Future<List<RouteModel>?> getFavoriteRoutes(String userId) async {
       return routes;
     } else {
       print('Failed to get user favorite routes.');
-      return null;
     }
   } catch (error) {
     print('Error fetching user favorite routes: $error');
   }
-  return null;
+  return [];
 }
 
 getHistoryRoutes(String userId) async {

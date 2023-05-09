@@ -42,7 +42,7 @@ class _MePageState extends State<MePage> {
                   'Error fetching user data. cant create user model');
             } else {
               if (userProvider.checkPref()) {
-                print("some thing change in me page");
+                print("some thing change in me page[test state]");
                 return ProfilePage(user: userProvider.user);
               } else {
                 return PreferenceSurvey();

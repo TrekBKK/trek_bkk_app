@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/propose/propose_tab.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
+import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/providers/user.dart';
@@ -28,7 +29,10 @@ class _MeMenuState extends State<MeMenu> {
 
   void _fetchData() async {
     if (context.mounted) {
-      await Provider.of<UserData>(context, listen: false).getUserInfo();
+      if (Provider.of<UserData>(context, listen: false).checkUserRouteInfo() ==
+          false) {
+        await Provider.of<UserData>(context, listen: false).getUserInfo();
+      }
       setState(() {
         _isLoading = false;
       });
@@ -39,8 +43,10 @@ class _MeMenuState extends State<MeMenu> {
   Widget build(BuildContext context) {
     List<RouteModel>? _routeFavorite =
         Provider.of<UserData>(context, listen: false).routeFavorite;
-    List<RouteHistoryModel>? _routeHistory =
+    List<RouteHistoryModel> _routeHistory =
         Provider.of<UserData>(context, listen: false).routeHistory;
+    List<ProposeModel> _routePropose =
+        Provider.of<UserData>(context, listen: false).routePropose;
     return Column(
       children: [
         Flexible(
@@ -158,7 +164,8 @@ class _MeMenuState extends State<MeMenu> {
                 );
               },
               child: _currentIndex == 0
-                  ? const ProposeTab()
+                  ? ProposeTab(
+                      isLoading: _isLoading, routePropose: _routePropose)
                   : _currentIndex == 1
                       ? _buildFav(_isLoading, _routeFavorite)
                       : _buildHistory(_isLoading, _routeHistory),

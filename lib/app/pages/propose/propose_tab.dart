@@ -11,23 +11,27 @@ import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class ProposeTab extends StatefulWidget {
-  const ProposeTab({super.key});
+  final bool isLoading;
+  final List<ProposeModel> routePropose;
+  const ProposeTab(
+      {super.key, required this.isLoading, required this.routePropose});
 
   @override
   State<ProposeTab> createState() => _ProposeTabState();
 }
 
 class _ProposeTabState extends State<ProposeTab> {
-  List<ProposeModel> _proposedRoutes = [];
-  bool _dataIsFetched = false;
+  late List<ProposeModel> _proposedRoutes;
+  late bool _dataIsFetched;
 
   @override
   void initState() {
     super.initState();
-
-    if (context.mounted) {
-      _fetchProposedRoutes();
-    }
+    // _proposedRoutes = widget.routePropose;
+    // _dataIsFetched = widget.isLoading;
+    // if (context.mounted) {
+    //   _fetchProposedRoutes();
+    // }
   }
 
   void _fetchProposedRoutes() async {
@@ -40,6 +44,8 @@ class _ProposeTabState extends State<ProposeTab> {
 
   @override
   Widget build(BuildContext context) {
+    _proposedRoutes = widget.routePropose;
+    _dataIsFetched = !widget.isLoading;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(

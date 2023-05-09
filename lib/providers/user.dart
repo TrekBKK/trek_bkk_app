@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/configs.dart';
+import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:http/http.dart' as http;
@@ -11,8 +12,9 @@ import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
 
 class UserData with ChangeNotifier {
   UserModel? _user;
-  List<RouteHistoryModel>? routeHistory;
-  List<RouteModel>? routeFavorite;
+  late List<RouteHistoryModel> routeHistory = [];
+  late List<RouteModel> routeFavorite = [];
+  late List<ProposeModel> routePropose = [];
 
   bool _isfilled = false;
   bool _isloading = false;
@@ -24,6 +26,13 @@ class UserData with ChangeNotifier {
 
   bool checkHaveUser() {
     return _user != null;
+  }
+
+  bool checkUserRouteInfo() {
+    if (routeHistory.isEmpty && routeFavorite.isEmpty && routePropose.isEmpty) {
+      return false;
+    }
+    return true;
   }
 
   bool checkPref() {
@@ -49,11 +58,8 @@ class UserData with ChangeNotifier {
 
   void tempp() {
     testFe.add("test state");
-    DateTime now = DateTime.now();
-    DateFormat dateFormat = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
-    String dateNow = dateFormat.format(now);
-    print(dateNow);
-    print(routeHistory!.length);
+
+    print(routePropose.length);
     notifyListeners();
   }
 
@@ -163,7 +169,7 @@ class UserData with ChangeNotifier {
     String userId = _user!.id;
     routeFavorite = await getFavoriteRoutes(userId);
     routeHistory = await getHistoryRoutes(userId);
-    print(routeHistory!.length);
+    routePropose = await getProposedRoutes(userId);
     //get proposeRoute
   }
 
@@ -202,6 +208,9 @@ class UserData with ChangeNotifier {
   void clear() {
     _isfilled = false;
     _user = null;
+    routeHistory.clear();
+    routeFavorite.clear();
+    routePropose.clear();
     notifyListeners();
   }
 }

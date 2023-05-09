@@ -101,16 +101,19 @@ class _ProposePageState extends State<ProposePage> {
 
   void _onSubmitHandler(String name, String des) {
     if (context.mounted) {
-      _propose(ProposeModel(
+      ProposeModel data = ProposeModel(
           userId: Provider.of<UserData>(context, listen: false).user!.id,
           name: name,
           description: des,
           distance: widget.totalDistanceInMeter,
           stops: _places.length,
           waypoints: _places,
-          polyline: _polyline));
+          polyline: _polyline);
+
+      _propose(data);
 
       ScaffoldMessenger.of(context).showSnackBar(successSnackbar("Success!"));
+      Provider.of<UserData>(context, listen: false).routePropose.add(data);
 
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushAndRemoveUntil(
