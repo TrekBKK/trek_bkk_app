@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:trek_bkk_app/app/pages/me/settings.dart';
 import 'package:trek_bkk_app/app/widgets/me_menu.dart';
+import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
@@ -21,15 +23,23 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SafeArea(
           child: Container(
         decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
-        child: Column(children: <Widget>[
-          Align(alignment: Alignment(1, 0), child: buildSettings(context)),
-          Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
-              child: buildProfile(widget.user!.name)),
-          Flexible(
-              flex: 7, fit: FlexFit.tight, child: MeMenu(user: widget.user)),
-        ]),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                  decoration: const BoxDecoration(color: lightColor),
+                  child: Align(
+                      alignment: Alignment(1, 0),
+                      child: buildSettings(context))),
+              Flexible(
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: buildProfile(widget.user!.name)),
+              Flexible(
+                  flex: 7,
+                  fit: FlexFit.tight,
+                  child: MeMenu(user: widget.user)),
+            ]),
       )),
     );
   }
@@ -37,13 +47,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
 Widget buildSettings(BuildContext context) => IconButton(
     onPressed: (() {
-      Provider.of<UserData>(context, listen: false).tempp();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Settings()));
     }),
-    icon: Icon(Icons.settings));
+    icon: const Icon(Icons.settings));
 
 Widget buildProfile(name) => Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+      decoration: const BoxDecoration(
+          border:
+              Border.symmetric(horizontal: BorderSide(color: Colors.brown))),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           const CircleAvatar(

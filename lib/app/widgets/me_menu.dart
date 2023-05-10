@@ -143,7 +143,9 @@ class _MeMenuState extends State<MeMenu> {
                         Text(
                           'History',
                           style: _currentIndex == 2
-                              ? const TextStyle(color: Color(0xff972d07))
+                              ? const TextStyle(
+                                  color: Color(0xff972d07),
+                                )
                               : null,
                         )
                       ],
