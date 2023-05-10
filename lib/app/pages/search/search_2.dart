@@ -3,35 +3,29 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:trek_bkk_app/app/pages/search/get_tags_from_query.dart';
 
+import 'package:trek_bkk_app/app/pages/search/get_tags_from_query.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
-import 'package:trek_bkk_app/app/utils/search_result_dummy.dart';
 import 'package:trek_bkk_app/app/pages/search/filter_search_results.dart';
 import 'package:trek_bkk_app/app/widgets/add_place_dialog.dart';
 import 'package:trek_bkk_app/app/widgets/route_card.dart';
 import 'package:trek_bkk_app/domain/entities/add_place_dialog_input.dart';
-import 'package:trek_bkk_app/domain/entities/place.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/usecases/get_routes_by_key.dart';
 import 'package:trek_bkk_app/domain/usecases/get_routes_by_place_ids.dart';
 import 'package:trek_bkk_app/utils.dart';
 import 'package:trek_bkk_app/constants.dart';
 
-List<String> tags = [
-  "home",
-  "alone",
-  "sad",
-  "veryverysad",
-  "okokokkkkkkkk",
-  "new line"
-];
-
 class Search2 extends StatefulWidget {
   final String? initialSearchKey;
   final AddPlaceDialogInput? initalPlaceTag;
+  final String? initialTypeFilter;
 
-  const Search2({super.key, this.initialSearchKey, this.initalPlaceTag});
+  const Search2(
+      {super.key,
+      this.initialSearchKey,
+      this.initalPlaceTag,
+      this.initialTypeFilter});
 
   @override
   State<Search2> createState() => _Search2State();
@@ -78,6 +72,7 @@ class _Search2State extends State<Search2> {
   initValues() {
     if (widget.initialSearchKey != null) {
       _searchController.text = widget.initialSearchKey!;
+      print(widget.initialSearchKey);
     } else {
       if (widget.initalPlaceTag!.isSource) {
         srcDisable = true;
@@ -100,7 +95,9 @@ class _Search2State extends State<Search2> {
             .toList();
         filteredSearchResult = searchResults.toList();
         queryTagList = getTagsFromQuery(searchResults);
-        selectedTagList = queryTagList.toList();
+        selectedTagList = widget.initialTypeFilter == null
+            ? queryTagList.toList()
+            : [widget.initialTypeFilter!];
       });
     }
     setState(() {
@@ -192,14 +189,14 @@ class _Search2State extends State<Search2> {
     ));
 
     Widget title = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: (() {
           if (widget.initalPlaceTag != null) {
             return [
               Text(
-                "${filteredSearchResult.isEmpty ? "No search" : "Search"} result for routes with",
+                "${filteredSearchResult.isEmpty ? "No search" : "Search"} results for routes with",
                 style: headline20,
               ),
               const SizedBox(
@@ -214,7 +211,7 @@ class _Search2State extends State<Search2> {
           } else {
             return [
               Text(
-                "${filteredSearchResult.isEmpty ? "No search" : "Search"} result for ${_searchController.text}",
+                "${filteredSearchResult.isEmpty ? "No search" : "Search"} results ${_searchController.text.isEmpty ? "" : "for ${_searchController.text}"}",
                 style: headline22,
               ),
             ];
@@ -238,7 +235,35 @@ class _Search2State extends State<Search2> {
               ),
               GestureDetector(
                 onTap: () => _filterDialogBuilder(context),
-                child: const Icon(Icons.filter_alt),
+                child: SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: Stack(children: [
+                    const Icon(Icons.filter_alt),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            color: lightColor,
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              selectedTagList.length.toString(),
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ]),
+                ),
               )
             ],
           )),
@@ -253,8 +278,8 @@ class _Search2State extends State<Search2> {
                     itemCount: filteredSearchResult.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding:
-                            const EdgeInsets.only(left: 24, right: 24, top: 24),
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, bottom: 24),
                         child: RouteCard(
                           route: filteredSearchResult[index],
                           imgUrl: "https://picsum.photos/160/90",

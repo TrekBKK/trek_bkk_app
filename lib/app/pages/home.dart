@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/widgets/home_card.dart';
+import 'package:trek_bkk_app/app/widgets/place_type_card.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
+import 'package:trek_bkk_app/domain/usecases/get_route_types.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 import 'package:trek_bkk_app/utils.dart';
@@ -16,10 +18,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List _availableTypes = [];
+
   @override
   void initState() {
     super.initState();
     _checkLogin();
+    _getAvailableTypes();
+  }
+
+  void _getAvailableTypes() async {
+    List types = await getRouteTypes();
+    setState(() {
+      _availableTypes = types;
+    });
   }
 
   Future<void> _checkLogin() async {
@@ -171,8 +183,31 @@ class _HomeState extends State<Home> {
               ),
             ),
             const SizedBox(
+              height: 24,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: Text(
+                "Explore New Destination",
+                style: headline22,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                    children: (_availableTypes.toList()..shuffle())
+                        .map((typeKey) => PlaceTypeCard(type: typeKey))
+                        .toList()),
+              ),
+            ),
+            const SizedBox(
               height: 32,
-            )
+            ),
           ]),
         )
       ],
