@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/me/me.dart';
 import 'package:trek_bkk_app/app/widgets/snackbar.dart';
@@ -8,6 +10,8 @@ import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/usecases/post_route.dart';
 import 'package:trek_bkk_app/providers/user.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class ProposePage extends StatefulWidget {
   final String polyline;
@@ -24,16 +28,21 @@ class ProposePage extends StatefulWidget {
   State<ProposePage> createState() => _ProposePageState();
 }
 
+enum Option {
+  camera,
+  gallery,
+}
+
 class _ProposePageState extends State<ProposePage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   late GoogleMapController _mapController;
   late String _polyline;
-  List<List<double>> _coordinates = [];
   late List<dynamic> _places;
   late List<LatLng> _polylinePoints;
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
   bool _isProposing = false;
+  File? _image;
 
   @override
   void initState() {
@@ -84,25 +93,23 @@ class _ProposePageState extends State<ProposePage> {
   }
 
   void _onDeleteHandler(String place_id) {
-    // for (var place in _places) {
-    //   if (place["place_id"] == place_id) {
-    //     _places.remove(place);
-    //   }
-    // }
     Navigator.of(context, rootNavigator: true).pop('dialog');
     setState(() {
       _markers.removeWhere((e) => e.markerId.value == place_id);
     });
   }
 
-  void _propose(ProposeModel route) async {
+  Future<void> _propose(ProposeModel route) async {
     await postProposedRoute(route);
   }
 
-  void _onSubmitHandler(String name, String des) {
+  void _onSubmitHandler(String name, String des, BuildContext ctx) async {
     if (context.mounted) {
+      final scaffoldMessenger = ScaffoldMessenger.of(ctx);
+      final userData = Provider.of<UserData>(ctx, listen: false);
+
       ProposeModel data = ProposeModel(
-          userId: Provider.of<UserData>(context, listen: false).user!.id,
+          userId: userData.user!.id,
           name: name,
           description: des,
           distance: widget.totalDistanceInMeter,
@@ -110,10 +117,9 @@ class _ProposePageState extends State<ProposePage> {
           waypoints: _places,
           polyline: _polyline);
 
-      _propose(data);
-
-      ScaffoldMessenger.of(context).showSnackBar(successSnackbar("Success!"));
-      Provider.of<UserData>(context, listen: false).routePropose.add(data);
+      await _propose(data);
+      scaffoldMessenger.showSnackBar(successSnackbar("Success!"));
+      userData.routePropose.add(data);
 
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushAndRemoveUntil(
@@ -124,83 +130,217 @@ class _ProposePageState extends State<ProposePage> {
     }
   }
 
+  Future<void> pickImage(String method) async {
+    try {
+      XFile? image;
+      if (method == 'camera') {
+        image = await ImagePicker().pickImage(source: ImageSource.camera);
+      } else if (method == 'gallery') {
+        image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      } else {
+        return;
+      }
+
+      if (image == null) return;
+
+      final imageTemp = File(image.path);
+      setState(() {
+        _image = imageTemp;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to get image: $e');
+    }
+  }
+
+  Future<void> _showDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select source'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    pickImage('camera');
+                    Navigator.of(context).pop();
+                  },
+                  splashColor: Colors.blue.withOpacity(0.5),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.camera_alt, color: Colors.blue),
+                      SizedBox(width: 10),
+                      Text(
+                        'Take a picture',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                InkWell(
+                  onTap: () {
+                    pickImage('gallery');
+                    Navigator.of(context).pop();
+                  },
+                  splashColor: Colors.blue.withOpacity(0.5),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.image, color: Colors.blue),
+                      SizedBox(width: 10),
+                      Text(
+                        'select from gallery',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double mapHeight = screenSize.height * 0.56;
+    final double userInputHeight =
+        screenSize.height * 0.33; //the rest goes to that bottom nav bar
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          children: [
-            Expanded(
-              child: GoogleMap(
-                onMapCreated: (controller) {
-                  _mapController = controller;
-                },
-                polylines: {
-                  Polyline(
-                    polylineId: PolylineId("route"),
-                    color: Colors.blue,
-                    width: 3,
-                    points: _polylinePoints,
-                  ),
-                },
-                markers: _markers,
-                initialCameraPosition: CameraPosition(
-                  target: _polylinePoints.first,
-                  zoom: 20,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottom * 0.8),
               child: Column(
                 children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Enter your name',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter a message',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    controller: _descriptionController,
-                    minLines: 2,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                      labelText: 'Enter your description',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter a message',
-                    ),
-                  ),
-                  _isProposing
-                      ? const CircularProgressIndicator()
-                      : IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: () {
-                            final String text = _nameController.text.trim();
-                            final String des =
-                                _descriptionController.text.trim();
-                            if (text.isNotEmpty) {
-                              _onSubmitHandler(text, des);
-                              setState(() {
-                                _isProposing = true;
-                              });
-                              _nameController.clear();
-                              _descriptionController.clear();
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  warningSnackbar(
-                                      "Please specify the route name"));
-                            }
-                          },
+                  Container(
+                    height: mapHeight,
+                    child: GoogleMap(
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                      },
+                      polylines: {
+                        Polyline(
+                          polylineId: PolylineId("route"),
+                          color: Colors.blue,
+                          width: 3,
+                          points: _polylinePoints,
                         ),
+                      },
+                      markers: _markers,
+                      initialCameraPosition: CameraPosition(
+                        target: _polylinePoints.first,
+                        zoom: 20,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: userInputHeight,
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    decoration:
+                        BoxDecoration(color: Colors.lightBlueAccent.shade100),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                _image != null
+                                    ? Image.file(_image!,
+                                        width: 140,
+                                        height: 140,
+                                        fit: BoxFit.cover)
+                                    : const Image(
+                                        image: AssetImage(
+                                            "assets/images/ImagePlaceHolder.jpg"),
+                                        fit: BoxFit.cover,
+                                        width: 140,
+                                        height: 140,
+                                      ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _showDialog(context);
+                                  },
+                                  child: const Text("select Image"),
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: 200.0,
+                                  height: 50.0,
+                                  child: TextField(
+                                    controller: _nameController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Enter route rame',
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Enter a message',
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: 200.0,
+                                  height: 120,
+                                  child: TextField(
+                                    controller: _descriptionController,
+                                    minLines: 4,
+                                    maxLines: 8,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Enter your description',
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Enter a message',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Container(
+                            child: _isProposing
+                                ? const CircularProgressIndicator()
+                                : IconButton(
+                                    icon: const Icon(Icons.send),
+                                    onPressed: () {
+                                      final String text =
+                                          _nameController.text.trim();
+                                      final String des =
+                                          _descriptionController.text.trim();
+                                      if (text.isNotEmpty) {
+                                        _onSubmitHandler(text, des, context);
+                                        setState(() {
+                                          _isProposing = true;
+                                        });
+                                        _nameController.clear();
+                                        _descriptionController.clear();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(warningSnackbar(
+                                                "Please specify the route name"));
+                                      }
+                                    },
+                                  ))
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 200),
                 ],
               ),
             ),
-          ],
+          ),
         ));
   }
 }

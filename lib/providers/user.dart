@@ -89,8 +89,8 @@ class UserData with ChangeNotifier {
 
         RouteHistoryModel temp = RouteHistoryModel(
             route: route, timestamp: dateFormat.parse(dateNow));
-        routeHistory!.add(temp);
-        print(routeHistory!.length);
+        routeHistory.add(temp);
+
         notifyListeners();
       } else {
         print('Failed to adding history route .');
@@ -118,10 +118,10 @@ class UserData with ChangeNotifier {
       if (response.statusCode == 200) {
         if (_user!.favoriteRoutes.contains(route.id)) {
           _user!.favoriteRoutes.remove(route.id);
-          routeFavorite!.removeWhere((e) => e.id == route.id);
+          routeFavorite.removeWhere((e) => e.id == route.id);
         } else {
           _user!.favoriteRoutes.add(route.id);
-          routeFavorite!.add(route);
+          routeFavorite.add(route);
         }
         notifyListeners();
       } else {

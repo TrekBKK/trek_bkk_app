@@ -66,6 +66,10 @@ dependencies:
   intl: ^0.18.1
   maps_toolkit: ^2.0.1
 
+  #firebase storage and image uploading
+  image_picker: ^0.8.4+2
+  path_provider: ^2.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
