@@ -5,7 +5,7 @@ getTagsFromQuery(List<RouteModel>? searchResult) {
 
   if (searchResult != null) {
     for (RouteModel r in searchResult) {
-      tags.addAll(r.tags);
+      tags.addAll(r.types);
     }
   }
 

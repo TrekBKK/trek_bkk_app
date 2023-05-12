@@ -4,8 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trek_bkk_app/app/widgets/home_card.dart';
 import 'package:trek_bkk_app/app/widgets/place_type_card.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
 import 'package:trek_bkk_app/domain/usecases/get_route_types.dart';
+import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 
 import 'package:trek_bkk_app/utils.dart';
@@ -19,12 +21,21 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List _availableTypes = [];
+  List<RouteModel> _routes = [];
 
   @override
   void initState() {
     super.initState();
     _checkLogin();
     _getAvailableTypes();
+    _getRoutes();
+  }
+
+  void _getRoutes() async {
+    List<RouteModel> routes = await getHomeRoutes();
+    setState(() {
+      _routes = routes;
+    });
   }
 
   void _getAvailableTypes() async {
@@ -127,26 +138,8 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child: Row(children: const [
-                  HomeCard(
-                    title: "Springdale but also very long",
-                    description:
-                        "city of god of the millenial puzzle and very longlong text text text",
-                    stops: 8,
-                    distance: 3.7,
-                  ),
-                  HomeCard(
-                    title: "ayodaya",
-                    description: "city of god",
-                    stops: 3,
-                    distance: 3.7,
-                  ),
-                  HomeCard(
-                      title: "title",
-                      description: "descripto",
-                      stops: 332,
-                      distance: 3.772)
-                ]),
+                child: Row(
+                    children: _routes.map((e) => HomeCard(route: e)).toList()),
               ),
             ),
             const SizedBox(
@@ -166,20 +159,8 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child: Row(children: const [
-                  HomeCard(
-                    title: "ayodaya",
-                    description: "city of god",
-                    stops: 3,
-                    distance: 3.7,
-                  ),
-                  HomeCard(
-                    title: "ayodaya",
-                    description: "city of god",
-                    stops: 3,
-                    distance: 3.7,
-                  )
-                ]),
+                child: Row(
+                    children: _routes.map((e) => HomeCard(route: e)).toList()),
               ),
             ),
             const SizedBox(

@@ -10,7 +10,7 @@ filterSearchResult(int numStopsValue, List<String> selectedTagList,
       if (route.distance > numStopsValue) {
         continue;
       }
-      if (route.tags.any((tag) => selectedTagList.contains(tag))) {
+      if (route.types.any((tag) => selectedTagList.contains(tag))) {
         filteredResult.add(route);
       }
     }

@@ -6,6 +6,21 @@ import 'package:trek_bkk_app/configs.dart';
 import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 
+getHomeRoutes() async {
+  try {
+    final url = Uri.http(apiUrl, "/routes/home");
+    final http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final res = (jsonDecode(response.body) as List);
+      List<RouteModel> routes = res.map((e) => RouteModel.fromJson(e)).toList();
+      return routes;
+    }
+  } catch (e) {
+    debugPrint("Error fetching home data: $e");
+  }
+}
+
 getProposedRoutes(String userId) async {
   try {
     final url = Uri.http(apiUrl, "/routes/propose", {"user_id": userId});
