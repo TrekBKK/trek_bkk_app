@@ -41,7 +41,7 @@ Future<List<dynamic>> getNearbyPlaces(double lat, double lng) async {
       Uri.https("maps.googleapis.com", "/maps/api/place/nearbysearch/json", {
     "location": "$lat,$lng",
     "radius": "10",
-    "type": "establishment",
+    "type": "point_of_interest",
     "key": accessToken,
   });
 
