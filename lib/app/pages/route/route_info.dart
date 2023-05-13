@@ -51,6 +51,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
     final int stop = widget.route.stops;
     final double distance = widget.route.distance;
     final List<WaypointModel> waypoints = widget.route.waypoints;
+    final List legs = widget.route.legs;
 
     var padding = MediaQuery.of(context).viewPadding;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -147,13 +148,14 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                               height: 40,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
                                   Text(
-                                    '10 mins',
+                                    legs[index]["duration"]["text"],
                                     style: headline20,
                                   ),
                                   Text(
-                                    '1 km',
+                                    legs[index]["distance"]["text"],
                                     style: body12,
                                   ),
                                 ],
@@ -223,7 +225,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                   spacing: 35,
                   children: [
                     Text(
-                      "$stop stops, $distance km",
+                      "$stop stops, ${distance.toStringAsFixed(2)} km",
                       style: body14,
                     ),
                     GestureDetector(
