@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/app/pages/generate/navigation.dart';
 import 'package:trek_bkk_app/app/widgets/slide_up.dart';
 import 'package:trek_bkk_app/domain/entities/direction_route.dart';
+import 'package:trek_bkk_app/domain/usecases/post_edited_route.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 
 import '../../../domain/repositories/googlemap_api.dart';
 
@@ -21,6 +24,8 @@ class MapGeneratedPage extends StatefulWidget {
 class _MapGeneratedPageState extends State<MapGeneratedPage> {
   DirectionRouteModel? _route;
   final PanelController _pc = PanelController();
+  late List<String> originPlaceIds;
+  late List<String> _PlaceIds;
 
   @override
   void initState() {
@@ -29,6 +34,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
         .sublist(0, widget.stops + 2)
         .map((place) => place['place_id'] as String)
         .toList();
+    originPlaceIds = placeIds;
     _generateRoute(placeIds, true);
   }
 
@@ -38,6 +44,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
         (data["geocoded_waypoints"] as List)
             .map((waypoint) async => await getPlaceDetail(waypoint["place_id"]))
             .toList());
+    _PlaceIds = places;
     setState(() {
       _route = DirectionRouteModel.fromJson(data);
     });
@@ -45,6 +52,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
 
   @override
   Widget build(BuildContext context) {
+    String? userId = Provider.of<UserData>(context, listen: false).user?.id;
     return SafeArea(
       child: Scaffold(
         body: SlidingUpPanel(
@@ -81,6 +89,11 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
                         children: [
                           ElevatedButton.icon(
                               onPressed: () {
+                                //call editedRoute API
+                                if (userId != null) {
+                                  postEditedRoute(
+                                      userId, originPlaceIds, _PlaceIds);
+                                }
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

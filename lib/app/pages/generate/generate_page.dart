@@ -104,7 +104,7 @@ class _GeneratePageState extends State<GeneratePage> {
       dynamic destDetail = await getPlaceDetail(destPlaceId!);
 
       if (response.statusCode == 200) {
-        List results = jsonDecode(response.body);
+        List results = jsonDecode(utf8.decode(response.bodyBytes));
         results.insert(0, srcDetail);
         results.insert(_numStopsSliderValue + 1, destDetail);
         toMap(results, _numStopsSliderValue);

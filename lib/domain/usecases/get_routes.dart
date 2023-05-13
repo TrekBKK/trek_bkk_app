@@ -12,7 +12,7 @@ getHomeRoutes() async {
     final http.Response response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final res = (jsonDecode(response.body) as List);
+      final res = (jsonDecode(utf8.decode(response.bodyBytes)) as List);
       List<RouteModel> routes = res.map((e) => RouteModel.fromJson(e)).toList();
       return routes;
     }
