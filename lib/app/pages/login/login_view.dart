@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
+import 'package:trek_bkk_app/domain/repositories/auth_services.dart';
 import 'package:trek_bkk_app/providers/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -9,10 +11,11 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future googleSignIn() async {
-      var res = await GoogleSignInApi.login();
+      final AuthService authService = AuthService();
+      User? res = await authService.googleLogin();
       if (res != null && context.mounted) {
         await Provider.of<UserData>(context, listen: false)
-            .getUser(res.displayName!, res.email, res.photoUrl ?? "");
+            .getUser(res.displayName!, res.email, res.photoURL ?? "");
       }
     }
 

@@ -5,7 +5,7 @@ import 'package:trek_bkk_app/app/widgets/home_card.dart';
 import 'package:trek_bkk_app/app/widgets/place_type_card.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
-import 'package:trek_bkk_app/domain/repositories/google_singin_api.dart';
+import 'package:trek_bkk_app/domain/repositories/auth_services.dart';
 import 'package:trek_bkk_app/domain/usecases/get_route_types.dart';
 import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
 import 'package:trek_bkk_app/providers/user.dart';
@@ -64,7 +64,8 @@ class _HomeState extends State<Home> {
   }
 
   Future _logout() async {
-    await GoogleSignInApi.logout();
+    final AuthService authService = AuthService();
+    await authService.logout();
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.remove("name");
     sp.remove("email");

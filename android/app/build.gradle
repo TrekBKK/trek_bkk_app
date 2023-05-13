@@ -90,6 +90,9 @@ dependencies {
     implementation 'com.mapbox.maps:android:10.2.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'androidx.browser:browser:1.2.0'
+
 }
 
 // un-comment if mapbox package has conflict when building app.

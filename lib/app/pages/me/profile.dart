@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     UserModel? _user = Provider.of<UserData>(context, listen: false).user;
+    print(widget.user!.photoUrl);
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -34,7 +35,8 @@ class _ProfilePageState extends State<ProfilePage> {
               Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: buildProfile(widget.user!.name)),
+                  child:
+                      buildProfile(widget.user!.name, widget.user!.photoUrl)),
               Flexible(
                   flex: 7,
                   fit: FlexFit.tight,
@@ -52,14 +54,16 @@ Widget buildSettings(BuildContext context) => IconButton(
     }),
     icon: const Icon(Icons.settings));
 
-Widget buildProfile(name) => Container(
+Widget buildProfile(name, photoURL) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
               radius: 60,
-              backgroundImage:
-                  NetworkImage('https://picsum.photos/250?image=9')),
+              backgroundImage: photoURL != ''
+                  ? NetworkImage(photoURL)
+                  : const AssetImage("assets/images/ImagePlaceHolder.jpg")
+                      as ImageProvider<Object>),
           Container(
             padding: const EdgeInsets.only(left: 30),
             child: Column(
