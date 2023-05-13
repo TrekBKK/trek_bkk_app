@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:trek_bkk_app/app/pages/splash.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
   await FlutterConfig.loadEnvVariables();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -6,8 +6,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/me/me.dart';
 import 'package:trek_bkk_app/app/widgets/snackbar.dart';
+import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/propose.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
+import 'package:trek_bkk_app/domain/repositories/firebase_api.dart';
 import 'package:trek_bkk_app/domain/usecases/post_route.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 import 'dart:io';
@@ -36,12 +38,14 @@ enum Option {
 class _ProposePageState extends State<ProposePage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final FirebaseStorageService storageService = FirebaseStorageService();
   late GoogleMapController _mapController;
   late String _polyline;
   late List<dynamic> _places;
   late List<LatLng> _polylinePoints;
   final Set<Marker> _markers = {};
   bool _isProposing = false;
+  XFile? _imagePath;
   File? _image;
 
   @override
@@ -108,6 +112,8 @@ class _ProposePageState extends State<ProposePage> {
       final scaffoldMessenger = ScaffoldMessenger.of(ctx);
       final userData = Provider.of<UserData>(ctx, listen: false);
 
+      String imagePath = await storageService.uploadFile(_imagePath!);
+
       ProposeModel data = ProposeModel(
           userId: userData.user!.id,
           name: name,
@@ -115,9 +121,10 @@ class _ProposePageState extends State<ProposePage> {
           distance: widget.totalDistanceInMeter,
           stops: _places.length,
           waypoints: _places,
-          polyline: _polyline);
-
+          polyline: _polyline,
+          imagePath: imagePath);
       await _propose(data);
+
       scaffoldMessenger.showSnackBar(successSnackbar("Success!"));
       userData.routePropose.add(data);
 
@@ -146,6 +153,7 @@ class _ProposePageState extends State<ProposePage> {
       final imageTemp = File(image.path);
       setState(() {
         _image = imageTemp;
+        _imagePath = image;
       });
     } on PlatformException catch (e) {
       print('Failed to get image: $e');
@@ -244,8 +252,7 @@ class _ProposePageState extends State<ProposePage> {
                   Container(
                     height: userInputHeight,
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    decoration:
-                        BoxDecoration(color: Colors.lightBlueAccent.shade100),
+                    decoration: BoxDecoration(color: lightColor),
                     child: Column(
                       children: [
                         Row(
@@ -282,10 +289,11 @@ class _ProposePageState extends State<ProposePage> {
                                   child: TextField(
                                     controller: _nameController,
                                     decoration: const InputDecoration(
-                                      labelText: 'Enter route rame',
-                                      border: OutlineInputBorder(),
-                                      hintText: 'Enter a message',
-                                    ),
+                                        labelText: 'Enter route rame',
+                                        border: OutlineInputBorder(),
+                                        hintText: 'Enter a message',
+                                        filled: true,
+                                        fillColor: Colors.white),
                                   ),
                                 ),
                                 const SizedBox(
@@ -299,10 +307,11 @@ class _ProposePageState extends State<ProposePage> {
                                     minLines: 4,
                                     maxLines: 8,
                                     decoration: const InputDecoration(
-                                      labelText: 'Enter your description',
-                                      border: OutlineInputBorder(),
-                                      hintText: 'Enter a message',
-                                    ),
+                                        labelText: 'Enter your description',
+                                        border: OutlineInputBorder(),
+                                        hintText: 'Enter a message',
+                                        filled: true,
+                                        fillColor: Colors.white),
                                   ),
                                 ),
                               ],
@@ -319,7 +328,8 @@ class _ProposePageState extends State<ProposePage> {
                                           _nameController.text.trim();
                                       final String des =
                                           _descriptionController.text.trim();
-                                      if (text.isNotEmpty) {
+                                      if (text.isNotEmpty &&
+                                          _imagePath != null) {
                                         _onSubmitHandler(text, des, context);
                                         setState(() {
                                           _isProposing = true;

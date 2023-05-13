@@ -39,7 +39,7 @@ class Settings extends StatelessWidget {
           children: [
             Container(
                 alignment: Alignment.centerLeft,
-                decoration: const BoxDecoration(color: lightButDarkerColor),
+                decoration: const BoxDecoration(color: lightColor),
                 child: IconButton(
                   onPressed: () {
                     Navigator.pop(context);

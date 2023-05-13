@@ -96,3 +96,5 @@ dependencies {
 configurations {
     all*.exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
 }
+
+apply plugin: 'com.google.gms.google-services'

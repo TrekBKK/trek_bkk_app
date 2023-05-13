@@ -56,13 +56,6 @@ class UserData with ChangeNotifier {
     return false;
   }
 
-  void tempp() {
-    testFe.add("test state");
-
-    print(routePropose.length);
-    notifyListeners();
-  }
-
   Future<void> addHistoryRoute(RouteModel route) async {
     if (checkHaveUser() == false) {
       print("have no user(how the hell you can call this function)");
@@ -73,7 +66,7 @@ class UserData with ChangeNotifier {
       DateTime now = DateTime.now();
       DateFormat dateFormat = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
       String dateNow = dateFormat.format(now);
-      print(dateNow);
+
       final url = Uri.http(apiUrl, "/user/history");
       final http.Response response = await http.patch(url,
           headers: <String, String>{

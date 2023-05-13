@@ -53,9 +53,6 @@ Widget buildSettings(BuildContext context) => IconButton(
     icon: const Icon(Icons.settings));
 
 Widget buildProfile(name) => Container(
-      decoration: const BoxDecoration(
-          border:
-              Border.symmetric(horizontal: BorderSide(color: Colors.brown))),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
@@ -78,7 +75,7 @@ Widget buildProfile(name) => Container(
                   child: LinearPercentIndicator(
                     width: 120.0,
                     lineHeight: 15.0,
-                    percent: 0.2,
+                    percent: 0.5,
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     barRadius: const Radius.circular(16),
                     progressColor: Colors.blue[400],

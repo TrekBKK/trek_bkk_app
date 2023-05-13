@@ -7,6 +7,7 @@ class ProposeModel {
   final List waypoints;
   final String polyline;
   final String? timestamp;
+  final String? imagePath;
 
   ProposeModel(
       {required this.userId,
@@ -16,7 +17,8 @@ class ProposeModel {
       required this.stops,
       required this.waypoints,
       required this.polyline,
-      this.timestamp});
+      this.timestamp,
+      this.imagePath});
 
   factory ProposeModel.fromJson(Map<String, dynamic> json) {
     return ProposeModel(
@@ -27,7 +29,8 @@ class ProposeModel {
         stops: json["stops"],
         waypoints: json["waypoints"],
         polyline: json["polyline"],
-        timestamp: json["timestamp"]);
+        timestamp: json["timestamp"],
+        imagePath: json["imagePath"]);
   }
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +40,7 @@ class ProposeModel {
         'distance': distance,
         'stops': stops,
         "waypoints": waypoints,
-        "polyline": polyline
+        "polyline": polyline,
+        'imagePath': imagePath
       };
 }

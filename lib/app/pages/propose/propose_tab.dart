@@ -46,6 +46,7 @@ class _ProposeTabState extends State<ProposeTab> {
   Widget build(BuildContext context) {
     _proposedRoutes = widget.routePropose;
     _dataIsFetched = !widget.isLoading;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -97,10 +98,11 @@ class _ProposeTabState extends State<ProposeTab> {
                                                   Container(
                                             width: 108,
                                             height: 144,
-                                            decoration: const BoxDecoration(
+                                            decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 image: NetworkImage(
-                                                    "https://picsum.photos/108/144"),
+                                                    _proposedRoutes[index]
+                                                        .imagePath!),
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
