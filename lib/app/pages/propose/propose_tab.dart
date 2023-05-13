@@ -100,9 +100,16 @@ class _ProposeTabState extends State<ProposeTab> {
                                             height: 144,
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                image: NetworkImage(
-                                                    _proposedRoutes[index]
-                                                        .imagePath!),
+                                                image: _proposedRoutes[index]
+                                                            .imagePath !=
+                                                        ''
+                                                    ? NetworkImage(
+                                                        _proposedRoutes[index]
+                                                            .imagePath!)
+                                                    : const AssetImage(
+                                                            "assets/images/ImagePlaceHolder.jpg")
+                                                        as ImageProvider<
+                                                            Object>,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),

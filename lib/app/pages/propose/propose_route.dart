@@ -112,7 +112,10 @@ class _ProposePageState extends State<ProposePage> {
       final scaffoldMessenger = ScaffoldMessenger.of(ctx);
       final userData = Provider.of<UserData>(ctx, listen: false);
 
-      String imagePath = await storageService.uploadFile(_imagePath!);
+      String imagePath = '';
+      if (_imagePath != null) {
+        imagePath = await storageService.uploadFile(_imagePath!);
+      }
 
       ProposeModel data = ProposeModel(
           userId: userData.user!.id,
@@ -328,8 +331,7 @@ class _ProposePageState extends State<ProposePage> {
                                           _nameController.text.trim();
                                       final String des =
                                           _descriptionController.text.trim();
-                                      if (text.isNotEmpty &&
-                                          _imagePath != null) {
+                                      if (text.isNotEmpty) {
                                         _onSubmitHandler(text, des, context);
                                         setState(() {
                                           _isProposing = true;

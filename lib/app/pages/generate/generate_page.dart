@@ -27,6 +27,7 @@ class GeneratePage extends StatefulWidget {
 class _GeneratePageState extends State<GeneratePage> {
   int _numStopsSliderValue = 3;
   List<String> selectedTagList = [];
+  bool _loading = false;
 
   String? srcPlaceId;
   String? destPlaceId;
@@ -94,6 +95,9 @@ class _GeneratePageState extends State<GeneratePage> {
       ScaffoldMessenger.of(context).showSnackBar(
           warningSnackbar("Please specify source and destination"));
     } else {
+      setState(() {
+        _loading = true;
+      });
       http.Response response = await generateRoute(
           srcId: srcPlaceId!,
           destId: destPlaceId!,
@@ -102,6 +106,9 @@ class _GeneratePageState extends State<GeneratePage> {
 
       dynamic srcDetail = await getPlaceDetail(srcPlaceId!);
       dynamic destDetail = await getPlaceDetail(destPlaceId!);
+      setState(() {
+        _loading = false;
+      });
 
       if (response.statusCode == 200) {
         List results = jsonDecode(utf8.decode(response.bodyBytes));
@@ -140,6 +147,7 @@ class _GeneratePageState extends State<GeneratePage> {
 
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             color: dividerColor,
@@ -265,10 +273,12 @@ class _GeneratePageState extends State<GeneratePage> {
                     height: 32,
                   ),
                   Center(
-                    child: ElevatedButton(
-                        style: primaryButtonStyles(px: 32),
-                        onPressed: generate,
-                        child: const Text("Generate")),
+                    child: _loading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            style: primaryButtonStyles(px: 32),
+                            onPressed: generate,
+                            child: const Text("Generate")),
                   )
                 ],
               )),

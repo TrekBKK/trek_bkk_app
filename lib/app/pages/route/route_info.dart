@@ -73,6 +73,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
             child: Container(
               width: screenWidth,
               height: infoHeight,
+              padding: const EdgeInsets.only(bottom: 70),
               decoration: const BoxDecoration(color: Colors.white),
               child: ListView.separated(
                   padding: const EdgeInsets.all(24),
