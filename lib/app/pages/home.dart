@@ -48,15 +48,14 @@ class _HomeState extends State<Home> {
   Future<void> _checkLogin() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
 
-    String? _name = sp.getString("name");
-    String? _email = sp.getString("email");
-    print("check have user info or not<Home page> ${_name} ${_email}");
+    String? name = sp.getString("name");
+    String? email = sp.getString("email");
 
     if (context.mounted) {
-      if (_name != null && _email != null) {
+      if (name != null && email != null) {
         //have user information in local storage -> call BE to get user instance
         await Provider.of<UserData>(context, listen: false)
-            .getUser(_name, _email);
+            .getUser(name, email);
       } else {
         // first time logging in
       }

@@ -25,7 +25,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
   DirectionRouteModel? _route;
   final PanelController _pc = PanelController();
   late List<String> originPlaceIds;
-  late List<String> _PlaceIds;
+  late List<String> _placeIds;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
         (data["geocoded_waypoints"] as List)
             .map((waypoint) async => await getPlaceDetail(waypoint["place_id"]))
             .toList());
-    _PlaceIds = places;
+    _placeIds = places;
     setState(() {
       _route = DirectionRouteModel.fromJson(data);
     });
@@ -92,7 +92,7 @@ class _MapGeneratedPageState extends State<MapGeneratedPage> {
                                 //call editedRoute API
                                 if (userId != null) {
                                   postEditedRoute(
-                                      userId, originPlaceIds, _PlaceIds);
+                                      userId, originPlaceIds, _placeIds);
                                 }
                                 Navigator.push(
                                     context,
