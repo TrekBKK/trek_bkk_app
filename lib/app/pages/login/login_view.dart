@@ -38,40 +38,6 @@ class _SignInPageState extends State<SignInPage> {
       }
     }
 
-    void _showPopup() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Enter Your Name"),
-            content: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: "Your Name",
-                      border: OutlineInputBorder(),
-                      labelText: "Name",
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  child: Text("Send"),
-                  onPressed: () {
-                    String name = _textController.text;
-                    signInGuest(name);
-                  },
-                ),
-              ],
-            ),
-          );
-          ;
-        },
-      );
-    }
-
     return Scaffold(
       body: SafeArea(
           child: Column(

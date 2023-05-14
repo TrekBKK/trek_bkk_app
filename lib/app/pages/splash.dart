@@ -32,26 +32,14 @@ class _SplashState extends State<Splash> {
               permission == LocationPermission.whileInUse) &&
           await Geolocator.isLocationServiceEnabled()) {
         Future.microtask(() => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MultiProvider(providers: [
-                      ChangeNotifierProvider(
-                        create: ((context) => UserData()),
-                      )
-                    ], child: MainScreen()))));
+            context, MaterialPageRoute(builder: (context) => MainScreen())));
       } else {
         permission = await Geolocator.requestPermission();
         if ((permission == LocationPermission.always ||
                 permission == LocationPermission.whileInUse) &&
             await Geolocator.isLocationServiceEnabled()) {
           Future.microtask(() => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MultiProvider(providers: [
-                        ChangeNotifierProvider(
-                          create: ((context) => UserData()),
-                        )
-                      ], child: MainScreen()))));
+              context, MaterialPageRoute(builder: (context) => MainScreen())));
         } else {
           Future.microtask(() => Navigator.pushReplacement(
               context,
