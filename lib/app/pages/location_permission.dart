@@ -19,7 +19,6 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
 
   checkLocationPermission() async {
     LocationPermission permission;
-    bool serviceEnabled;
 
     permission = await Geolocator.checkPermission();
 
@@ -32,14 +31,16 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
       }
     }
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    if (await Geolocator.isLocationServiceEnabled()) {
+      Future.microtask(() => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => MainScreen()))));
+    } else {
       Future.microtask(() => Geolocator.getCurrentPosition());
-      return;
+      if (await Geolocator.isLocationServiceEnabled()) {
+        Future.microtask(() => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => MainScreen()))));
+      }
     }
-
-    Future.microtask(() => Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: ((context) => MainScreen()))));
   }
 
   @override
@@ -47,7 +48,8 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.only(top: 160, bottom: 48),
+          padding:
+              const EdgeInsets.only(top: 160, right: 16, bottom: 48, left: 16),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,9 +57,13 @@ class _LocationPermissionPageState extends State<LocationPermissionPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Text("data"),
+                    Image(
+                      width: 120,
+                      height: 120,
+                      image: AssetImage("assets/icons/adventurer.png"),
+                    ),
                     SizedBox(
-                      height: 48,
+                      height: 24,
                     ),
                     Text(
                       "Location access is important",
