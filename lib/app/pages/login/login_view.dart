@@ -139,7 +139,7 @@ class _SignInPageState extends State<SignInPage> {
                 },
                 icon: const Image(
                     width: 16, image: AssetImage("assets/icons/github.png")),
-                label: const Text("Sign in with e-mail"),
+                label: const Text("Sign in as guest"),
                 style: ButtonStyle(
                     padding: MaterialStateProperty.resolveWith((states) =>
                         const EdgeInsets.symmetric(

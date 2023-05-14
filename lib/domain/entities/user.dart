@@ -2,7 +2,7 @@ class UserModel {
   final String id;
   final String name;
   final String email;
-  final String? photoUrl;
+  String? photoUrl;
   final List<String> favoriteRoutes;
   final List<RouteHistory> routesHistory;
   // final bool preference;

@@ -198,6 +198,30 @@ class UserData with ChangeNotifier {
     }
   }
 
+  Future<void> updateUserImage(String name, email, photoUrl) async {
+    try {
+      final url = Uri.http(apiUrl, "/user/image");
+      final http.Response response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'name': name,
+            'email': email,
+            'photo': photoUrl
+          }));
+      if (response.statusCode == 200) {
+        _user!.photoUrl = photoUrl;
+      } else {
+        print('Failed to edit user image.');
+      }
+    } catch (error) {
+      print('Error editing user image: $error');
+    } finally {
+      notifyListeners();
+    }
+  }
+
   void clear() {
     _isfilled = false;
     _user = null;
