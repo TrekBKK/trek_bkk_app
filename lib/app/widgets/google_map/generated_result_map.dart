@@ -105,7 +105,7 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
       },
       polylines: {
         Polyline(
-            polylineId: PolylineId('route'),
+            polylineId: const PolylineId('route'),
             points: _polylinePoints,
             color: Colors.black,
             width: 3,

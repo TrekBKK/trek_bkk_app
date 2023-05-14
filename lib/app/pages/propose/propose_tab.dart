@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/app/pages/propose/proposed_route_detail.dart';
 
 import 'package:trek_bkk_app/app/widgets/google_map/propose_route.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/propose.dart';
-import 'package:trek_bkk_app/domain/usecases/get_routes.dart';
-import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
 
 class ProposeTab extends StatefulWidget {
@@ -23,24 +20,6 @@ class ProposeTab extends StatefulWidget {
 class _ProposeTabState extends State<ProposeTab> {
   late List<ProposeModel> _proposedRoutes;
   late bool _dataIsFetched;
-
-  @override
-  void initState() {
-    super.initState();
-    // _proposedRoutes = widget.routePropose;
-    // _dataIsFetched = widget.isLoading;
-    // if (context.mounted) {
-    //   _fetchProposedRoutes();
-    // }
-  }
-
-  void _fetchProposedRoutes() async {
-    _proposedRoutes = await getProposedRoutes(
-        Provider.of<UserData>(context, listen: false).user!.id);
-    setState(() {
-      _dataIsFetched = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

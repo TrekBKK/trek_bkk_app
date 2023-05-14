@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:maps_toolkit/maps_toolkit.dart' as MapToolkit;
+import 'package:maps_toolkit/maps_toolkit.dart' as map_tool_kit;
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
@@ -101,16 +101,16 @@ class _RouteNavigationState extends State<RouteNavigation>
       if (position != null) {
         LatLng latLng = LatLng(position.latitude, position.longitude);
 
-        List<MapToolkit.LatLng> toolkitPolyline = _polylinePoints
-            .map((e) => MapToolkit.LatLng(e.latitude, e.longitude))
+        List<map_tool_kit.LatLng> toolkitPolyline = _polylinePoints
+            .map((e) => map_tool_kit.LatLng(e.latitude, e.longitude))
             .toList();
         if (context.mounted) {
           setState(() {
             _currentLocation = position;
           });
 
-          if (MapToolkit.PolygonUtil.isLocationOnPath(
-              MapToolkit.LatLng(position.latitude, position.longitude),
+          if (map_tool_kit.PolygonUtil.isLocationOnPath(
+              map_tool_kit.LatLng(position.latitude, position.longitude),
               toolkitPolyline,
               true,
               tolerance: 27)) {

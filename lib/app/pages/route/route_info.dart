@@ -215,8 +215,8 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                     GestureDetector(
                         onTap: _favHandler,
                         child: favTapped
-                            ? Icon(Icons.star_rounded)
-                            : Icon(Icons.star_outline_rounded))
+                            ? const Icon(Icons.star_rounded)
+                            : const Icon(Icons.star_outline_rounded))
                   ],
                 ),
                 const SizedBox(

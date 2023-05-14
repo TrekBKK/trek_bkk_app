@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _imagePath = image;
       });
     } on PlatformException catch (e) {
-      print('Failed to get image: $e');
+      debugPrint('Failed to get image: $e');
     }
   }
 
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _user = Provider.of<UserData>(context, listen: false).user;
+    UserModel? user = Provider.of<UserData>(context, listen: false).user;
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                   decoration: const BoxDecoration(color: lightColor),
                   child: Align(
-                      alignment: Alignment(1, 0),
+                      alignment: const Alignment(1, 0),
                       child: buildSettings(context))),
               Flexible(
                   flex: 2,
@@ -161,8 +161,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 radius: 60,
                                 backgroundImage: _image != null
                                     ? FileImage(_image!)
-                                    : _user!.photoUrl != ''
-                                        ? NetworkImage(_user.photoUrl!)
+                                    : user!.photoUrl != ''
+                                        ? NetworkImage(user.photoUrl!)
                                         : const AssetImage(
                                                 "assets/images/ImagePlaceHolder.jpg")
                                             as ImageProvider),
@@ -228,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("${_user!.name}"),
+                              Text(user!.name),
                               const SizedBox(height: 20),
                               Container(
                                 decoration: BoxDecoration(
@@ -267,6 +267,6 @@ class _ProfilePageState extends State<ProfilePage> {
 Widget buildSettings(BuildContext context) => IconButton(
     onPressed: (() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Settings()));
+          context, MaterialPageRoute(builder: (context) => const Settings()));
     }),
     icon: const Icon(Icons.settings));

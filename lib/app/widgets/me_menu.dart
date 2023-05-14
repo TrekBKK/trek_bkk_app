@@ -42,11 +42,11 @@ class _MeMenuState extends State<MeMenu> {
 
   @override
   Widget build(BuildContext context) {
-    List<RouteModel>? _routeFavorite =
+    List<RouteModel>? routeFavorite =
         Provider.of<UserData>(context, listen: false).routeFavorite;
-    List<RouteHistoryModel> _routeHistory =
+    List<RouteHistoryModel> routeHistory =
         Provider.of<UserData>(context, listen: false).routeHistory;
-    List<ProposeModel> _routePropose =
+    List<ProposeModel> routePropose =
         Provider.of<UserData>(context, listen: false).routePropose;
     return Column(
       children: [
@@ -174,10 +174,10 @@ class _MeMenuState extends State<MeMenu> {
               },
               child: _currentIndex == 0
                   ? ProposeTab(
-                      isLoading: _isLoading, routePropose: _routePropose)
+                      isLoading: _isLoading, routePropose: routePropose)
                   : _currentIndex == 1
-                      ? _buildFav(_isLoading, _routeFavorite)
-                      : _buildHistory(_isLoading, _routeHistory),
+                      ? _buildFav(_isLoading, routeFavorite)
+                      : _buildHistory(_isLoading, routeHistory),
             ))
       ],
     );

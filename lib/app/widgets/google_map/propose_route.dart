@@ -20,11 +20,10 @@ class ProposeRoutePage extends StatefulWidget {
 class _ProposeRoutePageState extends State<ProposeRoutePage> {
   GoogleMapController? _mapController;
   StreamSubscription<Position>? _positionStream;
-  late CameraPosition _initialCameraPosition;
   Position? _currentLocation;
-  List<LatLng> _polylinePoints = [];
-  Set<Marker> _markers = {};
-  List<dynamic> _markedPlaces = [];
+  final List<LatLng> _polylinePoints = [];
+  final Set<Marker> _markers = {};
+  final List<dynamic> _markedPlaces = [];
   Position? _previousPosition;
   double _totalDistance = 0;
 
@@ -110,18 +109,17 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
       return;
     }
 
-    String _encodedPolyline = encodePolyline(
+    String encodedPolyline = encodePolyline(
       _polylinePoints
           .map((LatLng latLng) => [latLng.latitude, latLng.longitude])
           .toList(),
     );
 
-    print(_encodedPolyline);
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ProposePage(
-                polyline: _encodedPolyline,
+                polyline: encodedPolyline,
                 places: _markedPlaces,
                 totalDistanceInMeter: _totalDistance,
               )),
@@ -151,7 +149,6 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   }
 
   void _onTapHandler(dynamic place) {
-    String name = place["name"];
     Marker newMarker = Marker(
       markerId: MarkerId(place['place_id']),
       position: LatLng(place['geometry']['location']['lat'],

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,7 @@ class FirebaseStorageService {
       final String downloadUrl = await ref.getDownloadURL();
       return downloadUrl;
     } else {
-      print('upload image error');
+      debugPrint('upload image error');
       return '';
     }
   }

@@ -40,23 +40,12 @@ class _PRpopupState extends State<PRpopup> {
   }
 
   void _onClickHandler(dynamic place) {
-    var temp = {
-      'place_id': "$place['place_id']",
-      'name': place['name'],
-      'latitude': place['geometry']['location']['lat'],
-      'longitude': place['geometry']['location']['lng'],
-    };
-
     widget.onClick(place);
     widget.onPlacesChanged();
   }
 
   void _onClickCustomPlaceHandler() {
     final String text = _textController.text.trim();
-    final temp = {
-      'place_id': "$text+id",
-      'name': text,
-    };
     widget.onAddCurrentLoc(text);
     widget.onPlacesChanged();
     // setState(() {
@@ -85,75 +74,73 @@ class _PRpopupState extends State<PRpopup> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-        future: _places,
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            //while waiting for the API response.
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            // Handle any errors while fetching.
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            List<dynamic> places = snapshot.data!;
-            return ListView.builder(
-              itemCount: places.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                // we want to have another item in this builder and dont want to access over index
-                index -= 1;
-                if (index == -1) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _textController,
-                          decoration: const InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            border: OutlineInputBorder(),
-                            labelText: 'Enter a custom place',
-                            hintText: 'Enter a custom place',
-                          ),
+    return FutureBuilder(
+      future: _places,
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          //while waiting for the API response.
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          // Handle any errors while fetching.
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else {
+          List<dynamic> places = snapshot.data!;
+          return ListView.builder(
+            itemCount: places.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              // we want to have another item in this builder and dont want to access over index
+              index -= 1;
+              if (index == -1) {
+                return Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        decoration: const InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter a custom place',
+                          hintText: 'Enter a custom place',
                         ),
                       ),
-                      GestureDetector(
-                        onTap: _onClickCustomPlaceHandler,
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.place),
-                        ),
-                      )
-                    ],
-                  );
-                }
-                dynamic place = places[index];
-                String name = place['name'];
-                double rating = (place['rating'] != null
-                    ? (place['rating'] as num).toDouble()
-                    : 0.0);
-                String address = place['vicinity'];
-                bool check = _checkClicked(name);
-
-                return Container(
-                  color: check ? Colors.grey : null,
-                  child: ListTile(
-                    title: Text(name),
-                    subtitle: Text(address),
-                    trailing: Text(rating.toString()),
-                    onTap: () {
-                      check ? null : _onClickHandler(place);
-                    },
-                  ),
+                    ),
+                    GestureDetector(
+                      onTap: _onClickCustomPlaceHandler,
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.place),
+                      ),
+                    )
+                  ],
                 );
-              },
-            );
-          }
-        },
-      ),
+              }
+              dynamic place = places[index];
+              String name = place['name'];
+              double rating = (place['rating'] != null
+                  ? (place['rating'] as num).toDouble()
+                  : 0.0);
+              String address = place['vicinity'];
+              bool check = _checkClicked(name);
+
+              return Container(
+                color: check ? Colors.grey : null,
+                child: ListTile(
+                  title: Text(name),
+                  subtitle: Text(address),
+                  trailing: Text(rating.toString()),
+                  onTap: () {
+                    check ? null : _onClickHandler(place);
+                  },
+                ),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

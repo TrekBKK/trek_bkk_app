@@ -8,12 +8,10 @@ import 'package:trek_bkk_app/app/pages/me/me.dart';
 import 'package:trek_bkk_app/app/widgets/snackbar.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/propose.dart';
-import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/domain/repositories/firebase_api.dart';
 import 'package:trek_bkk_app/domain/usecases/post_route.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class ProposePage extends StatefulWidget {
   final String polyline;
@@ -39,7 +37,6 @@ class _ProposePageState extends State<ProposePage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final FirebaseStorageService storageService = FirebaseStorageService();
-  late GoogleMapController _mapController;
   late String _polyline;
   late List<dynamic> _places;
   late List<LatLng> _polylinePoints;
@@ -64,8 +61,7 @@ class _ProposePageState extends State<ProposePage> {
   }
 
   void _addMarkers() {
-    widget.places.forEach((place) {
-      print(place);
+    for (var place in widget.places) {
       _markers.add(Marker(
         markerId: MarkerId(place["place_id"]),
         position: LatLng(place["latitude"], place["longitude"]),
@@ -85,7 +81,7 @@ class _ProposePageState extends State<ProposePage> {
                     onPressed: () {
                       _onDeleteHandler(place["place_id"]);
                     },
-                    child: Text('delete'),
+                    child: const Text('delete'),
                   ),
                 ],
               );
@@ -93,13 +89,13 @@ class _ProposePageState extends State<ProposePage> {
           );
         },
       ));
-    });
+    }
   }
 
-  void _onDeleteHandler(String place_id) {
+  void _onDeleteHandler(String placeId) {
     Navigator.of(context, rootNavigator: true).pop('dialog');
     setState(() {
-      _markers.removeWhere((e) => e.markerId.value == place_id);
+      _markers.removeWhere((e) => e.markerId.value == placeId);
     });
   }
 
@@ -159,7 +155,7 @@ class _ProposePageState extends State<ProposePage> {
         _imagePath = image;
       });
     } on PlatformException catch (e) {
-      print('Failed to get image: $e');
+      debugPrint('Failed to get image: $e');
     }
   }
 
@@ -231,15 +227,13 @@ class _ProposePageState extends State<ProposePage> {
               padding: EdgeInsets.only(bottom: bottom * 0.8),
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: mapHeight,
                     child: GoogleMap(
-                      onMapCreated: (controller) {
-                        _mapController = controller;
-                      },
+                      onMapCreated: (controller) {},
                       polylines: {
                         Polyline(
-                          polylineId: PolylineId("route"),
+                          polylineId: const PolylineId("route"),
                           color: Colors.blue,
                           width: 3,
                           points: _polylinePoints,
@@ -255,7 +249,7 @@ class _ProposePageState extends State<ProposePage> {
                   Container(
                     height: userInputHeight,
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    decoration: BoxDecoration(color: lightColor),
+                    decoration: const BoxDecoration(color: lightColor),
                     child: Column(
                       children: [
                         Row(
@@ -286,7 +280,7 @@ class _ProposePageState extends State<ProposePage> {
                             ),
                             Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 200.0,
                                   height: 50.0,
                                   child: TextField(
@@ -302,7 +296,7 @@ class _ProposePageState extends State<ProposePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 200.0,
                                   height: 120,
                                   child: TextField(

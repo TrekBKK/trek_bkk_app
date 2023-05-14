@@ -72,7 +72,6 @@ class _Search2State extends State<Search2> {
   initValues() {
     if (widget.initialSearchKey != null) {
       _searchController.text = widget.initialSearchKey!;
-      print(widget.initialSearchKey);
     } else {
       if (widget.initalPlaceTag!.isSource) {
         srcDisable = true;
@@ -254,8 +253,8 @@ class _Search2State extends State<Search2> {
                           children: [
                             Text(
                               selectedTagList.length.toString(),
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 10, color: Colors.black),
                               textAlign: TextAlign.center,
                             ),
                           ],

@@ -38,7 +38,7 @@ class _RouteDetailMapState extends State<RouteDetailMap> {
   }
 
   void _addMarkers() {
-    _route.waypoints.forEach((place) {
+    for (var place in _route.waypoints) {
       _markers.add(Marker(
         markerId: MarkerId(place.placeId),
         position: LatLng(place.location["lat"], place.location["lng"]),
@@ -46,7 +46,7 @@ class _RouteDetailMapState extends State<RouteDetailMap> {
           title: place.name,
         ),
       ));
-    });
+    }
   }
 
   @override

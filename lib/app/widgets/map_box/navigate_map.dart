@@ -32,7 +32,6 @@ class _NavigatedMapState extends State<NavigatedMap> {
   }
 
   _onMapCreated(MapboxMapController mapcontroller) async {
-    print("onMapCreated");
     this.mapcontroller = mapcontroller;
   }
 
@@ -58,7 +57,6 @@ class _NavigatedMapState extends State<NavigatedMap> {
 
   _onStyleLoadedCallback() async {
     List<LatLng> points = _coordinates.map((c) => LatLng(c[0], c[1])).toList();
-    print(points);
     currentLine = await mapcontroller!.addLine(LineOptions(
       geometry: points,
       lineColor: Colors.green.toHexStringRGB(),
@@ -68,16 +66,14 @@ class _NavigatedMapState extends State<NavigatedMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: MapboxMap(
-        accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
-        initialCameraPosition: _initialCameraPosition!,
-        onMapCreated: _onMapCreated,
-        onStyleLoadedCallback: _onStyleLoadedCallback,
-        // myLocationEnabled: true,
-        // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-        minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-      ),
+    return MapboxMap(
+      accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
+      initialCameraPosition: _initialCameraPosition!,
+      onMapCreated: _onMapCreated,
+      onStyleLoadedCallback: _onStyleLoadedCallback,
+      // myLocationEnabled: true,
+      // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+      minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
     );
   }
 }

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trek_bkk_app/app/pages/login/login_view.dart';
 import 'package:trek_bkk_app/app/pages/me/profile.dart';
-import 'package:trek_bkk_app/app/widgets/me_menu.dart';
-
 import 'package:trek_bkk_app/app/pages/me/preference_survey.dart';
-import 'package:trek_bkk_app/domain/entities/user.dart';
 
 import '../../../providers/user.dart';
 
@@ -36,16 +32,15 @@ class _MePageState extends State<MePage> {
               );
             }
             if (userProvider.isfilled == false) {
-              return SignInPage();
+              return const SignInPage();
             } else if (userProvider.user == null) {
               return const Text(
                   'Error fetching user data. cant create user model');
             } else {
               if (userProvider.checkPref()) {
-                print("some thing change in me page[test state]");
                 return ProfilePage(user: userProvider.user);
               } else {
-                return PreferenceSurvey();
+                return const PreferenceSurvey();
               }
             }
           },
