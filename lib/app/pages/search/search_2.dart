@@ -281,7 +281,9 @@ class _Search2State extends State<Search2> {
                             left: 24, right: 24, bottom: 24),
                         child: RouteCard(
                           route: filteredSearchResult[index],
-                          imgUrl: "https://picsum.photos/160/90",
+                          imgUrl: filteredSearchResult[index].imagePath == ''
+                              ? "https://picsum.photos/160/90"
+                              : filteredSearchResult[index].imagePath,
                         ),
                       );
                     }),

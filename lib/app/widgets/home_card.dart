@@ -13,6 +13,7 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(route.imagePath);
     return InkWell(
       onTap: () {
         Navigator.push(context,
@@ -24,13 +25,23 @@ class HomeCard extends StatelessWidget {
           width: 160,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Image.network(
-              "https://picsum.photos/160/90",
-              errorBuilder: (context, error, stackTrace) => const Placeholder(
-                fallbackWidth: 160,
-                fallbackHeight: 90,
-              ),
-            ),
+            route.imagePath == ''
+                ? Image.network(
+                    "https://picsum.photos/160/90",
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Placeholder(
+                      fallbackWidth: 160,
+                      fallbackHeight: 90,
+                    ),
+                  )
+                : Image.network(
+                    route.imagePath,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Placeholder(
+                      fallbackWidth: 160,
+                      fallbackHeight: 90,
+                    ),
+                  ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

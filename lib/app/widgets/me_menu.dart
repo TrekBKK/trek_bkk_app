@@ -196,7 +196,9 @@ Widget _buildFav(bool isloading, List<RouteModel>? routes) {
                 padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
                 child: RouteCard(
                   route: routes[index],
-                  imgUrl: "https://picsum.photos/160/90",
+                  imgUrl: routes[index].imagePath == ''
+                      ? "https://picsum.photos/160/90"
+                      : routes[index].imagePath,
                 ),
               );
             }),
@@ -216,7 +218,9 @@ Widget _buildHistory(bool isloading, List<RouteHistoryModel>? routes) {
                 padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
                 child: RouteCard(
                   route: routes[index].route,
-                  imgUrl: "https://picsum.photos/160/90",
+                  imgUrl: routes[index].route.imagePath == ''
+                      ? "https://picsum.photos/160/90"
+                      : routes[index].route.imagePath,
                 ),
               );
             }),

@@ -62,7 +62,7 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
           .map((c) => LatLng(c[0], c[1]))
           .toList();
       _mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: _polylinePoints.first, zoom: 13)
+          CameraPosition(target: _polylinePoints.first, zoom: 25)
           //17 is new zoom level
           ));
     });

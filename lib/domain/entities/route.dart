@@ -10,6 +10,7 @@ class RouteModel {
   final List<String> types;
   final List legs;
   final String polyline;
+  final String imagePath;
 
   RouteModel(
       {required this.id,
@@ -20,7 +21,8 @@ class RouteModel {
       required this.waypoints,
       required this.types,
       required this.legs,
-      required this.polyline});
+      required this.polyline,
+      this.imagePath = ''});
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     // List<String> tags = [];
@@ -48,7 +50,8 @@ class RouteModel {
             .toList(),
         types: (json["types"] as List).map((e) => e.toString()).toList(),
         legs: legs,
-        polyline: json['routes'][0]['overview_polyline']['points']);
+        polyline: json['routes'][0]['overview_polyline']['points'],
+        imagePath: json["imagePath"]);
   }
 }
 

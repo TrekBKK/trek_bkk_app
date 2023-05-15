@@ -259,7 +259,7 @@ class _GeneratePageState extends State<GeneratePage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  const Text("Location types"),
+                  const Text("Location types (optional)"),
                   const SizedBox(
                     height: 16,
                   ),
