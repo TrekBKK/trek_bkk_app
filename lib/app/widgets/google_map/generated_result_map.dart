@@ -70,9 +70,9 @@ class _GeneratedResultMapState extends State<GeneratedResultMap> {
 
   void _addMarkers() async {
     final Uint8List? redMarker =
-        await getBytesFromAsset("assets/icons/location-pin.png", 80);
+        await getBytesFromAsset("assets/icons/location-pin.png", 96);
     final Uint8List? barMarker =
-        await getBytesFromAsset("assets/icons/bar.png", 80);
+        await getBytesFromAsset("assets/icons/question.png", 96);
 
     _markers.clear();
 

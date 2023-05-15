@@ -1,17 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trek_bkk_app/app/pages/route/route_page.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 
 class RouteCard extends StatelessWidget {
-  const RouteCard({super.key, required this.imgUrl, required this.route});
+  final time;
+
+  const RouteCard(
+      {super.key, required this.imgUrl, required this.route, this.time});
 
   final String imgUrl;
   final RouteModel route;
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = '';
+    if (time != null) {
+      formattedDate = DateFormat("yyyy-MM-dd").format(time);
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -70,7 +79,10 @@ class RouteCard extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                        Text("${route.stops} stops, ${route.distance} km")
+                        time == null
+                            ? Text("${route.stops} stops, ${route.distance} km")
+                            : Text(
+                                "${route.stops} stops, ${route.distance} km, ${formattedDate}"),
                       ],
                     ),
                   )

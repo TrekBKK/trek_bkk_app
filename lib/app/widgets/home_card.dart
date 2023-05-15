@@ -13,7 +13,6 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(route.imagePath);
     return InkWell(
       onTap: () {
         Navigator.push(context,
