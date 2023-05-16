@@ -5,12 +5,15 @@ import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'package:trek_bkk_app/app/pages/generate/generate_map.dart';
 import 'package:trek_bkk_app/app/widgets/places_autocomplete_field.dart';
 import 'package:trek_bkk_app/constants.dart';
+import 'package:trek_bkk_app/domain/entities/user.dart';
 import 'package:trek_bkk_app/domain/repositories/googlemap_api.dart';
 import 'package:trek_bkk_app/domain/usecases/get_generated_route.dart';
+import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
 import 'package:trek_bkk_app/app/utils/limit_range_text_input_formatter.dart';
 import 'package:trek_bkk_app/app/widgets/snackbar.dart';
@@ -98,11 +101,26 @@ class _GeneratePageState extends State<GeneratePage> {
       setState(() {
         _loading = true;
       });
-      http.Response response = await generateRoute(
-          srcId: srcPlaceId!,
-          destId: destPlaceId!,
-          stops: _numStopsSliderValue,
-          tags: selectedTagList);
+
+      UserModel? user = Provider.of<UserData>(context, listen: false).user;
+
+      http.Response response;
+
+      if (user == null || user.routesHistory.length < 3) {
+        response = await generateRoute(
+            srcId: srcPlaceId!,
+            destId: destPlaceId!,
+            stops: _numStopsSliderValue,
+            tags: selectedTagList);
+      } else {
+        response = await generateRoute(
+            userId: user.id,
+            srcId: srcPlaceId!,
+            destId: destPlaceId!,
+            stops: _numStopsSliderValue,
+            tags: selectedTagList,
+            useAlgorithm: true);
+      }
 
       dynamic srcDetail = await getPlaceDetail(srcPlaceId!);
       dynamic destDetail = await getPlaceDetail(destPlaceId!);
@@ -113,7 +131,7 @@ class _GeneratePageState extends State<GeneratePage> {
       if (response.statusCode == 200) {
         List results = jsonDecode(utf8.decode(response.bodyBytes));
         results.insert(0, srcDetail);
-        results.insert(_numStopsSliderValue + 1, destDetail);
+        results.insert(results.length, destDetail);
         toMap(results, _numStopsSliderValue);
       }
     }

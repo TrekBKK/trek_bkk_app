@@ -57,9 +57,6 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    // final userProvider = Provider.of<UserData>(context, listen: false);
-    // print("test");
-    // userProvider.check();
     return SafeArea(
         child: Scaffold(
       body: Column(

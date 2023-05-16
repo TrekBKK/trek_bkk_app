@@ -17,8 +17,6 @@ getRoutesByPlaceIds({required List<AddPlaceDialogInput> inputs}) async {
     }
   }
 
-  print("dest id: $destId");
-
   final http.Response response = await http.get(Uri.http(apiUrl,
       "/routes/place", {"src_id": srcId, "dest_id": destId, "place_ids": ids}));
 

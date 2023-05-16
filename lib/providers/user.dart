@@ -78,10 +78,11 @@ class UserData with ChangeNotifier {
             'timestamp': dateNow
           }));
       if (response.statusCode == 200) {
-        _user!.favoriteRoutes.add(route.id);
-
         RouteHistoryModel temp = RouteHistoryModel(
             route: route, timestamp: dateFormat.parse(dateNow));
+        RouteHistory temp2 =
+            RouteHistory(routeId: route.id, timestamp: dateNow);
+        _user!.routesHistory.add(temp2);
         routeHistory.add(temp);
 
         notifyListeners();

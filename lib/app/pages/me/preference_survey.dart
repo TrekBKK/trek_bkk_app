@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:provider/provider.dart';
+import 'package:trek_bkk_app/app/widgets/snackbar.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/providers/user.dart';
 import 'package:trek_bkk_app/utils.dart';
@@ -13,7 +14,7 @@ class PreferenceSurvey extends StatefulWidget {
 }
 
 class _PreferenceSurveyState extends State<PreferenceSurvey> {
-  List<String> selectedTagList = [];
+  List<String> _selectedTagList = [];
   int _stepperIndex = 0;
   final int _maxStepIndex = 3;
   int _numStopsSliderValue = 3;
@@ -36,7 +37,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
       hideSearchField: true,
       hideCloseIcon: true,
       listData: placeTypes.keys.toList(),
-      selectedListData: selectedTagList,
+      selectedListData: _selectedTagList,
       choiceChipLabel: (tag) => placeTypes[tag],
       validateSelectedItem: (list, val) => list!.contains(val),
       themeData: getTagsDialogThemeData(context),
@@ -45,7 +46,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
       },
       onApplyButtonClick: (list) {
         setState(() {
-          selectedTagList = List.from(list!);
+          _selectedTagList = List.from(list!);
         });
         Navigator.pop(context);
       },
@@ -54,18 +55,23 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
 
   void _onSubmitHandler() async {
     if (context.mounted) {
-      await Provider.of<UserData>(context, listen: false)
-          .addPreference(_distanceText, _numStopsText, selectedTagList);
+      if (_selectedTagList.isEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(warningSnackbar("Please provide a place type"));
+      } else {
+        await Provider.of<UserData>(context, listen: false)
+            .addPreference(_distanceText, _numStopsText, _selectedTagList);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> tagsUI = selectedTagList
+    List<Widget> tagsUI = _selectedTagList
         .map<Widget>((tag) => GestureDetector(
               onTap: () {
                 setState(() {
-                  selectedTagList.remove(tag);
+                  _selectedTagList.remove(tag);
                 });
               },
               child: Container(
@@ -126,14 +132,9 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
           }
         },
         onStepContinue: () {
-          if (_stepperIndex < _maxStepIndex) {
-            setState(() {
-              _stepperIndex += 1;
-            });
-          } else {
-            print(
-                {_numStopsSliderValue, _distanceSliderValue, selectedTagList});
-          }
+          setState(() {
+            _stepperIndex += 1;
+          });
         },
         onStepTapped: (int index) {
           setState(() {
