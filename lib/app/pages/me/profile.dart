@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: LinearPercentIndicator(
                                   width: 120.0,
                                   lineHeight: 15.0,
-                                  percent: 0.5,
+                                  percent: 0.3,
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 0),
                                   barRadius: const Radius.circular(16),

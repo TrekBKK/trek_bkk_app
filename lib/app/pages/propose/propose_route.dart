@@ -330,8 +330,6 @@ class _ProposePageState extends State<ProposePage> {
                                         setState(() {
                                           _isProposing = true;
                                         });
-                                        _nameController.clear();
-                                        _descriptionController.clear();
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(warningSnackbar(
