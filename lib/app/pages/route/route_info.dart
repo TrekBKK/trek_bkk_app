@@ -5,13 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:trek_bkk_app/constants.dart';
 import 'package:trek_bkk_app/domain/entities/route.dart';
 import 'package:trek_bkk_app/providers/user.dart';
+import 'package:trek_bkk_app/utils.dart';
 
 class RouteInfoWidget extends StatefulWidget {
   final RouteModel route;
+  final Function() onClose;
 
   const RouteInfoWidget({
     super.key,
     required this.route,
+    required this.onClose,
   });
 
   @override
@@ -58,7 +61,6 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
     double screenHeight =
         MediaQuery.of(context).size.height - padding.top - padding.bottom;
     double panelHeight = screenHeight / 2;
-    double infoHeight = panelHeight;
     double descHeight = panelHeight - 20;
 
     return SizedBox(
@@ -66,107 +68,117 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
       height: panelHeight,
       child: Stack(
         children: [
-          // Route Info Body
-          Positioned(
-            top: 100,
-            left: 0,
-            child: Container(
-              width: screenWidth,
-              height: infoHeight,
-              padding: const EdgeInsets.only(bottom: 70),
-              decoration: const BoxDecoration(color: Colors.white),
-              child: ListView.separated(
-                  padding: const EdgeInsets.all(24),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: 310,
-                      height: 64,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black38,
-                              blurRadius: 4,
-                              offset: Offset(0, 4),
-                            ),
-                          ]),
-                      child: Row(
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: 'https://placehold.co/120/jpg',
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: 64,
-                              height: 64,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(8)),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://picsum.photos/seed/trekbkk/64'),
-                                  fit: BoxFit.cover,
+          Column(
+            children: [
+              const SizedBox(
+                height: 112,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 24),
+                  child: ElevatedButton(
+                      onPressed: widget.onClose,
+                      style: primaryButtonStyles(px: 16),
+                      child: const Text("Close Detail")),
+                ),
+              ),
+              Expanded(
+                  child: ListView.separated(
+                      padding: const EdgeInsets.only(
+                          top: 16, right: 24, bottom: 24, left: 24),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          width: 310,
+                          height: 64,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black38,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                ),
+                              ]),
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: 'https://placehold.co/120/jpg',
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 64,
+                                  height: 64,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.horizontal(
+                                        left: Radius.circular(8)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          'https://picsum.photos/seed/trekbkk/64'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 16),
+                                  child: Text(
+                                    waypoints[index].name,
+                                    style: headline20,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
-                            ),
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            ],
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 16),
-                              child: Text(
-                                waypoints[index].name,
-                                style: headline20,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Container(
+                            height: 64,
+                            padding: const EdgeInsets.only(left: 32),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const DottedLine(
+                                  direction: Axis.vertical,
+                                  lineLength: 64,
+                                ),
+                                const SizedBox(width: 24),
+                                const Icon(
+                                  Icons.directions_walk_sharp,
+                                  size: 30,
+                                ),
+                                const SizedBox(width: 12),
+                                SizedBox(
+                                  height: 40,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        legs[index]["duration"]["text"],
+                                        style: headline20,
+                                      ),
+                                      Text(
+                                        legs[index]["distance"]["text"],
+                                        style: body12,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Container(
-                        height: 64,
-                        padding: const EdgeInsets.only(left: 32),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const DottedLine(
-                              direction: Axis.vertical,
-                              lineLength: 64,
-                            ),
-                            const SizedBox(width: 24),
-                            const Icon(
-                              Icons.directions_walk_sharp,
-                              size: 30,
-                            ),
-                            const SizedBox(width: 12),
-                            SizedBox(
-                              height: 40,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    legs[index]["duration"]["text"],
-                                    style: headline20,
-                                  ),
-                                  Text(
-                                    legs[index]["distance"]["text"],
-                                    style: body12,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                  itemCount: waypoints.length),
-            ),
+                      itemCount: waypoints.length))
+            ],
           ),
           // Route description panel
           AnimatedPositioned(

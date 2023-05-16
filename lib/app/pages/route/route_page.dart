@@ -38,11 +38,16 @@ class _RoutePageState extends State<RoutePage> {
       appBar: AppBar(),
       body: SlidingUpPanel(
         controller: _pc,
+        isDraggable: false,
         minHeight: threshold,
-        maxHeight: 416,
+        maxHeight: 448,
         defaultPanelState: PanelState.OPEN,
         panel: RouteInfoWidget(
           route: widget.route,
+          onClose: () async {
+            await _pc.close();
+            setState(() {});
+          },
         ),
         body: Padding(
           padding: const EdgeInsets.only(bottom: 235),
@@ -81,20 +86,6 @@ class _RoutePageState extends State<RoutePage> {
                 ),
               ),
             ),
-            _pc.isAttached
-                ? _pc.isPanelClosed
-                    ? const SizedBox()
-                    : Align(
-                        alignment: Alignment.topCenter,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await _pc.close();
-                              setState(() {});
-                            },
-                            style: primaryButtonStyles(px: 16),
-                            child: const Text("Close Detail")),
-                      )
-                : const SizedBox()
           ]),
         ),
       ),
