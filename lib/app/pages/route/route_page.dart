@@ -22,40 +22,76 @@ class RoutePage extends StatefulWidget {
 
 class _RoutePageState extends State<RoutePage> {
   bool showRouteInfo = true;
+  final PanelController _pc = PanelController();
 
   @override
   Widget build(BuildContext context) {
     var threshold = 100.0;
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: SlidingUpPanel(
-        minHeight: threshold,
-        maxHeight: 416,
-        defaultPanelState: PanelState.OPEN,
-        panel: RouteInfoWidget(
-          route: widget.route,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: 235),
-          child: Stack(children: [
-            RouteDetailMap(route: widget.route),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                  onPressed: () {
-                    Provider.of<UserData>(context, listen: false)
-                        .addHistoryRoute(widget.route);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                RouteNavigation(route: widget.route)));
-                  },
-                  style: primaryButtonStyles(px: 24),
-                  child: const Text("Start")),
-            )
-          ]),
+    return SafeArea(
+      child: Scaffold(
+        body: SlidingUpPanel(
+          controller: _pc,
+          minHeight: threshold,
+          maxHeight: 416,
+          defaultPanelState: PanelState.OPEN,
+          panel: RouteInfoWidget(
+            route: widget.route,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 235),
+            child: Stack(children: [
+              RouteDetailMap(route: widget.route),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Provider.of<UserData>(context, listen: false)
+                                .addHistoryRoute(widget.route);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RouteNavigation(route: widget.route)));
+                          },
+                          style: primaryButtonStyles(px: 24),
+                          child: const Text("Start")),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            _pc.open();
+                          },
+                          style: primaryButtonStyles(px: 16),
+                          child: const Text("View Detail"))
+                    ],
+                  ),
+                ),
+              ),
+              _pc.isAttached
+                  ? _pc.isPanelOpen
+                      ? Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 96),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  _pc.close();
+                                },
+                                style: primaryButtonStyles(px: 16),
+                                child: const Text("Close Detail")),
+                          ),
+                        )
+                      : const SizedBox()
+                  : const SizedBox()
+            ]),
+          ),
         ),
       ),
     );

@@ -89,7 +89,7 @@ class _Search2State extends State<Search2> {
     http.Response response = await getRoutesByKey(searchKey: searchKey);
     if (response.statusCode == 200) {
       setState(() {
-        searchResults = (jsonDecode(response.body) as List)
+        searchResults = (jsonDecode(utf8.decode(response.bodyBytes)) as List)
             .map((data) => RouteModel.fromJson(data))
             .toList();
         filteredSearchResult = searchResults.toList();
@@ -112,7 +112,7 @@ class _Search2State extends State<Search2> {
         await getRoutesByPlaceIds(inputs: selectedPlaceTags);
     if (response.statusCode == 200) {
       setState(() {
-        searchResults = (jsonDecode(response.body) as List)
+        searchResults = (jsonDecode(utf8.decode(response.bodyBytes)) as List)
             .map((data) => RouteModel.fromJson(data))
             .toList();
         filteredSearchResult = searchResults.toList();

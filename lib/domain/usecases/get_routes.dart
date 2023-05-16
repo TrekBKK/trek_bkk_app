@@ -27,7 +27,7 @@ getProposedRoutes(String userId) async {
     final http.Response response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final res = (jsonDecode(response.body) as List);
+      final res = (jsonDecode(utf8.decode(response.bodyBytes)) as List);
       List<ProposeModel> routes =
           res.map((e) => ProposeModel.fromJson(e)).toList();
 
@@ -43,7 +43,7 @@ Future<List<RouteModel>> getFavoriteRoutes(String userId) async {
     final url = Uri.http(apiUrl, "/user/favorite", {"user_id": userId});
     final http.Response response = await http.get(url);
     if (response.statusCode == 200) {
-      final res = (jsonDecode(response.body)) as List;
+      final res = (jsonDecode(utf8.decode(response.bodyBytes))) as List;
       List<RouteModel> routes = res.map((e) => RouteModel.fromJson(e)).toList();
 
       return routes;
@@ -61,7 +61,7 @@ getHistoryRoutes(String userId) async {
     final url = Uri.http(apiUrl, "/user/history", {"user_id": userId});
     final http.Response response = await http.get(url);
     if (response.statusCode == 200) {
-      final res = (jsonDecode(response.body)) as List;
+      final res = (jsonDecode(utf8.decode(response.bodyBytes)) as List);
       List<RouteHistoryModel> routes =
           res.map((e) => RouteHistoryModel.fromJson(e)).toList();
 

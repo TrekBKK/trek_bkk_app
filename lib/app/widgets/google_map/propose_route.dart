@@ -54,7 +54,7 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
   }
 
   Future<Position> getUserCurrentLocation() async {
-    await Geolocator.requestPermission()
+    await Geolocator.checkPermission()
         .then((value) {})
         .onError((error, stackTrace) async {
       await Geolocator.requestPermission();

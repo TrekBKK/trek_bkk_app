@@ -45,12 +45,12 @@ class _SplashState extends State<Splash> {
             await Geolocator.isLocationServiceEnabled()) {
           Future.microtask(() => Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainScreen())));
+        } else {
+          Future.microtask(() => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LocationPermissionPage())));
         }
-
-        Future.microtask(() => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const LocationPermissionPage())));
       }
     }
   }
