@@ -65,8 +65,9 @@ class _RoutePageState extends State<RoutePage> {
                         width: 16,
                       ),
                       ElevatedButton(
-                          onPressed: () {
-                            _pc.open();
+                          onPressed: () async {
+                            await _pc.open();
+                            setState(() {});
                           },
                           style: primaryButtonStyles(px: 16),
                           child: const Text("View Detail"))
@@ -81,8 +82,9 @@ class _RoutePageState extends State<RoutePage> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 96),
                             child: ElevatedButton(
-                                onPressed: () {
-                                  _pc.close();
+                                onPressed: () async {
+                                  await _pc.close();
+                                  setState(() {});
                                 },
                                 style: primaryButtonStyles(px: 16),
                                 child: const Text("Close Detail")),
