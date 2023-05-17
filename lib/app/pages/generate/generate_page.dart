@@ -131,7 +131,7 @@ class _GeneratePageState extends State<GeneratePage> {
       if (response.statusCode == 200) {
         List results = jsonDecode(utf8.decode(response.bodyBytes));
         results.insert(0, srcDetail);
-        results.insert(results.length, destDetail);
+        results.insert(_numStopsSliderValue + 1, destDetail);
         toMap(results, _numStopsSliderValue);
       }
     }
