@@ -36,6 +36,7 @@ class HomeCard extends StatelessWidget {
                 : Image.network(
                     route.imagePath,
                     height: 90,
+                    width: 160,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
                         const Placeholder(
