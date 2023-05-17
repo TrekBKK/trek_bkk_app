@@ -250,7 +250,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              const Text('3 places visited'),
+                              Text(
+                                  '${userProvider.user!.routesHistory.length} places visited'),
                             ],
                           ),
                         )

@@ -21,6 +21,7 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
   late String _numStopsText;
   double _distanceSliderValue = 5;
   late String _distanceText;
+  bool _isloading = false;
 
   @override
   void initState() {
@@ -53,14 +54,22 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
     );
   }
 
-  void _onSubmitHandler() async {
+  void _onSubmitHandler(BuildContext ctx) async {
     if (context.mounted) {
       if (_selectedTagList.isEmpty) {
         ScaffoldMessenger.of(context)
             .showSnackBar(warningSnackbar("Please provide a place type"));
       } else {
+        print("heree");
+        setState(() {
+          _isloading = true;
+        });
         await Provider.of<UserData>(context, listen: false)
             .addPreference(_distanceText, _numStopsText, _selectedTagList);
+        setState(() {
+          _isloading = false;
+        });
+        Navigator.pop(ctx);
       }
     }
   }
@@ -97,19 +106,32 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
         controlsBuilder: (context, details) {
           return Column(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    shape: const StadiumBorder()),
-                onPressed: _stepperIndex == _maxStepIndex
-                    ? _onSubmitHandler
-                    : details.onStepContinue,
-                child: _stepperIndex == _maxStepIndex
-                    ? const Text("COMPLETE")
-                    : const Text('CONTINUE'),
-              ),
-              if (_stepperIndex > 0)
+              _isloading
+                  ? const CircularProgressIndicator()
+                  : _stepperIndex == _maxStepIndex
+                      ? ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 8),
+                              shape: const StadiumBorder()),
+                          onPressed: () {
+                            _onSubmitHandler(context);
+                          },
+                          child: _stepperIndex == _maxStepIndex
+                              ? const Text("COMPLETE")
+                              : const Text('CONTINUE'),
+                        )
+                      : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 8),
+                              shape: const StadiumBorder()),
+                          onPressed: details.onStepContinue,
+                          child: _stepperIndex == _maxStepIndex
+                              ? const Text("COMPLETE")
+                              : const Text('CONTINUE'),
+                        ),
+              if (_stepperIndex > 0 && !_isloading)
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
