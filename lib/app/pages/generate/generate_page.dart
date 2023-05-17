@@ -170,60 +170,71 @@ class _GeneratePageState extends State<GeneratePage> {
           Container(
             color: dividerColor,
             padding: const EdgeInsets.all(16),
-            child: Row(children: [
-              Column(
-                children: const [
-                  Icon(Icons.follow_the_signs),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  DottedLine(
-                    direction: Axis.vertical,
-                    lineLength: 32,
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Icon(Icons.flag)
-                ],
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Flexible(
-                child: Column(
-                  children: [
-                    CustomPlacesAutocompleteField(
-                      controller: _startAutocompleteController,
-                      hintText: "Your starting point",
-                      trailingOnTap: () => setState(() {
-                        _startAutocompleteController.clear();
-                        srcPlaceId = null;
-                      }),
-                      onSelected: (value) => setState(() {
-                        srcPlaceId = value.placeId;
-                      }),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    CustomPlacesAutocompleteField(
-                      controller: _destinationAutocompleteController,
-                      hintText: "Your destination",
-                      trailingOnTap: () {
-                        setState(() {
-                          _destinationAutocompleteController.clear();
-                          destPlaceId = null;
-                        });
-                      },
-                      onSelected: (value) => setState(() {
-                        destPlaceId = value.placeId;
-                      }),
-                    ),
-                  ],
+            child: Column(
+              children: [
+                const Text(
+                  "Simply input your source and destination, specify the number of stops you require, and let our algorithm generates a route with waypoints tailored to your needs",
+                  textAlign: TextAlign.center,
                 ),
-              )
-            ]),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(children: [
+                  Column(
+                    children: const [
+                      Icon(Icons.follow_the_signs),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      DottedLine(
+                        direction: Axis.vertical,
+                        lineLength: 32,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Icon(Icons.flag)
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Flexible(
+                    child: Column(
+                      children: [
+                        CustomPlacesAutocompleteField(
+                          controller: _startAutocompleteController,
+                          hintText: "Your starting point",
+                          trailingOnTap: () => setState(() {
+                            _startAutocompleteController.clear();
+                            srcPlaceId = null;
+                          }),
+                          onSelected: (value) => setState(() {
+                            srcPlaceId = value.placeId;
+                          }),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        CustomPlacesAutocompleteField(
+                          controller: _destinationAutocompleteController,
+                          hintText: "Your destination",
+                          trailingOnTap: () {
+                            setState(() {
+                              _destinationAutocompleteController.clear();
+                              destPlaceId = null;
+                            });
+                          },
+                          onSelected: (value) => setState(() {
+                            destPlaceId = value.placeId;
+                          }),
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
+              ],
+            ),
           ),
           Padding(
               padding: const EdgeInsets.all(24),

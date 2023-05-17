@@ -196,14 +196,16 @@ class _ProposeRoutePageState extends State<ProposeRoutePage> {
     return Scaffold(
       appBar: AppBar(),
       body: _currentLocation == null
-          ? const Text("loading")
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
           : Stack(children: [
               GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
                       _currentLocation!.latitude, _currentLocation!.longitude),
-                  zoom: 20,
+                  zoom: 18,
                 ),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController = controller;
