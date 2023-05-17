@@ -85,10 +85,51 @@ class _PRpopupState extends State<PRpopup> {
         } else if (snapshot.hasError) {
           // Handle any errors while fetching.
           return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
+              child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _textController,
+                      decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter a custom place',
+                        hintText: 'Enter a custom place',
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _onClickCustomPlaceHandler,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.place),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text(
+                    "We apologize, but we couldn't find any places near your current location. However, you have the option to add your own custom place."),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Image(
+                width: 120,
+                height: 120,
+                image: AssetImage("assets/icons/not-found-place.png"),
+              ),
+            ],
+          ));
         } else {
           List<dynamic> places = snapshot.data!;
+
           return ListView.builder(
             itemCount: places.length + 1,
             itemBuilder: (BuildContext context, int index) {

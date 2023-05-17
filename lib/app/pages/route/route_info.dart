@@ -39,7 +39,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
 
   void _favHandler() async {
     if (context.mounted) {
-      await Provider.of<UserData>(context, listen: false)
+      Provider.of<UserData>(context, listen: false)
           .updateFavRoute(widget.route);
     }
     setState(() {

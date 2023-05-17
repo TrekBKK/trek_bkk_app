@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Provider.of<UserData>(context, listen: false).user;
+    UserData userProvider = Provider.of<UserData>(context, listen: false);
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -161,8 +161,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 radius: 60,
                                 backgroundImage: _image != null
                                     ? FileImage(_image!)
-                                    : user!.photoUrl != ''
-                                        ? NetworkImage(user.photoUrl!)
+                                    : userProvider.user!.photoUrl != ''
+                                        ? NetworkImage(
+                                            userProvider.user!.photoUrl!)
                                         : const AssetImage(
                                                 "assets/images/ImagePlaceHolder.jpg")
                                             as ImageProvider),
@@ -228,7 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(user!.name),
+                              Text(userProvider.user!.name),
                               const SizedBox(height: 20),
                               Container(
                                 decoration: BoxDecoration(
@@ -238,7 +239,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: LinearPercentIndicator(
                                   width: 120.0,
                                   lineHeight: 15.0,
-                                  percent: 0.3,
+                                  percent: userProvider.routeHistory.length
+                                          .clamp(0, 10) /
+                                      10,
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 0),
                                   barRadius: const Radius.circular(16),
