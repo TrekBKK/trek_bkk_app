@@ -60,16 +60,20 @@ class _PreferenceSurveyState extends State<PreferenceSurvey> {
         ScaffoldMessenger.of(context)
             .showSnackBar(warningSnackbar("Please provide a place type"));
       } else {
-        print("heree");
+        bool edited = Provider.of<UserData>(context, listen: false).checkPref();
         setState(() {
           _isloading = true;
         });
+
         await Provider.of<UserData>(context, listen: false)
             .addPreference(_distanceText, _numStopsText, _selectedTagList);
         setState(() {
           _isloading = false;
         });
-        Navigator.pop(ctx);
+        if (edited) {
+          Navigator.pop(ctx);
+          Navigator.pop(ctx);
+        }
       }
     }
   }

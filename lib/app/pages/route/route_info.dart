@@ -39,12 +39,16 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
 
   void _favHandler() async {
     if (context.mounted) {
-      Provider.of<UserData>(context, listen: false)
-          .updateFavRoute(widget.route);
+      bool haveUser =
+          Provider.of<UserData>(context, listen: false).checkHaveUser();
+      if (haveUser) {
+        Provider.of<UserData>(context, listen: false)
+            .updateFavRoute(widget.route);
+        setState(() {
+          favTapped = !favTapped;
+        });
+      }
     }
-    setState(() {
-      favTapped = !favTapped;
-    });
   }
 
   @override

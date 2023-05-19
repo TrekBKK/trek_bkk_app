@@ -132,6 +132,9 @@ class UserData with ChangeNotifier {
       return;
     }
     try {
+      _user!.preference.distance = '';
+      _user!.preference.stop = '';
+      _user!.preference.type = [];
       final url = Uri.http(apiUrl, "/user/pref");
       final http.Response response = await http.patch(url,
           headers: <String, String>{
