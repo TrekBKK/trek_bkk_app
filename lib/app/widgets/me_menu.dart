@@ -58,103 +58,112 @@ class _MeMenuState extends State<MeMenu> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 3,
-                                  color: _currentIndex == 0
-                                      ? const Color(0xff972d07)
-                                      : Colors.white))),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: _currentIndex == 0
-                                ? Image.asset("assets/icons/routeA.png")
-                                : Image.asset("assets/icons/routeU.png"),
-                            onPressed: () {
-                              _currentIndex != 0
-                                  ? setState(() {
-                                      _currentIndex = 0;
-                                    })
-                                  : null;
-                            },
-                          ),
-                          Text(
-                            'Create my own',
-                            style: _currentIndex == 0
-                                ? const TextStyle(color: Color(0xff972d07))
-                                : null,
-                          )
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        _currentIndex != 0
+                            ? setState(() {
+                                _currentIndex = 0;
+                              })
+                            : null;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 3,
+                                    color: _currentIndex == 0
+                                        ? const Color(0xff972d07)
+                                        : Colors.white))),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              icon: _currentIndex == 0
+                                  ? Image.asset("assets/icons/routeA.png")
+                                  : Image.asset("assets/icons/routeU.png"),
+                              onPressed: () {},
+                            ),
+                            Text(
+                              'Create my own',
+                              style: _currentIndex == 0
+                                  ? const TextStyle(color: Color(0xff972d07))
+                                  : null,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 3,
-                                  color: _currentIndex == 1
-                                      ? const Color(0xff972d07)
-                                      : Colors.white))),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: _currentIndex == 1
-                                ? Image.asset("assets/icons/favoriteA.png")
-                                : Image.asset("assets/icons/favoriteU.png"),
-                            onPressed: () {
-                              _currentIndex != 1
-                                  ? setState(() {
-                                      _currentIndex = 1;
-                                    })
-                                  : null;
-                            },
-                          ),
-                          Text(
-                            'my favorite',
-                            style: _currentIndex == 1
-                                ? const TextStyle(color: Color(0xff972d07))
-                                : null,
-                          )
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        _currentIndex != 1
+                            ? setState(() {
+                                _currentIndex = 1;
+                              })
+                            : null;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 3,
+                                    color: _currentIndex == 1
+                                        ? const Color(0xff972d07)
+                                        : Colors.white))),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              icon: _currentIndex == 1
+                                  ? Image.asset("assets/icons/favoriteA.png")
+                                  : Image.asset("assets/icons/favoriteU.png"),
+                              onPressed: () {},
+                            ),
+                            Text(
+                              'my favorite',
+                              style: _currentIndex == 1
+                                  ? const TextStyle(color: Color(0xff972d07))
+                                  : null,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 3,
-                                  color: _currentIndex == 2
-                                      ? const Color(0xff972d07)
-                                      : Colors.white))),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: _currentIndex == 2
-                                ? Image.asset("assets/icons/historyA.png")
-                                : Image.asset("assets/icons/historyU.png"),
-                            onPressed: () {
-                              _currentIndex != 2
-                                  ? setState(() {
-                                      _currentIndex = 2;
-                                    })
-                                  : null;
-                            },
-                          ),
-                          Text(
-                            'History',
-                            style: _currentIndex == 2
-                                ? const TextStyle(
-                                    color: Color(0xff972d07),
-                                  )
-                                : null,
-                          )
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        _currentIndex != 2
+                            ? setState(() {
+                                _currentIndex = 2;
+                              })
+                            : null;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 3,
+                                    color: _currentIndex == 2
+                                        ? const Color(0xff972d07)
+                                        : Colors.white))),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              icon: _currentIndex == 2
+                                  ? Image.asset("assets/icons/historyA.png")
+                                  : Image.asset("assets/icons/historyU.png"),
+                              onPressed: () {},
+                            ),
+                            Text(
+                              'History',
+                              style: _currentIndex == 2
+                                  ? const TextStyle(
+                                      color: Color(0xff972d07),
+                                    )
+                                  : null,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   )

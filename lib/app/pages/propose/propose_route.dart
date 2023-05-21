@@ -286,7 +286,7 @@ class _ProposePageState extends State<ProposePage> {
                                   child: TextField(
                                     controller: _nameController,
                                     decoration: const InputDecoration(
-                                        labelText: 'Enter route rame',
+                                        labelText: 'Enter route name',
                                         border: OutlineInputBorder(),
                                         hintText: 'Enter a message',
                                         filled: true,
