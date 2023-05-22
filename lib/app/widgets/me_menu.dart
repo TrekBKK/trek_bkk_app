@@ -80,7 +80,13 @@ class _MeMenuState extends State<MeMenu> {
                               icon: _currentIndex == 0
                                   ? Image.asset("assets/icons/routeA.png")
                                   : Image.asset("assets/icons/routeU.png"),
-                              onPressed: () {},
+                              onPressed: () {
+                                _currentIndex != 0
+                                    ? setState(() {
+                                        _currentIndex = 0;
+                                      })
+                                    : null;
+                              },
                             ),
                             Text(
                               'Create my own',
@@ -116,7 +122,13 @@ class _MeMenuState extends State<MeMenu> {
                               icon: _currentIndex == 1
                                   ? Image.asset("assets/icons/favoriteA.png")
                                   : Image.asset("assets/icons/favoriteU.png"),
-                              onPressed: () {},
+                              onPressed: () {
+                                _currentIndex != 1
+                                    ? setState(() {
+                                        _currentIndex = 1;
+                                      })
+                                    : null;
+                              },
                             ),
                             Text(
                               'my favorite',
@@ -152,7 +164,13 @@ class _MeMenuState extends State<MeMenu> {
                               icon: _currentIndex == 2
                                   ? Image.asset("assets/icons/historyA.png")
                                   : Image.asset("assets/icons/historyU.png"),
-                              onPressed: () {},
+                              onPressed: () {
+                                _currentIndex != 2
+                                    ? setState(() {
+                                        _currentIndex = 2;
+                                      })
+                                    : null;
+                              },
                             ),
                             Text(
                               'History',
